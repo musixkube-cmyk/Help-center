@@ -45,7 +45,7 @@ export default async function SectionPage({
   const trail = findTrail(path);
 
   return (
-    <main className="!bg-white w-full px-6 lg:px-10 py-16">
+    <main className="!bg-white w-full min-h-[calc(100vh-57px)] px-6 lg:px-10 py-16">
       <nav className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
         <NavLink href="/" className="hover:text-accent">
           Home

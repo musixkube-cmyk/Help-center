@@ -50,7 +50,7 @@ const OVERVIEW_CARDS = [
 
 export default function HelpCenterPage() {
   return (
-    <main className="w-full px-6 lg:px-10 py-12">
+    <main className="w-full min-h-[calc(100vh-57px)] bg-white px-6 lg:px-10 py-12">
       {/* Breadcrumb */}
       <nav className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
         <NavLink href="/" className="hover:text-accent">
