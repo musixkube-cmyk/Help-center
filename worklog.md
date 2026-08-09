@@ -231,3 +231,48 @@ Verification (Agent Browser + curl + VLM):
 
 Stage Summary:
 - Ticker banner beneath hero completely removed (page flows hero → Trending this week carousel directly). Nav tree expanded to match the user's full navigation tree: all missing Privacy & Safety sub-sections (Security, Law Enforcement) and items (Privacy Policies, Google Privacy Policy, SheerID Privacy Policy, Stitch privacy settings, Age-restricted LIVE content, Violent extremism, Content Algorithm, Political Ads) added; Reporting labels updated; Copyright & IP moved from Privacy & Safety to the new Legal & Policies footer section (with Terms of Use's 18 items + Copyright & IP's 6 items); For Creators > Catalog & Asset Management updated to single child per tree. All pages route via the existing catch-all — 13 new/updated routes verified 200, old moved path correctly 404s. Lint clean, dev server clean, browser-verified (ticker gone, 8 footer sections, deep routes render, no errors, responsive, footer intact).
+
+---
+Task ID: 9
+Agent: main (Z.ai Code)
+Task: User was angry that the mega menu didn't represent the tree (branch, or leaf) — it only showed 3 columns (slice(0,3)). Section pages only showed flat child cards, not the full parent→child→leaf tree. Footer hierarchy was "fucked up" — not showing parent→child→leaf. Fix all three: mega menu must show ALL branches + leaves, section pages must show full tree, footer must show proper hierarchy.
+
+Work Log:
+- (1) Desktop MegaPanel redesign (src/components/site/site-header.tsx):
+  * ROOT CAUSE: old MegaPanel had `const groups = node.children.slice(0, 3)` — only showed first 3 branches. For For Creators (14 branches), For Labels (23 branches), most were invisible.
+  * Removed: ICONS array (17 icons), iconFor() function, MegaItem component (icon + label + group), promo panel (Musicosy AI sidebar). All unnecessary noise that took space away from actual tree content.
+  * New MegaPanel: full-width dropdown with an intro bar (section label + blurb + "Explore" link) at top, then a scrollable (max-h-[72vh] overflow-y-auto) grid of ALL node.children. Grid: grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 — wraps to show every branch.
+  * New BranchColumn component: renders each branch as a titled link (border-b heading with ArrowUpRight icon) + its leaves as a list of text-xs links. For leaf-only branches (no children), just the heading link. This shows parent → child → leaf clearly.
+  * Result: For Fans shows 11 branches + 3 leaves; For Creators shows 14 branches + 38 leaves; For Labels shows 22 branches + 6 role leaves; For Business shows 8 branches + 1 leaf. ALL branches visible, not just 3.
+
+- (2) Mobile menu redesign (same file):
+  * Old mobile menu: flat 2-level list (mega item + direct children in a 2-col grid). No leaves visible, no expandability.
+  * New MobileNavItem: recursive component that handles ANY depth. Each item has the label link + a ChevronDown expand button (if it has children). Clicking expand toggles a nested list (border-l border-border pl-3) of children, which are themselves MobileNavItem instances. Depth-based styling: depth 0 = uppercase tracking label, depth 1 = font-semibold, depth 2+ = text-xs muted.
+  * Verified: expanding "For Creators" shows all 14 branches as expandable sub-items; each can be further expanded to show leaves. Recursion handles For Labels > By Role > For Managers > leaves (4 levels deep).
+
+- (3) Section pages redesign (src/app/[...path]/page.tsx):
+  * Old section page: flat grid of direct children with just labels + "Explore" links. No leaves visible. Didn't represent the tree leg.
+  * New section page: splits children into "direct leaves" (no sub-children) and "categories" (have children). Direct leaves render in a "Browse" grid. Categories render as CategoryBlock — each with a font-display heading link + a grid of LeafCards for its children. This shows the full parent → child → leaf hierarchy.
+  * LeafCard: a card with the leaf label + ArrowUpRight icon, links to the leaf path.
+  * Verified: /for-creators shows 14 category blocks with 38 total leaf cards (Music Distribution: 4, Studio Production Tools: 12, etc.). /for-labels shows 21 direct leaves in Browse + By Role category with 6 role cards. /for-labels/by-role/for-managers shows 7 leaf cards (Artist relations, Project management, etc.).
+
+- (4) Footer redesign (src/components/site/site-footer.tsx):
+  * Old footer: 8 groups in a flat 4-col grid, each showing direct children as simple links. For Privacy & Safety, showed only sub-category names (Privacy, Safety, Security, etc.) — no leaves visible. "Parent, child, leaf — where the fuck is it?" = user couldn't find leaf pages.
+  * New footer: splits groups into "simple" (all children are leaves: Platform, Solutions, Developers, Advertising, Resources) and "comprehensive" (children are sub-categories with their own leaves: Privacy & Safety, Legal & Policies, Support Center).
+  * Simple groups: rendered in a 5-col grid at top (SimpleGroup component — heading + direct leaf links).
+  * Comprehensive groups: rendered in a second row below a divider (lg:grid-cols-5). Privacy & Safety spans 2 cols with a 3-col sub-grid (6 sub-categories in 2 rows of 3, each showing its leaves). Legal & Policies spans 2 cols with a 2-col sub-grid (Terms of Use + Copyright & IP side by side, each with leaves). Support Center spans 1 col (stacked: Support & Account Management leaf + Using Musicosy + Advertising Hub with their leaves).
+  * New components: FooterLeafList (text-xs leaf links), FooterSubCategory (bold sub-category link + its leaves), SimpleGroup (heading + direct leaves), ComprehensiveGroup (heading + sub-grid of sub-categories with leaves).
+  * Result: 105 leaf links now visible in the footer (was ~38 before). All Privacy, Safety, Security, Law Enforcement, Terms of Use, Copyright & IP leaves are directly accessible from the footer.
+
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200). No console/page errors.
+
+Verification (Agent Browser + VLM):
+- Mega menu: ALL branches visible (not just 3). For Creators = 14 branches + 38 leaves, For Labels = 22 branches + 6 role leaves, For Fans = 11 branches + 3 leaves, For Business = 8 branches + 1 leaf. VLM confirmed: "dropdown displays multiple columns of navigation branches with leaf links listed under each."
+- Section pages: /for-creators shows 14 category blocks + 38 leaf cards (full tree). /for-labels shows 21 Browse leaves + By Role category with 6 roles. /for-labels/by-role/for-managers shows 7 leaf cards.
+- Footer: 8 group headings, 11 sub-category links, 105 leaf links. Privacy/Safety/Security/LawEnforcement/TermsOfUse/Copyright leaves all present and verified. VLM confirmed seeing sub-categories (Content & Conduct, Security, Law Enforcement) with their leaf links.
+- Mobile menu: recursive expandable tree. Expanding For Creators shows all 14 branches as expandable sub-items. Handles 4-level depth (For Labels > By Role > For Managers > leaves).
+- Home page: ticker gone, 8 carousels intact, hero video playing, 8 footer groups, no horizontal scroll, no errors.
+- Deep routes verified: /for-labels/by-role/for-managers (200, 7 leaves), /for-creators (200, full tree).
+
+Stage Summary:
+- Fixed all three issues: (1) Mega menu now shows EVERY branch + leaf in a scrollable multi-column grid (was truncated to 3). (2) Section pages now show the full parent → child → leaf tree with category blocks and leaf cards (was flat child grid). (3) Footer now shows comprehensive hierarchy — simple groups with direct leaves + comprehensive groups (Privacy & Safety, Legal & Policies, Support Center) with sub-categories AND their leaves (105 leaf links visible, was ~38). Mobile menu is a recursive expandable tree handling any depth. Lint clean, dev server clean, browser-verified (all branches/leaves visible, deep routes work, no errors, responsive).
