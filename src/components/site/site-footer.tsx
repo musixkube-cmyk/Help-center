@@ -8,9 +8,12 @@ export function SiteFooter() {
         <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {footerNav.map((group) => (
             <div key={group.path}>
-              <h3 className="font-display text-xl tracking-widest text-accent">
+              <NavLink
+                href={group.path}
+                className="font-display text-xl tracking-widest text-accent transition-opacity hover:opacity-70"
+              >
                 {group.label}
-              </h3>
+              </NavLink>
               <ul className="mt-3 space-y-1.5">
                 {(group.children ?? []).map((child) => (
                   <li key={child.path}>
