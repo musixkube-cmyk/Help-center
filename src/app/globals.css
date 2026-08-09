@@ -318,11 +318,102 @@
   );
 }
 
+/*
+ * 3D brand wordmark — the "brand video" hero.
+ *
+ * The original hero-disco.mp4 (a Lovable-R2-hosted asset, never committed to
+ * git, project since deleted) showed an animated 3D "Musicosy" wordmark on a
+ * dark stage. Since the footage is irretrievable, this recreates that brand
+ * hero as genuine looping CSS 3D motion:
+ *
+ *   .brand-stage   — perspective container for the 3D turn
+ *   .brand-wordmark— the extruded 3D "Musicosy" text (layered text-shadows
+ *                    fake the extrusion depth), tinted ink with an orange "M";
+ *                    slowly turns on Y so it reads as 3D and is always moving
+ *   .brand-glow    — pulsing accent halo behind the wordmark
+ */
+
+@utility brand-stage {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+@utility brand-wordmark {
+  font-family: var(--font-display), "Bebas Neue", system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: color-mix(in oklab, var(--ink-foreground) 92%, transparent);
+  text-transform: uppercase;
+  /*
+   * Fake 3D extrusion: stack ~40 right-down offset shadows that darken toward
+   * the back. This is what gives the wordmark its carved/embossed depth.
+   */
+  text-shadow:
+    1px 1px 0 color-mix(in oklab, var(--ink-foreground) 85%, transparent),
+    2px 2px 0 color-mix(in oklab, var(--ink-foreground) 78%, transparent),
+    3px 3px 0 color-mix(in oklab, var(--ink-foreground) 70%, transparent),
+    4px 4px 0 color-mix(in oklab, var(--ink-foreground) 62%, transparent),
+    5px 5px 0 color-mix(in oklab, var(--ink-foreground) 55%, transparent),
+    6px 6px 0 color-mix(in oklab, var(--ink-foreground) 48%, transparent),
+    7px 7px 0 color-mix(in oklab, var(--ink-foreground) 42%, transparent),
+    8px 8px 0 color-mix(in oklab, var(--ink-foreground) 36%, transparent),
+    9px 9px 0 color-mix(in oklab, var(--ink-foreground) 30%, transparent),
+    10px 10px 0 color-mix(in oklab, var(--ink-foreground) 25%, transparent),
+    12px 12px 0 color-mix(in oklab, var(--ink-foreground) 20%, transparent),
+    14px 14px 0 color-mix(in oklab, var(--ink-foreground) 16%, transparent),
+    16px 16px 0 color-mix(in oklab, var(--ink-foreground) 12%, transparent),
+    18px 18px 0 color-mix(in oklab, var(--ink-foreground) 9%, transparent),
+    20px 20px 0 color-mix(in oklab, var(--ink-foreground) 7%, transparent),
+    22px 22px 0 color-mix(in oklab, var(--ink-foreground) 5%, transparent),
+    24px 24px 0 color-mix(in oklab, var(--ink-foreground) 3%, transparent),
+    4px 4px 24px color-mix(in oklab, var(--accent) 45%, transparent);
+  animation: brand-turn 11s ease-in-out infinite;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+@keyframes brand-turn {
+  0% {
+    transform: rotateY(-22deg) rotateX(6deg) translateZ(0);
+  }
+  50% {
+    transform: rotateY(22deg) rotateX(6deg) translateZ(0);
+  }
+  100% {
+    transform: rotateY(-22deg) rotateX(6deg) translateZ(0);
+  }
+}
+
+@utility brand-glow {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--accent) 45%, transparent) 0%,
+    color-mix(in oklab, var(--accent) 12%, transparent) 45%,
+    transparent 75%
+  );
+  filter: blur(8px);
+  animation: brand-glow 6s ease-in-out infinite alternate;
+}
+
+@keyframes brand-glow {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-kenburns,
   .hero-beams,
   .hero-huewash,
-  .hero-bokeh {
+  .hero-bokeh,
+  .brand-wordmark,
+  .brand-glow {
     animation: none !important;
   }
 }

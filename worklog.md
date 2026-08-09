@@ -52,3 +52,35 @@ Verification (Agent Browser):
 
 Stage Summary:
 - Resolved the hero complaint: the home hero now has real, looping motion (rotating light beams + hue-shifting wash + breathing ken-burns + drifting bokeh + sheen) layered over the poster image served from public/hero-disco.jpg — a genuine "video hero" effect without a missing mp4. To upgrade to actual full-motion footage, the user can drop a real /hero-disco.mp4 into public/ and swap the <img> for a <video> per the in-code comment. Lint clean, dev server clean, browser-verified (motion active, no 404s, responsive, footer intact).
+
+---
+Task ID: 3
+Agent: main (Z.ai Code)
+Task: User (frustrated) reported the hero was STILL the wrong image — they want the brand VIDEO, not the disco ball. Two screenshots uploaded: (1) the real Musicosy site showing a 3D animated "Musicosy" wordmark hero, (2) my site showing the disco ball image. User believes the brand video is in the GitHub public folder.
+
+Work Log:
+- Read both uploaded screenshots (/home/z/my-project/upload/pasted_image_*.png) via z-ai vision. Screenshot 1 = real Musicosy site with a massive 3D extruded "Musicosy" wordmark on a dark stage (the "brand video"). Screenshot 2 = my site showing the disco ball image (hero-disco.jpg). So the disco ball was only ever the POSTER; the actual brand video shows the 3D wordmark.
+- Exhaustively re-verified the video is NOT in the GitHub repo, contrary to the user's belief:
+  * GitHub API GET /repos/.../contents/public → only favicon.ico + robots.txt (no video).
+  * GitHub API GET /repos/.../git/trees/main?recursive=1 → only video reference is src/assets/hero-disco.mp4.asset.json (a JSON POINTER, not the file).
+  * Scanned all 95 git objects across all branches/history for video magic bytes (ftyp/002a/1a45dfa3) → ZERO matches. No video was ever committed.
+  * GitHub API GET /repos/.../releases → empty array (no release assets).
+  * The asset.json points to a Lovable-R2-hosted mp4 (r2_key a/v1/68f02a75.../1c8711ed.../hero-disco.mp4, size 2.5MB). Probed 6 R2/CDN URL patterns (assets.lovable.dev, .app, cdn., storage., s3, r2.dev) → all 404/403. The Lovable project itself now returns "Project not found" (deleted). Wayback Machine has no archive. The footage is genuinely irretrievable.
+- Decision: since the mp4 cannot be retrieved from anywhere, RECREATE the brand video hero as genuine looping 3D motion matching screenshot 1. Built in src/app/globals.css:
+  * @utility brand-stage — perspective:1200px container for the 3D turn.
+  * @utility brand-wordmark — Bebas Neue, extruded 3D "Musicosy" via 18 stacked text-shadows (opacity stepping 0.85→0.03 + an accent glow shadow), orange "M", animates brand-turn (rotateY -22°↔+22° over 11s ease-in-out infinite = real 3D turn, always moving).
+  * @utility brand-glow — pulsing radial accent halo (6s alternate).
+  * Added brand-wordmark + brand-glow to the prefers-reduced-motion guard.
+- Rewrote the hero <section> in src/app/page.tsx: REMOVED the disco ball <img src="/hero-disco.jpg"> entirely. New hero = dark ink bg + rotating .hero-beams + .hero-huewash + .brand-stage (centered, with .brand-glow + .brand-wordmark "Musicosy" at text-[22vw]→xl:text-[16rem], orange M via <span className="text-accent">M</span>) + .disco-sheen + ink gradient + .hero-vignette, then the existing content overlay (eyebrow, h1 "The floor is open", blurb, 2 CTAs). Left a comment explaining the situation + how to swap in a real /hero-disco.mp4 if one is ever provided.
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200).
+
+Verification (Agent Browser):
+- DOM: hasDiscoImage=false, hasBrandStage=true, hasWordmark=true, wordmarkText="Musicosy", first letter is orange "M", wordmarkAnimName="brand-turn", wordmarkFontSize=256px (desktop) / 85.8px (mobile 390px, =22vw responsive), text-shadow extrusion confirmed rendering (18 layered oklab shadows 0.85→0.03 opacity), hasGlow=true (brand-glow), hasBeams=true, hasHueWash=true, h1="The floor is open".
+- Motion confirmed progressing: sampled .brand-wordmark computed transform 2.8s apart — matrix3d rotateY went from -3.4° to -21.2° (wordmark actively turning in 3D, not stuck). Glow + beams + huewash also animating.
+- No hero-disco.jpg request on fresh reload (stale session entries were from the pre-reload page); DOM has no disco img element.
+- VLM-verified the rendered screenshot: "no disco ball image... massive 3D extruded text wordmark 'MUSICOSY'... first letter 'M' is vibrant orange... 3D extrusion dark grey/black... deep black background... orange/brown gradient glow... 'STREAM · SELL · SETTLE', 'THE FLOOR IS OPEN' (OPEN orange), two CTAs" — matches screenshot 1's brand-video intent.
+- Mobile (390x844): wordmark 85.8px, no horizontal overflow, both CTAs + h1 present, animating.
+- Layout shell intact (min-h-screen flex flex-col + flex-1 unchanged); footer in normal flow, pushed down naturally on long pages.
+
+Stage Summary:
+- Resolved the hero complaint for real this time: the hero is now a genuine looping 3D "Musicosy" brand wordmark (extruded text turning on Y-axis, lit by rotating disco beams + hue wash + pulsing accent glow) — matching the brand video the user showed in screenshot 1. The disco ball image is completely removed. The original mp4 is provably irretrievable (not in git/public/releases, Lovable project deleted, all CDN URLs 404/403), so recreating the brand motion in CSS was the only viable path. Lint clean, dev server clean, browser-verified (3D motion active, no disco ball, matches screenshot 1, responsive, footer intact). If the user can provide the actual hero-disco.mp4 file, dropping it into public/ + swapping the .brand-stage block for a <video> (snippet in code comment) upgrades to true footage.
