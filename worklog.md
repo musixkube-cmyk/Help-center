@@ -347,3 +347,28 @@ Verification (Agent Browser + VLM):
 
 Stage Summary:
 - Restored the mega menu design EXACTLY as the original GitHub source — icons (17 lucide icons via iconFor hash), 3-column layout (slice(0,3)), intro rail with overview/blurb/Explore, dark promo panel with Musicosy AI / "One spine" / "Business intelligence layer" / "Meet the platform". Also restored section pages to the original flat grid. The ONLY changes kept are the nav DATA (all branches/leaves from the user's tree) and the Task 10 additions (lean footer, Help Center sidebar page) which the user explicitly requested. Lesson learned: ADD to existing designs, do NOT redesign. Lint clean, dev server clean, browser-verified (icons + promo panel + 3 columns all present).
+
+---
+Task ID: 12
+Agent: main (Z.ai Code)
+Task: Examine how For Creators is built in the mega menu, do the exact same for For Labels — put all information in cleanly, including the 5+ persona types that were being ignored (buried under "By Role" wrapper, never visible in the mega menu).
+
+Work Log:
+- Examined For Creators pattern: children are CATEGORIES (Music Distribution, Studio Production Tools, etc.), each WITH leaves. The MegaPanel does node.children.slice(0, 3) → shows first 3 categories as columns, each with up to 6 leaves + icons. This is why For Creators looks rich in the mega menu.
+- Diagnosed For Labels problem: the 21 label capabilities were flat leaves (no sub-children → empty columns with just the item name), and the 6 personas (For Managers, For Publishers, etc.) were buried under a "By Role" wrapper node — which was the LAST child. Since the mega menu only shows slice(0, 3), the personas never appeared. The first 3 columns showed flat items like "A&R and artist discovery" with no leaves.
+- Restructured For Labels in src/data/nav.ts to mirror For Creators exactly:
+  * Made the 6 persona types DIRECT children of For Labels (first, before the 21 capabilities) — each with its leaves, exactly like For Creators categories.
+  * Explicit paths preserve the /for-labels/by-role/for-managers URLs (so existing footer links + bookmarks work). Used manual { label, path, blurb, children: build(path, [...]) } objects instead of auto-generated build() paths.
+  * Added blurbs to each persona (For Managers: "Artist relations, projects and team ops for managers.", etc.) so the intro rail + section pages have descriptions.
+  * Kept the 21 label capabilities as direct leaves after the personas (via build("/for-labels", [21 items])).
+  * Removed the "By Role" wrapper node — personas are now direct children, not nested.
+- Did NOT touch the MegaPanel component, site-header, or any UI. Only changed nav DATA, as instructed ("only ADD to not redesign").
+
+Verification (curl + Agent Browser):
+- All 8 persona routes return 200: /for-labels (200), /for-labels/by-role/for-managers (200), /for-labels/by-role/for-publishers (200), /for-labels/by-role/for-music-supervisors (200), /for-labels/by-role/for-producers-and-engineers (200), /for-labels/by-role/for-songwriters (200), /for-labels/by-role/for-tour-managers (200), /for-labels/by-role/for-managers/artist-relations (200).
+- For Labels mega menu (DOM-verified): 3 columns = For Managers (6 leaves: Artist relations, Project management, Marketing & pitching, CRM, Finance & budgeting, Catalog management), For Publishers (4 leaves: Rights management, Royalty administration, Catalog management, Sync & licensing), For Music Supervisors (3 leaves: Sync briefs, Licensing, Catalog discovery). 13 icons visible. Intro rail with "overview" + promo panel present. This is the EXACT same pattern as For Creators.
+- For Labels section page: 27 cards total — 6 personas first (For Managers, For Publishers, For Music Supervisors, For Producers & Engineers, For Songwriters, For Tour Managers), then 21 label capabilities (A&R and artist discovery through Audio file management).
+- Lint clean (bun run lint, 0 problems). No page/console errors.
+
+Stage Summary:
+- For Labels now mirrors For Creators exactly: the 6 role-based personas (For Managers, For Publishers, For Music Supervisors, For Producers & Engineers, For Songwriters, For Tour Managers) are direct children of For Labels, each with their leaves — showing as rich columns with icons in the mega menu (first 3 visible: For Managers/Publishers/Music Supervisors). The 21 label capabilities follow as direct leaves. All 27 items visible on the section page. No UI redesign — only nav DATA restructured. Existing paths preserved (/for-labels/by-role/*). Lint clean, dev server clean, browser-verified.

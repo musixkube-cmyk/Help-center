@@ -108,6 +108,74 @@ export const megaMenu: NavNode[] = [
     path: "/for-labels",
     blurb: "Roster-scale ops: A&R, accounting, rights and reporting.",
     children: [
+      // Role-based personas first — mirrors how For Creators groups by category.
+      // Explicit paths preserve the /for-labels/by-role/* URLs.
+      {
+        label: "For Managers",
+        path: "/for-labels/by-role/for-managers",
+        blurb: "Artist relations, projects and team ops for managers.",
+        children: build("/for-labels/by-role/for-managers", [
+          "Artist relations",
+          "Project management",
+          "Marketing & pitching",
+          "CRM",
+          "Finance & budgeting",
+          "Catalog management",
+          "Team management",
+        ]),
+      },
+      {
+        label: "For Publishers",
+        path: "/for-labels/by-role/for-publishers",
+        blurb: "Rights, royalties, catalog and sync for publishers.",
+        children: build("/for-labels/by-role/for-publishers", [
+          "Rights management",
+          "Royalty administration",
+          "Catalog management",
+          "Sync & licensing",
+        ]),
+      },
+      {
+        label: "For Music Supervisors",
+        path: "/for-labels/by-role/for-music-supervisors",
+        blurb: "Sync briefs, licensing and catalog discovery.",
+        children: build("/for-labels/by-role/for-music-supervisors", [
+          "Sync briefs",
+          "Licensing",
+          "Catalog discovery",
+        ]),
+      },
+      {
+        label: "For Producers & Engineers",
+        path: "/for-labels/by-role/for-producers-and-engineers",
+        blurb: "Studio tools, audio files and collaboration.",
+        children: build("/for-labels/by-role/for-producers-and-engineers", [
+          "Studio tools",
+          "Audio file management",
+          "Collaboration",
+        ]),
+      },
+      {
+        label: "For Songwriters",
+        path: "/for-labels/by-role/for-songwriters",
+        blurb: "Collaboration, metadata and rights for songwriters.",
+        children: build("/for-labels/by-role/for-songwriters", [
+          "Collaboration",
+          "Metadata",
+          "Rights management",
+        ]),
+      },
+      {
+        label: "For Tour Managers",
+        path: "/for-labels/by-role/for-tour-managers",
+        blurb: "Tour planning, logistics and budgeting.",
+        children: build("/for-labels/by-role/for-tour-managers", [
+          "Tour planning",
+          "Logistics",
+          "Budgeting",
+        ]),
+      },
+      // Label-level capabilities
       ...build("/for-labels", [
         "A&R and artist discovery",
         "Release management",
@@ -131,32 +199,6 @@ export const megaMenu: NavNode[] = [
         "Performance analytics",
         "Audio file management",
       ]),
-      {
-        label: "By Role",
-        path: "/for-labels/by-role",
-        children: build("/for-labels/by-role", [
-          [
-            "For Managers",
-            [
-              "Artist relations",
-              "Project management",
-              "Marketing & pitching",
-              "CRM",
-              "Finance & budgeting",
-              "Catalog management",
-              "Team management",
-            ],
-          ],
-          [
-            "For Publishers",
-            ["Rights management", "Royalty administration", "Catalog management", "Sync & licensing"],
-          ],
-          ["For Music Supervisors", ["Sync briefs", "Licensing", "Catalog discovery"]],
-          ["For Producers & Engineers", ["Studio tools", "Audio file management", "Collaboration"]],
-          ["For Songwriters", ["Collaboration", "Metadata", "Rights management"]],
-          ["For Tour Managers", ["Tour planning", "Logistics", "Budgeting"]],
-        ]),
-      },
     ],
   },
   {
