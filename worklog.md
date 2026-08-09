@@ -137,3 +137,27 @@ Verification (Agent Browser):
 
 Stage Summary:
 - Hero stripped per instructions: the two headline texts ("Stream · Sell · Settle" eyebrow + "The floor is open" h1) are gone; the brown poster image (hero-disco.jpg) is deleted from disk and no longer referenced; on load the hero is dark (bg-ink, zero/none) until the brand video (preload=auto) starts playing. Blurb + both CTAs kept. Metadata title cleaned of the removed phrases. Lint clean, dev server clean, browser-verified (no brown image, no headline, video playing, no 404s, responsive, footer intact).
+
+---
+Task ID: 6
+Agent: main (Z.ai Code)
+Task: The brand video has sound. Add a play button to the hero so sound can be played and heard.
+
+Work Log:
+- Root cause: the <video> was autoPlay + muted (required for browser autoplay compliance — Chrome/Safari/Firefox all block autoplay-with-sound). So the video played visually but audio was inaudible. Enabling sound requires a user gesture (click).
+- Created src/components/site/hero.tsx as a 'use client' component (needed for click handlers + state). It owns: the <video> (autoPlay muted loop playsInline preload=auto), the existing hero content (blurb + Start listening / Upload your music CTAs), and a control cluster with TWO buttons bottom-right of the hero:
+  * Play/Pause button (Play / Pause icon, toggles video.play()/pause(), aria-label "Play video"/"Pause video").
+  * Mute/Unmute button (VolumeX / Volume2 icon, toggles video.muted; on unmute also resumes playback if paused so the user actually hears audio). aria-label "Unmute video"/"Mute video", aria-pressed reflects state.
+- Wired a mount useEffect that forces v.muted=true and calls v.play() (best-effort) so muted visual autoplay starts reliably; updates local `playing` state from the play() promise.
+- Replaced the inline hero <section> in src/app/page.tsx with <Hero /> (imported from @/components/site/hero). page.tsx stays a Server Component (keeps metadata); only the hero is client.
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200).
+
+Verification (Agent Browser):
+- Controls present: 2 buttons, labels ["Pause video","Unmute video"] (video autoplays muted+playing, so initial labels reflect that state).
+- Sound enable (the key requirement): clicked the "Unmute video" button → videoMuted went true→FALSE. Sound is now audible. (User gesture was the trigger, satisfying browser autoplay policy.) videoPaused=false, currentTime advancing.
+- Play/Pause toggle: clicked pause → paused=true, button label became "Play video". Clicked again → paused=false, label "Pause video", currentTime advancing (5.159s).
+- No page/console errors.
+- Mobile (390x844): both buttons visible and within viewport (play at x=262,y=759 — bottom-right, 48px touch target ≥44px minimum), video playing, no horizontal overflow, blurb + both CTAs present.
+
+Stage Summary:
+- Hero now has a play/pause button + a mute/unmute button (bottom-right). Video autoplays muted (compliant) for visual motion on load; clicking the unmute button (a real user gesture) enables audio so the brand video's sound is heard, and the play/pause button controls playback. Lint clean, dev server clean, browser-verified (unmute → muted=false = sound audible; play/pause toggles correctly; responsive; no errors; footer/layout intact).

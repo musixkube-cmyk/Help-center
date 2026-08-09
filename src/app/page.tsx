@@ -4,6 +4,7 @@ import { trending, newlyDropped, type Track } from "@/data/releases";
 import { megaMenu } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
 import { Button } from "@/components/ui/button";
+import { Hero } from "@/components/site/hero";
 
 export const metadata: Metadata = {
   title: "Musicosy — One Platform.",
@@ -55,43 +56,7 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative isolate overflow-hidden bg-ink text-ink-foreground">
-        <video
-          src="/hero-disco.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-105 object-cover opacity-80"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/25" />
-        <div className="relative flex h-[92vh] min-h-[620px] w-full flex-col justify-end px-6 pb-16 pt-28 lg:px-10">
-
-          <p className="max-w-xl text-lg text-ink-foreground/75">
-            One platform where fans listen and buy, creators ship and get paid, and every
-            play settles back to the people who made it.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button
-              size="lg"
-              className="rounded-none bg-accent uppercase tracking-widest text-accent-foreground hover:bg-accent/90"
-              asChild
-            >
-              <NavLink href="/discover">Start listening</NavLink>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-none border-ink-foreground/40 bg-transparent uppercase tracking-widest text-ink-foreground hover:bg-ink-foreground/10 hover:text-ink-foreground"
-              asChild
-            >
-              <NavLink href="/for-creators">Upload your music</NavLink>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       {/* Ticker */}
       <div className="overflow-hidden border-y border-border bg-stone-deep py-2">
