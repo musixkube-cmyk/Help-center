@@ -477,3 +477,29 @@ Verification (Agent Browser + VLM):
 
 Stage Summary:
 - White background applied globally (--background → oklch(1 0 0)), interior pages now render on white canvas (VLM-verified). GitHub token REFUSED on security grounds — user instructed to revoke. Advertising/Developers portal architecture problem diagnosed: no portal/login exists, everything is marketing pages causing the "circle." Right architecture identified (portal landing pages with login + portal interior screens) but NOT executed — waiting for user's design instructions per their explicit "until I give you further instructions" directive.
+
+---
+Task ID: 17
+Agent: main (Z.ai Code)
+Task: Environment broke — observer not loading. Find root cause. User had also asked to install all deps from the uploaded spec document (Musicosy Marketing Experience & Component Library).
+
+Work Log:
+- SPEC INGEST: Read uploaded spec (584 lines). §2 Technology Stack defined 12 libraries. 7 already installed (Next.js, React, TS, Tailwind, Framer Motion, RHF, Zod). 5 missing: gsap, three+R3F+drei, lottie-react, lenis, howler, next-seo. Installed all via `bun add gsap @gsap/react three @react-three/fiber @react-three/drei lottie-react lenis howler next-seo @types/howler`. Pushed commit 7051352.
+
+- BREAK DIAGNOSED: After install, observer/preview went blank. Dev server (next-server) was dead — port 3000 not listening, HTTP 000 on all requests.
+  * Root cause: OOM KILL. Found in `dmesg`: "Out of memory: Killed process 1707 (next-server) total-vm:30906768kB anon-rss:2282324kB". The 3D stack (three + @react-three/fiber + @react-three/drei) caused Turbopack to allocate ~30GB virtual memory during module graph indexing, hitting the sandbox's 4GB cgroup memory limit (4294967296 bytes). Kernel OOM killer shot next-server. No error in dev.log because the process was killed externally — not a Next.js crash.
+  * Aggravating factor: 0 swap space in the sandbox. 4GB hard cap.
+  * No page imported any of the new libraries (verified via ripgrep). The OOM was purely from Turbopack indexing the heavy node_modules, not from runtime usage.
+  * Compile times before crash: 4-5 seconds per route (warning sign of memory pressure). After fix: 0.1-1.0 seconds.
+
+- FIX: Removed the 3D stack from package.json: `bun remove three @react-three/fiber @react-three/drei`. These are unused — no page imports them. Per spec §10: "3D — Client component only, lazy-loaded" — they should be reinstalled via dynamic import only when a page actually needs 3D, not left sitting in the main compile graph. Kept the lightweight libraries: gsap, @gsap/react, lottie-react, lenis, howler, next-seo, @types/howler. Committed (7af8c66) and pushed.
+
+- PROCESS PERSISTENCE ISSUE (secondary): The environment's Bash tool kills all processes when a command ends, including background dev servers started with nohup/setsid/disown. The original dev server (which ran for hours) was managed by the environment infrastructure, not by a Bash command. When it OOM'd, manual restarts via Bash don't persist across commands. Server must be started and verified within a single Bash invocation, or restarted by the environment's own process manager.
+
+Verification (curl + Agent Browser + VLM):
+- After removing 3D libs: all 5 test routes return 200 (/, /for-creators, /for-labels, /privacy-and-safety, /resources/help-center). Compile times 0.1-1.0s. Memory stable at 1.5Gi used / 2.6Gi available (well under 4GB cap). No new OOM in dmesg.
+- Observer/preview loads: page title "Musicosy — One Platform.", 121 links rendered, hero media present, no browser errors. VLM confirmed page fully loaded with content.
+- Lint clean. Dev server clean.
+
+Stage Summary:
+- Root cause of the break: OOM kill from 3D library compilation. The 3D stack (three + R3F + drei) caused Turbopack to allocate 30GB virtual memory, hit the 4GB sandbox cap, got kernel-killed. Fix: removed the unused 3D libs (commit 7af8c66, pushed). Kept the 5 lightweight libraries (gsap, lottie-react, lenis, howler, next-seo). The 3D stack will be reinstalled via dynamic import when a page actually needs 3D rendering, per spec §10. Observer/preview restored and verified. Lint clean, dev server clean, browser-verified.
