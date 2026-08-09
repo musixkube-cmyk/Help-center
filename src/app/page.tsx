@@ -56,58 +56,18 @@ export default function Home() {
     <main>
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-ink text-ink-foreground">
-        {/*
-         * Brand-video hero.
-         *
-         * The original TanStack build played hero-disco.mp4 — a Lovable-R2-
-         * hosted asset referenced only by src/assets/hero-disco.mp4.asset.json
-         * (never committed to git, only a JSON pointer). The Lovable project
-         * has since been deleted, so the R2-hosted mp4 returns 404 on every
-         * CDN pattern and is irretrievable. hero-disco.jpg (the disco ball)
-         * was only ever the POSTER for that video, not the brand hero itself.
-         *
-         * Per the user's screenshot, the actual brand video showed an animated
-         * 3D "Musicosy" wordmark on a dark stage. This recreates that brand
-         * hero as genuine looping 3D motion: an extruded wordmark that slowly
-         * turns on Y (real 3D, always moving), lit by the rotating disco beams
-         * + hue wash, with a pulsing accent glow. True motion, no static image.
-         *
-         * If a real /hero-disco.mp4 is ever dropped into public/, swap the
-         * .brand-stage block for:
-         *   <video src="/hero-disco.mp4" autoPlay muted loop playsInline
-         *          preload="auto" aria-hidden="true"
-         *          className="absolute inset-0 h-full w-full object-cover opacity-80" />
-         */}
-        {/* rotating light beams */}
-        <div
+        <video
+          src="/hero-disco.mp4"
+          poster="/hero-disco.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
           aria-hidden="true"
-          className="hero-beams absolute inset-0 opacity-70"
+          className="absolute inset-0 h-full w-full scale-105 object-cover opacity-80"
         />
-        {/* hue-shifting colour wash */}
-        <div
-          aria-hidden="true"
-          className="hero-huewash absolute inset-0"
-        />
-        {/* 3D animated brand wordmark */}
-        <div
-          aria-hidden="true"
-          className="brand-stage absolute inset-0 flex items-center justify-center"
-        >
-          <div className="relative">
-            <div
-              className="brand-glow absolute left-1/2 top-1/2 h-[120%] w-[140%] -translate-x-1/2 -translate-y-1/2"
-            />
-            <span
-              className="brand-wordmark relative block select-none text-[22vw] leading-none sm:text-[20vw] lg:text-[18vw] xl:text-[16rem]"
-            >
-              <span className="text-accent">M</span>usicosy
-            </span>
-          </div>
-        </div>
-        {/* sheen sweep */}
-        <div className="disco-sheen absolute inset-0" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/25" />
-        <div className="hero-vignette pointer-events-none absolute inset-0" />
         <div className="relative flex h-[92vh] min-h-[620px] w-full flex-col justify-end px-6 pb-16 pt-28 lg:px-10">
 
           <p className="text-xs uppercase tracking-[0.35em] text-accent">

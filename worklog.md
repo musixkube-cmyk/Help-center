@@ -84,3 +84,28 @@ Verification (Agent Browser):
 
 Stage Summary:
 - Resolved the hero complaint for real this time: the hero is now a genuine looping 3D "Musicosy" brand wordmark (extruded text turning on Y-axis, lit by rotating disco beams + hue wash + pulsing accent glow) — matching the brand video the user showed in screenshot 1. The disco ball image is completely removed. The original mp4 is provably irretrievable (not in git/public/releases, Lovable project deleted, all CDN URLs 404/403), so recreating the brand motion in CSS was the only viable path. Lint clean, dev server clean, browser-verified (3D motion active, no disco ball, matches screenshot 1, responsive, footer intact). If the user can provide the actual hero-disco.mp4 file, dropping it into public/ + swapping the .brand-stage block for a <video> (snippet in code comment) upgrades to true footage.
+
+---
+Task ID: 4
+Agent: main (Z.ai Code)
+Task: User provided the actual brand video file (upload/musicosy promo video 3.mp4). Was angry I improvised with CSS instead of using the real video. Instructed: do NOT improvise, use the file.
+
+Work Log:
+- Verified the uploaded file: /home/z/my-project/upload/musicosy promo video 3.mp4 — ISO Media MP4 v1, 2,577,560 bytes. Byte size EXACTLY matches the `size: 2577560` field in the source repo's src/assets/hero-disco.mp4.asset.json — confirmed this is the genuine original brand video.
+- Copied it to /home/z/my-project/public/hero-disco.mp4 (filename matches what the TanStack source's <video src> expected).
+- Removed ALL CSS I had improvised in src/app/globals.css across Tasks 2 & 3: deleted @utility hero-kenburns/hero-beams/hero-huewash/hero-bokeh/hero-vignette/brand-stage/brand-wordmark/brand-glow + all their @keyframes + the prefers-reduced-motion guard block. globals.css is now back to exactly the source's original utilities (marquee-track + disco-sheen only).
+- Rewrote the hero <section> in src/app/page.tsx to be exactly the original TanStack source's <video> markup: <video src="/hero-disco.mp4" poster="/hero-disco.jpg" autoPlay muted loop playsInline preload="metadata" aria-hidden="true" className="absolute inset-0 h-full w-full scale-105 object-cover opacity-80" /> + the ink gradient overlay + the existing content. No improvisation, no extra layers.
+- Deleted the uploaded file from /home/z/my-project/upload/ (per user note that it would sit there and slow the app) — the video now lives only in public/ where it's served statically.
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200).
+
+Verification (Agent Browser):
+- /hero-disco.mp4 serves HTTP 200, content-type video/mp4, content-length 2577560 (exact byte match).
+- <video> element state: src=http://localhost:3000/hero-disco.mp4, poster set, paused=false, muted=true, loop=true, autoplay=true, readyState=4 (HAVE_ENOUGH_DATA), networkState=1, duration=10.005s, videoWidth=1280, videoHeight=720, error=null.
+- Playing confirmed: currentTime advanced 5.636 → 8.220 over 2.5s (real-time playback, not stuck).
+- No page errors, no console errors.
+- VLM-verified the rendered hero: "video or high-fidelity 3D render... large 3D letters 'Musicosy'... 'M' stylized as orange geometric shape... realistic shadows and lighting... blurred darkened music streaming interface backdrop with album artwork... cinematic look with large 3D typography floating over a blurred app interface" — this is the genuine brand video from the user's file.
+- Mobile (390x844): video plays (paused=false, currentTime advancing), no horizontal overflow, h1 + both CTAs present.
+- Layout shell intact (min-h-screen flex flex-col + flex-1), footer present.
+
+Stage Summary:
+- Done right this time: the hero plays the REAL brand video (public/hero-disco.mp4, the user-provided file) via a standard <video autoPlay muted loop> element — no CSS improvisation, no static image, no missing-asset workarounds. All improvised CSS from Tasks 2-3 removed; globals.css restored to the source's original two utilities. Uploaded file removed from /upload/ to avoid dead weight. Lint clean, dev server clean, browser-verified (video genuinely playing, 200/ video/mp4, responsive, footer intact).
