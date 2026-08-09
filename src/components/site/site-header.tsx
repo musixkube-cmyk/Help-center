@@ -87,9 +87,9 @@ function MegaPanel({ node }: { node: NavNode }) {
   return (
     <div className="invisible absolute left-0 right-0 top-full z-50 translate-y-1 opacity-0 transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
       <div className="w-full border-t border-border bg-popover shadow-[0_24px_60px_-30px_oklch(0_0_0/0.55)]">
-        <div className="grid grid-cols-1 lg:grid-cols-[19rem_repeat(6,minmax(0,1fr))_20rem]">
-          {/* Intro rail */}
-          <div className="border-r border-border bg-card px-8 py-9">
+        <div className="grid grid-cols-1 lg:grid-cols-[19rem_repeat(3,minmax(0,1fr))_20rem] lg:grid-rows-2">
+          {/* Intro rail — pinned to col 1, spans both rows */}
+          <div className="border-r border-border bg-card px-8 py-9 lg:col-start-1 lg:row-start-1 lg:row-span-2">
             <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
               {node.label} overview
             </p>
@@ -125,8 +125,8 @@ function MegaPanel({ node }: { node: NavNode }) {
             </div>
           ))}
 
-          {/* Promo panel */}
-          <div className="relative overflow-hidden bg-ink px-8 py-9 text-ink-foreground">
+          {/* Promo panel — pinned to col 5, spans both rows */}
+          <div className="relative overflow-hidden bg-ink px-8 py-9 text-ink-foreground lg:col-start-5 lg:row-start-1 lg:row-span-2">
             <div className="pointer-events-none absolute -bottom-16 -right-10 h-56 w-56 rounded-full bg-accent/25 blur-3xl" />
             <div className="relative">
               <p className="flex items-center gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-accent">

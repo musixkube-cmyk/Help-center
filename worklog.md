@@ -430,3 +430,30 @@ Verification (Agent Browser + VLM):
 
 Stage Summary:
 - The mega menu now shows 6 columns instead of 3 — same design (intro rail + columns with icons + promo panel), just doubled. For Labels shows 6 of its 14 branches (the 6 capability branches) as columns with leaves; For Creators shows 6 of its 14 branches. The swapping problem is resolved structurally — the count is configurable in one place (slice + grid template) and all sections benefit uniformly. Two-line change, lint clean, browser-verified.
+
+---
+Task ID: 15
+Agent: main (Z.ai Code)
+Task: User said don't force 6 columns onto one row (text gets cramped/invisible). Instead: 3 columns on top row, 3 columns on bottom row — 3x2 grid. No horizontal dividing line between the two rows. Same design, just arranged as two rows of three.
+
+Work Log:
+- Changed the grid template in src/components/site/site-header.tsx MegaPanel from a single 6-column row back to a 3-column layout with 2 rows:
+  * Grid: `lg:grid-cols-[19rem_repeat(3,minmax(0,1fr))_20rem] lg:grid-rows-2` (3 branch columns per row × 2 rows, with intro rail at 19rem and promo at 20rem on the sides)
+  * Intro rail: `lg:col-start-1 lg:row-start-1 lg:row-span-2` — pinned to column 1, spans both rows
+  * Promo panel: `lg:col-start-5 lg:row-start-1 lg:row-span-2` — pinned to column 5, spans both rows
+  * The 6 branch columns auto-flow into the remaining 6 cells (columns 2-4 of row 1, columns 2-4 of row 2): 3 on top, 3 on bottom
+- First attempt used only `lg:row-span-2` without col-start — auto-placement put 5 items in row 1 and 3 in row 2 because the promo panel (last in source order) couldn't claim its spot before the columns filled it. Fixed by explicitly pinning intro to col-start-1 and promo to col-start-5, which reserves their columns so auto-placement fills only the middle 3 columns × 2 rows with the 6 branches.
+- Did NOT add any horizontal border between the two rows. Verified via computed styles: all 6 branch columns have only `border-right: 1px` (the vertical separator between columns that the user wants to keep). `border-top` and `border-bottom` are both `0px` on every column — no horizontal divider between the rows.
+- Mobile untouched: `lg:` prefixed classes only apply on large screens. On mobile, `grid-cols-1` stacks everything in a single column (and mobile uses the separate hamburger menu anyway, not the mega panel).
+- Lint clean (bun run lint, 0 problems). Dev server compiled cleanly.
+
+Verification (Agent Browser + VLM):
+- For Labels mega menu (DOM-verified): 8 grid cells = intro rail (col 1, h=706, spans both rows) + 3 columns row 1 (A&R and Artist Development, Release and Distribution, Marketing and Promotion — each h=353) + 3 columns row 2 (Finance and Accounting, Rights Royalties and Legal, Catalog and Asset Management — each h=353) + promo panel (col 5, h=706, spans both rows). gridTemplateRows = "353px 353px" (2 equal rows). gridTemplateCols = "304px 325px 325px 325px 320px" (intro + 3 cols + promo).
+- VLM confirmed: "2 rows of navigation columns... Row 1: A&R and Artist Development, Release and Distribution, Marketing and Promotion. Row 2: Finance and Accounting, Rights Royalties and Legal, Catalog and Asset Management."
+- Border verification: all 6 columns have borderTop=0px, borderBottom=0px, borderRight=1px — vertical separators between columns only, NO horizontal divider between rows.
+- For Creators mega menu (DOM-verified): also renders as 3x2 — Row 1: Music Distribution, Studio Production Tools, Social Media Management. Row 2: Analytics, Merchandise & E-Commerce, Catalog & Asset Management. Both rows h=469px, intro and promo span both rows (h=938px).
+- Mobile (390x844): grid-cols-1 (single column stack), lg: classes don't apply. No layout breakage.
+- No page/console errors. Dev server clean.
+
+Stage Summary:
+- Mega menu now shows 6 branches as a 3x2 grid (3 columns top row, 3 columns bottom row) instead of 6 cramped columns in one row. Intro rail spans both rows on the left, promo panel spans both rows on the right. The vertical separating lines (border-r) remain between columns; there is NO horizontal dividing line between the two rows (verified via computed border styles). Same design — icons, intro rail, promo panel, column headers all intact — just arranged as two rows of three. For Labels shows all 6 capability branches; For Creators shows 6 of its 14 branches. Lint clean, dev server clean, browser-verified (3x2 layout, no horizontal divider, mobile stacks).
