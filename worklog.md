@@ -184,3 +184,50 @@ Verification (Agent Browser):
 
 Stage Summary:
 - Home restructured per spec: scrollbar beneath hero eliminated (overflow-x:hidden on html/body); all section sub-headline descriptors removed; the two old grids replaced by single-row horizontal carousels; the carousel pattern applied uniformly across 8 media sections (Trending, Newly dropped, Shows to try, Discover podcast, Popular artist, Recommended for you, New Single releases, The album trending playlist) — each scrolls left-to-right via drag or prev/next buttons (embla dragFree). Pick your lane kept. Lint clean, dev server clean, browser-verified (no h-scroll, 8 carousels, 64 cards, scroll confirmed, responsive, footer intact, no errors).
+
+---
+Task ID: 8
+Agent: main (Z.ai Code)
+Task: (1) Remove the scrolling ticker banner beneath the hero ("Distribution · Studio & AI · Merch & ticketing · Rights & sync · Royalties & payouts..."). (2) Expand the mega menu / nav tree to include ALL pages from the user's full navigation tree (Privacy & Safety sub-sections, Legal & Policies, etc.). (3) All pages must route via the app router.
+
+Work Log:
+- (1) Removed the ticker: deleted the entire <div className="overflow-hidden border-y border-border bg-stone-deep py-2"> block (the marquee-track with Distribution/Studio & AI/Merch & ticketing/Rights & sync/Royalties & payouts/Podcast hosting/Adnote targeting) from src/app/page.tsx. The hero now transitions directly into the "Trending this week" carousel.
+- (2)+(3) Expanded src/data/nav.ts to match the user's full navigation tree exactly:
+  * For Creators > Catalog & Asset Management: changed from 5 separate children (Stems & masters, Press photos, Contract drafts, Deal memos, Sync briefs) to the single child per the user's tree: "Manage stems, masters, press photos, contract drafts, deal memos, sync briefs".
+  * Privacy & Safety > Privacy: added "Privacy Policies" (before Privacy Policy), "Google Privacy Policy", "SheerID Privacy Policy" (at end) — now 16 items matching the tree.
+  * Privacy & Safety > Safety: added "Stitch privacy settings" (after Post privacy settings) — now 16 items.
+  * Privacy & Safety > Reporting: updated labels to match tree — "Report a post / account / LIVE / comment / DM" and "Report suggested search / hashtag / sound / Series".
+  * Privacy & Safety > Content & Conduct: removed "AI Services Terms" (belongs in Terms of Use), added "Age-restricted LIVE content", "Violent extremism", "Content Algorithm", "Political Ads" — now 17 items.
+  * Privacy & Safety > Security: ADDED entirely (6 items: Account safety, Account status, Content violations & bans, Transaction policy violations, Reporting security vulnerabilities, Avoid phishing).
+  * Privacy & Safety > Law Enforcement: ADDED entirely (1 item: Law Enforcement Data Request Guidelines).
+  * Privacy & Safety > Copyright & IP: REMOVED (moved to Legal & Policies).
+  * Legal & Policies: ADDED as a new footer section with 2 sub-categories:
+    - Terms of Use (18 items: Subscription Terms & Conditions through AI Services Terms).
+    - Copyright & IP (6 items: Intellectual Property Policy, Trademark & counterfeiting, DMCA Policy, Copyright reporting, Commercial use, Ownership & copyright).
+  * Footer now has 8 groups: Platform, Solutions, Developers, Advertising, Resources, Privacy & Safety, Legal & Policies (NEW), Support Center.
+- Routing: no new app-router files needed — the existing catch-all src/app/[...path]/page.tsx resolves ANY path via findNode(), so every node in the expanded tree is automatically routable. The build() function generates slug-based paths; findNode()/findTrail() recurse the full tree depth.
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200).
+
+Verification (Agent Browser + curl + VLM):
+- Ticker gone: hasTicker=false, hasMarqueeTrack=false on both desktop and mobile. VLM confirmed: "No scrolling marquee/ticker banner beneath the hero video; the page transitions directly into a TRENDING THIS WEEK section."
+- New routes all return HTTP 200 (curl-verified 13 routes):
+  /privacy-and-safety/security (200), /privacy-and-safety/law-enforcement (200),
+  /legal-and-policies (200), /legal-and-policies/terms-of-use (200), /legal-and-policies/copyright-and-ip (200),
+  /legal-and-policies/terms-of-use/ai-services-terms (200),
+  /privacy-and-safety/safety/stitch-privacy-settings (200),
+  /privacy-and-safety/content-and-conduct/political-ads (200),
+  /privacy-and-safety/reporting/report-a-post-account-live-comment-dm (200),
+  /for-creators/catalog-and-asset-management/manage-stems-masters-press-photos-contract-drafts-deal-memos-sync-briefs (200),
+  /privacy-and-safety/privacy/privacy-policies (200), /privacy-and-safety/privacy/google-privacy-policy (200), /privacy-and-safety/privacy/sheerid-privacy-policy (200).
+- Old path correctly 404s: /privacy-and-safety/copyright-and-ip → 404 (Copyright & IP moved to /legal-and-policies/copyright-and-ip which is 200).
+- Footer DOM: 8 headings [Platform, Solutions, Developers, Advertising, Resources, Privacy & Safety, Legal & Policies, Support Center]. Legal & Policies links → /legal-and-policies/terms-of-use + /legal-and-policies/copyright-and-ip. Security link → /privacy-and-safety/security. Law Enforcement link → /privacy-and-safety/law-enforcement. Old /privacy-and-safety/copyright-and-ip link gone (oldCopyrightUnderPrivacyExists=false). Total 38 footer links.
+- /legal-and-policies page: h1="Legal & Policies", 2 child cards (Terms of Use, Copyright & IP), title="Legal & Policies — Musicosy".
+- /legal-and-policies/terms-of-use page: h1="Terms of Use", 18 child cards (all 18 terms), title correct.
+- /privacy-and-safety page: h1="Privacy & Safety", 6 child cards (Privacy, Safety, Reporting, Content & Conduct, Security, Law Enforcement) — Copyright & IP gone.
+- /for-creators/catalog-and-asset-management page: h1="Catalog & Asset Management", 1 child card ("Manage stems, masters, press photos, contract drafts, deal memos, sync briefs") — matches user tree.
+- No console errors, no page errors (only normal HMR/DevTools messages).
+- Mobile (390x844): hasTicker=false, hasHScroll=false, footer with all 8 sections present, hero video + 8 carousels intact.
+- VLM-verified home screenshot: ticker gone, Legal & Policies in footer, Security + Law Enforcement under Privacy & Safety.
+
+Stage Summary:
+- Ticker banner beneath hero completely removed (page flows hero → Trending this week carousel directly). Nav tree expanded to match the user's full navigation tree: all missing Privacy & Safety sub-sections (Security, Law Enforcement) and items (Privacy Policies, Google Privacy Policy, SheerID Privacy Policy, Stitch privacy settings, Age-restricted LIVE content, Violent extremism, Content Algorithm, Political Ads) added; Reporting labels updated; Copyright & IP moved from Privacy & Safety to the new Legal & Policies footer section (with Terms of Use's 18 items + Copyright & IP's 6 items); For Creators > Catalog & Asset Management updated to single child per tree. All pages route via the existing catch-all — 13 new/updated routes verified 200, old moved path correctly 404s. Lint clean, dev server clean, browser-verified (ticker gone, 8 footer sections, deep routes render, no errors, responsive, footer intact).

@@ -32,30 +32,6 @@ export default function Home() {
       {/* Hero */}
       <Hero />
 
-      {/* Ticker */}
-      <div className="overflow-hidden border-y border-border bg-stone-deep py-2">
-        <div className="marquee-track flex w-max gap-10 whitespace-nowrap text-xs uppercase tracking-[0.3em] text-muted-foreground">
-          {Array.from({ length: 2 }).map((_, i) => (
-            <span key={i} className="flex gap-10">
-              <span>Distribution</span>
-              <span className="text-accent">·</span>
-              <span>Studio &amp; AI</span>
-              <span className="text-accent">·</span>
-              <span>Merch &amp; ticketing</span>
-              <span className="text-accent">·</span>
-              <span>Rights &amp; sync</span>
-              <span className="text-accent">·</span>
-              <span>Royalties &amp; payouts</span>
-              <span className="text-accent">·</span>
-              <span>Podcast hosting</span>
-              <span className="text-accent">·</span>
-              <span>Adnote targeting</span>
-              <span className="text-accent">·</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* Trending this week */}
       <SectionCarousel
         title="Trending this week"
