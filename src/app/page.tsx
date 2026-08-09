@@ -6,11 +6,11 @@ import { NavLink } from "@/components/site/nav-link";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Musicosy — Stream, Sell, Settle. One Platform.",
+  title: "Musicosy — One Platform.",
   description:
     "Musicosy is where listening, catalog, commerce and royalties share one spine. Discover what's trending, hear what just dropped, and run your release from studio to payout.",
   openGraph: {
-    title: "Musicosy — Stream, Sell, Settle. One Platform.",
+    title: "Musicosy — One Platform.",
     description:
       "Trending tracks, fresh drops, and the full creator stack: distribution, studio tools, merch, rights and royalties.",
   },
@@ -58,25 +58,18 @@ export default function Home() {
       <section className="relative isolate overflow-hidden bg-ink text-ink-foreground">
         <video
           src="/hero-disco.mp4"
-          poster="/hero-disco.jpg"
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           aria-hidden="true"
           className="absolute inset-0 h-full w-full scale-105 object-cover opacity-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/25" />
         <div className="relative flex h-[92vh] min-h-[620px] w-full flex-col justify-end px-6 pb-16 pt-28 lg:px-10">
 
-          <p className="text-xs uppercase tracking-[0.35em] text-accent">
-            Stream · Sell · Settle
-          </p>
-          <h1 className="mt-4 max-w-4xl text-6xl leading-[0.88] sm:text-8xl lg:text-9xl">
-            The floor is <span className="text-accent">open</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-ink-foreground/75">
+          <p className="max-w-xl text-lg text-ink-foreground/75">
             One platform where fans listen and buy, creators ship and get paid, and every
             play settles back to the people who made it.
           </p>
