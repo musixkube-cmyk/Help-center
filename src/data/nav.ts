@@ -108,8 +108,76 @@ export const megaMenu: NavNode[] = [
     path: "/for-labels",
     blurb: "Roster-scale ops: A&R, accounting, rights and reporting.",
     children: [
-      // Role-based personas first — mirrors how For Creators groups by category.
-      // Explicit paths preserve the /for-labels/by-role/* URLs.
+      // Capability branches — the 21 label-level items organized into thematic
+      // categories with nested leaves. Mirrors For Creators exactly (Music
+      // Distribution > 4 items, Studio Production Tools > 12 items, etc.).
+      // First 3 branches populate the mega-menu columns.
+      ...build("/for-labels", [
+        [
+          "A&R and Artist Development",
+          [
+            "A&R and artist discovery",
+            "Artist relations",
+            "Roster & team management",
+          ],
+        ],
+        [
+          "Release and Distribution",
+          [
+            "Release management",
+            "Distribution beyond Musicosy",
+            "Audio file management",
+          ],
+        ],
+        [
+          "Marketing and Promotion",
+          [
+            "Marketing & PR",
+            "Social media management",
+            "Artist website",
+            "Time stacking / Geo stacking",
+          ],
+        ],
+        [
+          "Finance and Accounting",
+          [
+            "Accounting",
+            "Finance & budget allocation",
+            "Financial reporting",
+          ],
+        ],
+        [
+          "Rights, Royalties and Legal",
+          [
+            "Performance rights & royalty administration",
+            "Contract management",
+            "Legal & contracts",
+          ],
+        ],
+        [
+          "Catalog and Asset Management",
+          [
+            "Catalog management",
+          ],
+        ],
+        [
+          "Operations and Collaboration",
+          [
+            "Collaboration & audio sharing",
+            "Project management",
+            "CRM",
+          ],
+        ],
+        [
+          "Analytics and Reporting",
+          [
+            "Performance analytics",
+          ],
+        ],
+      ]),
+      // Persona branches — each role as its own top-level branch (siblings to
+      // the capability branches, NOT hidden under a "By Role" wrapper).
+      // Explicit paths preserve the /for-labels/by-role/* URLs used in the footer.
       {
         label: "For Managers",
         path: "/for-labels/by-role/for-managers",
@@ -175,30 +243,6 @@ export const megaMenu: NavNode[] = [
           "Budgeting",
         ]),
       },
-      // Label-level capabilities
-      ...build("/for-labels", [
-        "A&R and artist discovery",
-        "Release management",
-        "Distribution beyond Musicosy",
-        "Marketing & PR",
-        "Accounting",
-        "Artist relations",
-        "Contract management",
-        "Performance rights & royalty administration",
-        "Collaboration & audio sharing",
-        "Project management",
-        "Legal & contracts",
-        "CRM",
-        "Finance & budget allocation",
-        "Catalog management",
-        "Time stacking / Geo stacking",
-        "Social media management",
-        "Financial reporting",
-        "Roster & team management",
-        "Artist website",
-        "Performance analytics",
-        "Audio file management",
-      ]),
     ],
   },
   {

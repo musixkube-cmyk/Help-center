@@ -372,3 +372,38 @@ Verification (curl + Agent Browser):
 
 Stage Summary:
 - For Labels now mirrors For Creators exactly: the 6 role-based personas (For Managers, For Publishers, For Music Supervisors, For Producers & Engineers, For Songwriters, For Tour Managers) are direct children of For Labels, each with their leaves — showing as rich columns with icons in the mega menu (first 3 visible: For Managers/Publishers/Music Supervisors). The 21 label capabilities follow as direct leaves. All 27 items visible on the section page. No UI redesign — only nav DATA restructured. Existing paths preserved (/for-labels/by-role/*). Lint clean, dev server clean, browser-verified.
+
+---
+Task ID: 13
+Agent: main (Z.ai Code)
+Task: User pointed out that the 21 label-level capability items (A&R and artist discovery, Release management, Distribution beyond Musicosy, ... Audio file management) were nowhere in the For Labels mega menu. Diagnose and fix — only nav DATA, no UI changes.
+
+Work Log:
+- Diagnosed root cause: site-header.tsx MegaPanel does `node.children.slice(0, 3)` — only the first 3 children render as columns. In the Task 12 structure, the 6 persona branches (For Managers, For Publishers, For Music Supervisors, For Producers & Engineers, For Songwriters, For Tour Managers) were the first 6 children, so the mega menu showed 3 personas as columns. The 21 capability items were at child index 6–26 and NEVER appeared in the mega menu (only on the /for-labels section page). For Creators works because all 14 of its children are CATEGORY branches with nested leaves — the first 3 populate rich columns.
+- Restructured For Labels in src/data/nav.ts to mirror For Creators exactly:
+  * Organized the 21 flat items into 8 thematic capability BRANCHES (each with nested leaves), placed FIRST:
+    1. A&R and Artist Development → A&R and artist discovery, Artist relations, Roster & team management
+    2. Release and Distribution → Release management, Distribution beyond Musicosy, Audio file management
+    3. Marketing and Promotion → Marketing & PR, Social media management, Artist website, Time stacking / Geo stacking
+    4. Finance and Accounting → Accounting, Finance & budget allocation, Financial reporting
+    5. Rights, Royalties and Legal → Performance rights & royalty administration, Contract management, Legal & contracts
+    6. Catalog and Asset Management → Catalog management
+    7. Operations and Collaboration → Collaboration & audio sharing, Project management, CRM
+    8. Analytics and Reporting → Performance analytics
+  * Kept the 6 persona branches as siblings AFTER the capability branches (not hidden under "By Role"), with their explicit /for-labels/by-role/* paths preserved so existing footer links + bookmarks still resolve.
+  * Total = 14 branches (8 capability + 6 persona) — same count as For Creators' 14 branches.
+- Did NOT touch site-header.tsx, [...path]/page.tsx, site-footer.tsx, or help-center. Only nav DATA changed.
+
+Verification (curl + Agent Browser + VLM):
+- Lint clean (bun run lint, 0 problems). Dev server compiled.
+- All routes return 200:
+  * /for-labels (200)
+  * 8 capability branches: /for-labels/aandr-and-artist-development, /for-labels/release-and-distribution, /for-labels/marketing-and-promotion, /for-labels/finance-and-accounting, /for-labels/rights-royalties-and-legal, /for-labels/catalog-and-asset-management, /for-labels/operations-and-collaboration, /for-labels/analytics-and-reporting (all 200)
+  * Deep leaves: /for-labels/aandr-and-artist-development/aandr-and-artist-discovery, /for-labels/release-and-distribution/release-management, /for-labels/marketing-and-promotion/time-stacking-geo-stacking (all 200)
+  * 6 persona routes preserved: /for-labels/by-role/for-managers, for-publishers, for-music-supervisors, for-producers-and-engineers, for-songwriters, for-tour-managers (all 200)
+  * Persona leaves: /for-labels/by-role/for-managers/artist-relations, /for-labels/by-role/for-tour-managers/budgeting (all 200)
+- For Labels section page (/for-labels): 14 cards in correct order — A&R and Artist Development, Release and Distribution, Marketing and Promotion, Finance and Accounting, Rights Royalties and Legal, Catalog and Asset Management, Operations and Collaboration, Analytics and Reporting, then For Managers, For Publishers, For Music Supervisors, For Producers & Engineers, For Songwriters, For Tour Managers.
+- For Labels MEGA MENU (DOM + VLM verified): 5 grid children — intro rail ("For Labels overview / For Labels / Roster-scale ops: A&R, accounting, rights and reporting. / Explore For Labels"), Column 1 = A&R and Artist Development (3 leaves: A&R and artist discovery, Artist relations, Roster & team management), Column 2 = Release and Distribution (3 leaves: Release management, Distribution beyond Musicosy, Audio file management), Column 3 = Marketing and Promotion (4 leaves: Marketing & PR, Social media management, Artist website, Time stacking / Geo stacking), promo panel (Musicosy AI / One spine across your whole music business / Business intelligence layer / Meet the platform). Icons render on each leaf via the iconFor() hash. EXACTLY mirrors For Creators (Music Distribution > 4 items, Studio Production Tools > 12 items, Social Media Management > 1 item).
+
+Stage Summary:
+- The 21 label capability items are no longer missing from the mega menu. They are organized into 8 thematic capability branches (mirroring For Creators' category-with-leaves pattern), and the FIRST 3 branches (A&R and Artist Development, Release and Distribution, Marketing and Promotion) now populate the 3 mega-menu columns with their leaves + icons. The other 5 capability branches + 6 persona branches appear on the /for-labels section page (same as For Creators where only 3 of 14 branches show in the mega menu). No UI files modified — only nav DATA restructured. Lint clean, dev server clean, browser-verified (mega menu columns + leaves + intro rail + promo panel all confirmed via VLM, all 14 branches on section page, all routes 200).
