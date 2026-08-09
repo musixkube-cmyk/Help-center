@@ -226,8 +226,19 @@ export const footerNav: NavNode[] = [
   {
     label: "Resources",
     path: "/resources",
-    children: build("/resources", ["Blog", "Guides", "Glossary", "Help Center", "Privacy & Safety"]),
+    children: [
+      ...build("/resources", ["Blog", "Guides", "Glossary"]),
+      { label: "Help Center", path: "/resources/help-center" },
+      { label: "Privacy & Safety", path: "/privacy-and-safety" },
+    ],
   },
+];
+
+/**
+ * Help Center sections — comprehensive policy & support content that lives
+ * in the Help Center sidebar (NOT in the footer).
+ */
+export const helpCenterSections: NavNode[] = [
   {
     label: "Privacy & Safety",
     path: "/privacy-and-safety",
@@ -402,7 +413,7 @@ export const footerNav: NavNode[] = [
   },
 ];
 
-export const allNav: NavNode[] = [...megaMenu, ...footerNav];
+export const allNav: NavNode[] = [...megaMenu, ...footerNav, ...helpCenterSections];
 
 export function findNode(path: string, nodes: NavNode[] = allNav): NavNode | undefined {
   for (const node of nodes) {

@@ -276,3 +276,42 @@ Verification (Agent Browser + VLM):
 
 Stage Summary:
 - Fixed all three issues: (1) Mega menu now shows EVERY branch + leaf in a scrollable multi-column grid (was truncated to 3). (2) Section pages now show the full parent → child → leaf tree with category blocks and leaf cards (was flat child grid). (3) Footer now shows comprehensive hierarchy — simple groups with direct leaves + comprehensive groups (Privacy & Safety, Legal & Policies, Support Center) with sub-categories AND their leaves (105 leaf links visible, was ~38). Mobile menu is a recursive expandable tree handling any depth. Lint clean, dev server clean, browser-verified (all branches/leaves visible, deep routes work, no errors, responsive).
+
+---
+Task ID: 10
+Agent: main (Z.ai Code)
+Task: User was angry that Privacy & Safety and Legal & Policies were in the footer. Policies belong in the Help Center, not the footer. The Help Center should be a "sidebar scenario." Also: "Everything music. | One Place." is the tagline.
+
+Work Log:
+- (1) Restructured src/data/nav.ts:
+  * Moved Privacy & Safety, Legal & Policies, Support Center OUT of footerNav into a new `helpCenterSections` export. These are the comprehensive policy/support sections that belong in the Help Center, NOT the footer.
+  * Simplified footerNav to only 5 simple groups: Platform, Solutions, Developers, Advertising, Resources.
+  * Fixed Resources children: Blog, Guides, Glossary (auto-built), plus explicit { label: "Help Center", path: "/resources/help-center" } and { label: "Privacy & Safety", path: "/privacy-and-safety" } (links to the main privacy page, not a separate /resources/privacy-and-safety).
+  * Updated allNav = [...megaMenu, ...footerNav, ...helpCenterSections] so all routes still resolve via findNode/findTrail (the catch-all router).
+
+- (2) Simplified src/components/site/site-footer.tsx:
+  * Removed ALL comprehensive group logic (FooterLeafList, FooterSubCategory, SimpleGroup, ComprehensiveGroup components — all deleted).
+  * Footer is now ONE simple grid of 5 groups, each with heading + direct leaf links. 27 total links (was 105+).
+  * No policy content in the footer whatsoever (no Security leaves, no Terms of Use leaves, no Safety leaves, no Privacy leaves).
+  * Updated tagline from "One spine. Catalog, audience, settlement." → "Everything music. | One Place."
+
+- (3) Created Help Center page with sidebar layout:
+  * New route: src/app/resources/help-center/page.tsx (overrides the catch-all for this specific path).
+  * Layout: two-column grid (lg:grid-cols-[18rem_minmax(0,1fr)]) — sticky sidebar on left, content area on right.
+  * Sidebar: src/components/site/help-center-sidebar.tsx ('use client') — recursive expandable tree (SidebarItem component). Top-level sections (depth 0) start expanded; sub-categories (depth 1+) start collapsed but expandable. Links to all policy/support pages (/privacy-and-safety, /legal-and-policies, /support, and their children).
+  * Sidebar contains ALL help center sections from helpCenterSections: Privacy & Safety (6 sub-categories: Privacy, Safety, Reporting, Content & Conduct, Security, Law Enforcement — each expandable to show leaves), Legal & Policies (Terms of Use, Copyright & IP), Support Center (Support & Account Management, Using Musicosy, Advertising Hub).
+  * Main content: "Start here" section with 5 overview cards (Support, Using Musicosy, Privacy & Safety, Legal & Policies, Advertising Hub — each with icon + blurb + link), plus "All sections" grid linking to the 3 major section pages.
+  * Breadcrumb: Home / Resources / Help Center.
+  * Metadata: title "Help Center — Musicosy".
+
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200). No console/page errors.
+
+Verification (Agent Browser + curl + VLM):
+- Footer is lean: 5 groups (Platform, Solutions, Developers, Advertising, Resources), 27 links total. NO policy content (hasSecurityLeaves=false, hasTermsLeaves=false, hasSafetyLeaves=false, hasPrivacyLeaves=false). Tagline "Everything music. | One Place." present. Resources group links: Blog, Guides, Glossary, Help Center (/resources/help-center), Privacy & Safety (/privacy-and-safety). VLM confirmed: "5 columns/groups... Platform, Solutions, Developers, Advertising, Resources... EVERYTHING MUSIC. ONE PLACE."
+- Help Center page (/resources/help-center): h1="Help Center", title="Help Center — Musicosy". Sidebar exists with 13 expandable buttons. All sections visible: Privacy & Safety, Safety, Reporting, Content & Conduct, Security, Law Enforcement, Legal & Policies, Terms of Use, Copyright & IP, Support & Account Management, Using Musicosy, Advertising Hub. Expanding "Security" reveals leaves (Account safety, Avoid phishing). VLM confirmed: "classic two-column help center design: a narrow navigation sidebar on the left for browsing topics and a wide content area on the right displaying categorized information cards."
+- Routes all return 200: / (200), /resources/help-center (200), /privacy-and-safety (200), /legal-and-policies (200), /support (200), /privacy-and-safety/security (200), /legal-and-policies/terms-of-use (200), /support/using-musicosy (200).
+- Mobile (390x844): Help Center sidebar stacks above content (isStacked=true), no horizontal scroll, h1 present.
+- No page/console errors.
+
+Stage Summary:
+- Fixed the architecture: policies (Privacy & Safety, Legal & Policies) and support content (Support Center) are OUT of the footer and now live in the Help Center. The footer is lean (5 simple groups, 27 links, no policy leaves). The Help Center (/resources/help-center) is a sidebar-style page with a recursive expandable navigation tree containing ALL policy and support sections — Privacy & Safety (6 sub-categories + leaves), Legal & Policies (Terms of Use + Copyright & IP), Support Center (Using Musicosy, Advertising Hub). Tagline updated to "Everything music. | One Place." Lint clean, dev server clean, browser-verified (lean footer, Help Center sidebar with all content, routes work, responsive, no errors).
