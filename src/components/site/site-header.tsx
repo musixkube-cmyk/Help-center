@@ -5,7 +5,7 @@ import {
   Menu,
   X,
   ArrowRight,
-  ArrowUpRight,
+  ChevronDown,
   FileText,
   FolderKanban,
   Users,
@@ -28,6 +28,7 @@ import {
 import { megaMenu, type NavNode } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const ICONS = [
   FileText,
@@ -80,6 +81,49 @@ function MegaItem({ node, group }: { node: NavNode; group: string }) {
   );
 }
 
+function MegaColumn({ child }: { child: NavNode }) {
+  const [open, setOpen] = useState(false);
+  const hasChildren = !!child.children?.length;
+  return (
+    <div className="border-r border-border px-6 py-7">
+      <div className="flex items-center justify-between gap-2 border-b border-border pb-3">
+        <NavLink
+          href={child.path}
+          className="group/head truncate text-sm font-semibold text-foreground transition-colors hover:text-accent"
+        >
+          {child.label}
+        </NavLink>
+        {hasChildren ? (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setOpen((v) => !v);
+            }}
+            aria-label={open ? `Collapse ${child.label}` : `Expand ${child.label}`}
+            aria-expanded={open}
+            className="shrink-0 p-1 text-muted-foreground/60 transition-colors hover:text-accent"
+          >
+            <ChevronDown
+              className={cn("h-4 w-4 transition-transform", open && "rotate-180")}
+            />
+          </button>
+        ) : (
+          <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+        )}
+      </div>
+      {open && hasChildren && (
+        <ul className="mt-3 space-y-1">
+          {(child.children ?? []).slice(0, 8).map((leaf) => (
+            <MegaItem key={leaf.path} node={leaf} group={child.label} />
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function MegaPanel({ node }: { node: NavNode }) {
   if (!node.children) return null;
   const groups = node.children.slice(0, 6);
@@ -87,9 +131,9 @@ function MegaPanel({ node }: { node: NavNode }) {
   return (
     <div className="invisible absolute left-0 right-0 top-full z-50 translate-y-1 opacity-0 transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
       <div className="w-full border-t border-border bg-popover shadow-[0_24px_60px_-30px_oklch(0_0_0/0.55)]">
-        <div className="grid grid-cols-1 lg:grid-cols-[19rem_repeat(3,minmax(0,1fr))_20rem] lg:grid-rows-2">
+        <div className="grid grid-cols-1 lg:grid-cols-[19rem_repeat(3,minmax(0,1fr))] lg:grid-rows-[auto_auto] lg:items-start">
           {/* Intro rail — pinned to col 1, spans both rows */}
-          <div className="border-r border-border bg-card px-8 py-9 lg:col-start-1 lg:row-start-1 lg:row-span-2">
+          <div className="border-r border-border bg-card px-8 py-8 lg:col-start-1 lg:row-start-1 lg:row-span-2">
             <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
               {node.label} overview
             </p>
@@ -107,49 +151,10 @@ function MegaPanel({ node }: { node: NavNode }) {
             </NavLink>
           </div>
 
-          {/* Columns */}
+          {/* Six collapsible group columns — headers always visible, children on click */}
           {groups.map((child) => (
-            <div key={child.path} className="border-r border-border px-7 py-9">
-              <NavLink
-                href={child.path}
-                className="group/head flex items-center justify-between gap-3 border-b border-border pb-4 text-sm font-semibold text-foreground"
-              >
-                <span className="truncate">{child.label}</span>
-                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover/head:text-accent" />
-              </NavLink>
-              <ul className="mt-4 space-y-1">
-                {(child.children ?? [child]).slice(0, 6).map((leaf) => (
-                  <MegaItem key={leaf.path} node={leaf} group={child.label} />
-                ))}
-              </ul>
-            </div>
+            <MegaColumn key={child.path} child={child} />
           ))}
-
-          {/* Promo panel — pinned to col 5, spans both rows */}
-          <div className="relative overflow-hidden bg-ink px-8 py-9 text-ink-foreground lg:col-start-5 lg:row-start-1 lg:row-span-2">
-            <div className="pointer-events-none absolute -bottom-16 -right-10 h-56 w-56 rounded-full bg-accent/25 blur-3xl" />
-            <div className="relative">
-              <p className="flex items-center gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-accent">
-                <Disc3 className="h-4 w-4" /> Musicosy AI
-              </p>
-              <h4 className="mt-4 font-display text-2xl leading-[1.1] tracking-wide">
-                One spine across your whole music business.
-              </h4>
-              <p className="mt-3 text-sm leading-relaxed text-ink-foreground/70">
-                Releases, royalties, contracts and analytics resolved together — not
-                stitched across eight disconnected tools.
-              </p>
-              <span className="mt-6 inline-block border border-accent/50 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-accent">
-                Business intelligence layer
-              </span>
-              <NavLink
-                href="/discover"
-                className="mt-6 flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
-              >
-                Meet the platform <ArrowUpRight className="h-4 w-4" />
-              </NavLink>
-            </div>
-          </div>
         </div>
       </div>
     </div>

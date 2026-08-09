@@ -551,3 +551,27 @@ Verification (curl — all routes 200):
 
 Stage Summary:
 - Developer Portal built at /developers with the user's tree as the sidebar. 3 groups (Developers, Embed, API), 32 portal routes all returning 200. Portal has its own dark sub-header, sticky collapsible sidebar with icons + active highlighting, dashboard with quick-start code block, and catch-all pages that adapt to node type (child grid for branches, endpoint reference for API leaves, content card for other leaves). Footer Developers links updated to point to new portal paths. Lint clean, no errors. No existing marketing routes broken.
+
+---
+Task ID: mega-menu-redesign
+Agent: main
+Task: Redesign help center mega menu — make columns collapsible (click arrow to expand children), remove dark promo panel with white text, unify with developer portal design, fix help center sidebar invisible white-on-white text.
+
+Work Log:
+- Diagnosed root cause of "white text up center": mega menu promo panel used bg-ink/text-ink-foreground (dark bg, white text), AND help-center-sidebar used text-ink-foreground (white) on a light bg page = invisible.
+- Rewrote src/components/site/site-header.tsx MegaPanel:
+  - Removed the dark bg-ink promo panel entirely (the "Musicosy AI" white-text panel)
+  - Added MegaColumn component with useState toggle: header always visible, children hidden by default, click chevron to expand (aria-label flips Expand/Collapse, aria-expanded toggles)
+  - Grid simplified to 4 cols (intro rail + 3x2 group columns), no promo
+  - Removed unused ArrowUpRight import
+- Rewrote src/components/site/help-center-sidebar.tsx:
+  - Replaced text-ink-foreground (invisible white) with text-foreground/text-muted-foreground (visible)
+  - Unified with portal-sidebar style: bg-secondary hover, bg-accent/10 active, uppercase group labels, border-l children
+  - Added usePathname for active-trail auto-expand (matches dev portal behavior)
+  - Collapse by default: depth-0 sections open (categories visible), deeper levels collapsed unless in trail
+- Lint clean. All routes 200, no errors.
+
+Stage Summary:
+- Browser-verified: 13 chevron buttons in mega menu, aria-expanded=false by default; clicking "Expand Music Distribution" → aria-expanded=true + label flips to "Collapse..." + child link "Distribute to third-party streaming platforms" appears in DOM; second column "Studio Production Tools" expands independently; non-clicked "Social Engagement" stays collapsed.
+- Vision-verified: help center sidebar shows readable dark text on light bg, section labels visible, no invisible text; mega menu has no dark promo panel, clean light documentation style, chevron icons on headers.
+- Dark "Musicosy AI" promo panel removed (0 occurrences). Help center sidebar ink-foreground removed (now uses muted-foreground).
