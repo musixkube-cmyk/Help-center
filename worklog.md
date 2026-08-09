@@ -503,3 +503,51 @@ Verification (curl + Agent Browser + VLM):
 
 Stage Summary:
 - Root cause of the break: OOM kill from 3D library compilation. The 3D stack (three + R3F + drei) caused Turbopack to allocate 30GB virtual memory, hit the 4GB sandbox cap, got kernel-killed. Fix: removed the unused 3D libs (commit 7af8c66, pushed). Kept the 5 lightweight libraries (gsap, lottie-react, lenis, howler, next-seo). The 3D stack will be reinstalled via dynamic import when a page actually needs 3D rendering, per spec §10. Observer/preview restored and verified. Lint clean, dev server clean, browser-verified.
+
+---
+Task ID: 18
+Agent: main (Z.ai Code)
+Task: Develop a Developer Portal using the user's tree as the sidebar. The tree has 3 top-level groups (developers/, embed/, api/) mapping to developers.musicosy.com in production.
+
+Work Log:
+- Created src/data/portal-nav.ts — the complete portal tree with 3 groups:
+  * Developers (14 items): API (with Business child), Apps, Connectors, Console, Docs, Ecosystem, Keys, MCP, Partners, Sandbox, SDKs (with Events + Playback children), Tools, Usage, Webhooks
+  * Embed (2 items): Clip, Player (with Chapters, Clip, Settings children)
+  * API (nested): v1/publish/{audio, podcast, presigned-url, video}
+  * Portal root at /developers. Paths faithful to tree: /developers/developers/*, /developers/embed/*, /developers/api/*
+  * Includes findPortalNode() and findPortalTrail() helpers + portalAllNodes flat list
+- Created src/components/portal/portal-sidebar.tsx — client component:
+  * Collapsible tree sidebar with 3 group headers
+  * Each item has a lucide icon (28 icons mapped via ICONS record)
+  * Active link highlighting (exact match = accent bg, in-trail = foreground)
+  * Auto-expand branches in the active trail (via useState initial value, no useEffect)
+  * Sticky positioning below the marketing header
+- Created src/app/developers/layout.tsx — portal shell:
+  * Dark ink sub-header bar with "DEVELOPER PLATFORM" label + "developers.musicosy.com" + back-to-Musicosy link
+  * Sidebar + content area grid layout
+  * Root layout's SiteHeader/SiteFooter still wrap the portal (acceptable — provides site nav)
+- Created src/app/developers/page.tsx — portal dashboard:
+  * Hero with title, description, CTA buttons (Get API Keys, Read the Docs)
+  * Quick-start code block (curl example for publishing audio)
+  * 3 group overview sections with child card grids
+- Created src/app/developers/[...slug]/page.tsx — catch-all for all portal sub-pages:
+  * Breadcrumb trail (Home / Developer Platform / ... / current)
+  * Title + description + action buttons
+  * Nodes with children: grid of child cards
+  * API leaf nodes: endpoint reference with POST badge + curl example
+  * Non-API leaf nodes: "About {label}" content card with doc/key links
+  * Sibling navigation at the bottom ("More in {parent}")
+- Updated src/data/nav.ts footer "Developers" group: replaced build() auto-slugs with explicit portal paths (API Docs → /developers/developers/docs, SDKs → /developers/developers/sdks, Webhooks → /developers/developers/webhooks, Partner Program → /developers/developers/partners, Agentic Hub → /developers/developers/mcp, API access → /developers/developers/keys)
+- Lint fix: removed useEffect from portal-sidebar.tsx (react-hooks/set-state-in-effect rule). Used useState initial value derived from pathname instead.
+- Lint clean (bun run lint, 0 problems).
+
+Verification (curl — all routes 200):
+- Portal root: /developers (200)
+- Developers group (all 200): /developers/developers, /api, /api/business, /apps, /connectors, /console, /docs, /ecosystem, /keys, /mcp, /partners, /sandbox, /sdks, /sdks/events, /sdks/playback, /tools, /usage, /webhooks
+- Embed group (all 200): /developers/embed, /embed/clip, /embed/player, /embed/player/chapters, /embed/player/clip, /embed/player/settings
+- API group (all 200): /developers/api, /api/v1, /api/v1/publish, /api/v1/publish/audio, /api/v1/publish/podcast, /api/v1/publish/presigned-url, /api/v1/publish/video
+- Marketing routes unchanged (all 200): /, /for-creators, /for-labels, /resources/help-center, /privacy-and-safety
+- No errors in dev.log. Titles correct (e.g. "Keys — Developer Platform — Musicosy").
+
+Stage Summary:
+- Developer Portal built at /developers with the user's tree as the sidebar. 3 groups (Developers, Embed, API), 32 portal routes all returning 200. Portal has its own dark sub-header, sticky collapsible sidebar with icons + active highlighting, dashboard with quick-start code block, and catch-all pages that adapt to node type (child grid for branches, endpoint reference for API leaves, content card for other leaves). Footer Developers links updated to point to new portal paths. Lint clean, no errors. No existing marketing routes broken.

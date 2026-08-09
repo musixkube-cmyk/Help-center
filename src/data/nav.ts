@@ -288,14 +288,14 @@ export const footerNav: NavNode[] = [
   {
     label: "Developers",
     path: "/developers",
-    children: build("/developers", [
-      "API Docs",
-      "SDKs",
-      "Webhooks",
-      "Partner Program",
-      "Agentic Hub & MCP Server",
-      "API access",
-    ]),
+    children: [
+      { label: "API Docs", path: "/developers/developers/docs" },
+      { label: "SDKs", path: "/developers/developers/sdks" },
+      { label: "Webhooks", path: "/developers/developers/webhooks" },
+      { label: "Partner Program", path: "/developers/developers/partners" },
+      { label: "Agentic Hub & MCP Server", path: "/developers/developers/mcp" },
+      { label: "API access", path: "/developers/developers/keys" },
+    ],
   },
   {
     label: "Advertising",
