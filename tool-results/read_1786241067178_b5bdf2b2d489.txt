@@ -1,0 +1,585 @@
+     1→     1→# Musicosy — Marketing Experience & Component Library
+     2→     2→
+     3→     3→*Canonical specification. This document defines HOW every marketing page behaves. It does not define what any single page says — that lives in `03-page-data.md` (per-route content) and is assembled via the blueprints below. Nothing in this file is page-specific; if you find yourself writing content here, it belongs in Doc 3.*
+     4→     4→
+     5→     5→Companion documents:
+     6→     6→- `02-information-architecture.md` — full sitemap, every route, blueprint assignment
+     7→     7→- `03-page-data.md` — per-route slot data (headlines, copy, asset paths, component composition)
+     8→     8→- `public/` — scaffolded asset tree with placeholder files matching the path patterns defined here
+     9→     9→
+    10→    10→---
+    11→    11→
+    12→    12→## 1. Experience Principles
+    13→    13→
+    14→    14→These are the filters every design and engineering decision runs through. If a proposed pattern violates one of these, it doesn't ship, regardless of how good it looks in isolation.
+    15→    15→
+    16→    16→| Principle | What it means in practice |
+    17→    17→|---|---|
+    18→    18→| **Minimalism** | One idea per section. No section carries more than one primary CTA. Whitespace is a component, not a gap. |
+    19→    19→| **Cinematic storytelling** | Sections reveal in sequence, not all at once. The scroll is a timeline, not a list. |
+    20→    20→| **High motion, low distraction** | Motion always communicates state or hierarchy (what changed, what's next). Motion never exists purely for decoration with no informational payload. |
+    21→    21→| **Touch-first interactions** | Every desktop interaction (pointer drag, hover) has a touch-equivalent (finger drag, tap-and-hold) designed first, not adapted after. |
+    22→    22→| **Scroll-driven narrative** | The primary navigation mechanism on marketing pages is scroll, not clicks. Scroll position is treated as application state. |
+    23→    23→| **Accessibility** | Every interactive element is keyboard-reachable and screen-reader-labeled. Motion respects `prefers-reduced-motion` without exception. |
+    24→    24→| **Performance-first** | A beautiful interaction that costs Lighthouse points below 90 is a rejected interaction, not a trade-off to negotiate. |
+    25→    25→| **Mobile-first** | Every blueprint and component is designed at 375px width first. Desktop is the enhancement, not the baseline. |
+    26→    26→| **Progressive enhancement** | The page is fully readable and navigable with zero JS motion. GSAP/Three.js/Framer Motion layer on top of a working, semantic HTML page — they never gate content visibility. |
+    27→    27→
+    28→    28→---
+    29→    29→
+    30→    30→## 2. Technology Stack
+    31→    31→
+    32→    32→| Layer | Library | Version target | Purpose | Rendering boundary |
+    33→    33→|---|---|---|---|---|
+    34→    34→| Framework | Next.js | 14+ (App Router) | Routing, SSG/ISR, image optimization | Server by default |
+    35→    35→| UI | React | 18+ | Component model | — |
+    36→    36→| Language | TypeScript | 5+ | Type safety across slot data → component props | — |
+    37→    37→| Styling | Tailwind CSS | 3+ | Utility-first responsive styling, design tokens | — |
+    38→    38→| Timeline animation | GSAP + ScrollTrigger | 3.12+ | Scroll-synced, multi-step, pinned timeline animations (Hero Rotation, Scroll Lock Hero, Bento Stack) | Client component only |
+    39→    39→| Micro-interaction | Framer Motion | 11+ | Hover, tap, entrance/exit, layout transitions on discrete components | Client component only |
+    40→    40→| 3D | Three.js + React Three Fiber + Drei | R3F 8+ | Hero 3D scenes, interactive models, particles, lighting, camera rigs | Client component only, lazy-loaded |
+    41→    41→| 3D authoring | Blender | 4.x | Source `.blend` files for all 3D assets, exported to `.glb` | Asset pipeline, not runtime |
+    42→    42→| Vector animation | Lottie (lottie-react) | latest | Icon animation, empty states, small looping motifs | Client component, lazy-loaded |
+    43→    43→| Scroll engine | Lenis | latest | Smooth scroll, scroll synchronization for GSAP ScrollTrigger, parallax | Client-side, wraps app root |
+    44→    44→| Audio | Howler.js | latest | Ambient loops, hover feedback, micro-interaction sound | Client component, user-gesture-gated (see §10) |
+    45→    45→| SEO | Next.js Metadata API + `next-seo` OG helpers | — | Per-page `generateMetadata`, OG/Twitter cards | Server |
+    46→    46→| Forms | React Hook Form + Zod | latest | Newsletter, contact, demo request | Client component |
+    47→    47→
+    48→    48→**Rendering rule of thumb:** Server Components render the page shell, copy, and static structure. Client Components are reserved for anything that touches `window`, animates on interaction, or holds local UI state (GSAP, Framer Motion, R3F, Lenis, Howler). This boundary is non-negotiable — see Implementation Rules §10.
+    49→    49→
+    50→    50→---
+    51→    51→
+    52→    52→## 3. Animation Library
+    53→    53→
+    54→    54→Every animation used anywhere on the marketing site is named here. A blueprint or page spec never invents a new animation inline — it references one of these by name. If a new visual effect is needed, it gets added here first, with a name, before any page uses it.
+    55→    55→
+    56→    56→| Name | Trigger | Behavior | Library | Reduced-motion fallback |
+    57→    57→|---|---|---|---|---|
+    58→    58→| **Intro Reveal** | Page load (Home only) | Fullscreen intro sequence: logo forms from particles → dissolves → reveals hero. 1.2–2s max. | GSAP timeline | Static logo, instant hero |
+    59→    59→| **Hero Rotation** | Pointer move / touch drag (Home hero only) | 3D model rotates on Y-axis tracking pointer position; inertia + easing on release | R3F + Drei `OrbitControls` (custom-constrained) | Model renders static at default angle |
+    60→    60→| **Scroll Lock Hero** | Scroll (Home hero only) | Hero pins in viewport; scroll input drives camera move / model transform instead of page scroll until a completion threshold, then releases to normal scroll | GSAP ScrollTrigger (`pin: true`) | Hero scrolls normally, no pin, no camera move |
+    61→    61→| **Bento Stack** | Scroll (any Bento Grid component) | Cards animate from offset/rotated resting state into a stacked grid as they enter viewport; slight z-index layering during transition | GSAP ScrollTrigger (`scrub`) | Cards fade in at final position, no stack motion |
+    62→    62→| **Card Lift** | Hover / focus (any card component) | `translateY(-8px)`, shadow expands, 200ms ease-out | Framer Motion `whileHover` | Same, but instant (no transition) — hover lift is not motion-heavy enough to need reduced-motion suppression, but transition duration drops to 0 |
+    63→    63→| **Text Glide** | Scroll into view (headlines, all blueprints) | Text enters on Y-axis (24px → 0) with opacity fade, staggered per line/word depending on length | Framer Motion `whileInView` | Opacity fade only, no Y translation |
+    64→    64→| **Fade Cascade** | Scroll into view (body paragraphs, list items) | Sequential opacity fade, 80ms stagger per child | Framer Motion `staggerChildren` | All children fade in simultaneously |
+    65→    65→| **Counter** | Scroll into view (statistics components) | Number animates from 0 to target value over 1.5s, eased | Framer Motion `animate` + `useMotionValue` | Number renders at final value instantly |
+    66→    66→| **Morph** | Scroll into view or hover (shape/icon transitions) | SVG path morph between two states | GSAP `MorphSVGPlugin` | Instant swap, no morph |
+    67→    67→| **Liquid Reveal** | Scroll into view (image reveals) | Image clip-path animates in an organic liquid-fill pattern from a mask | GSAP + custom SVG mask | Standard opacity fade |
+    68→    68→| **Magnetic Button** | Pointer proximity (primary CTAs, desktop only) | Button subtly translates toward cursor within a radius, snaps back on leave | Framer Motion `useMotionValue` + pointer tracking | No magnetic effect, standard hover state only |
+    69→    69→| **Cursor Glow** | Pointer move (interactive/3D zones only) | Soft radial gradient follows cursor, blends with background | Custom canvas or CSS `radial-gradient` + RAF | Disabled entirely |
+    70→    70→| **Scroll Indicator** | Persistent during Scroll Lock Hero | Small progress dots/bar showing position within locked scroll sequence | Framer Motion | Static, non-animated indicator |
+    71→    71→| **Footer Reveal** | Scroll into view (footer, all pages) | Footer rises from behind page content (parallax-style reveal, page content appears to lift off it) | GSAP ScrollTrigger | Footer appears in normal document flow, no parallax |
+    72→    72→
+    73→    73→---
+    74→    74→
+    75→    75→## 4. Component Library
+    76→    76→
+    77→    77→Components are the building blocks blueprints compose. Each has defined variants. A page spec (Doc 3) selects a component + variant per slot — it never modifies component behavior inline.
+    78→    78→
+    79→    79→### Hero
+    80→    80→Variants: `standard` · `interactive-3d` · `video` · `split` · `fullscreen-scroll-lock` · `product`
+    81→    81→
+    82→    82→| Prop slot | Type | Notes |
+    83→    83→|---|---|---|
+    84→    84→| `headline` | string | Rendered with Text Glide |
+    85→    85→| `subhead` | string | Rendered with Fade Cascade |
+    86→    86→| `media` | asset path | `.glb` for interactive-3d, `.mp4`/`.webm` for video, `.webp`/`.avif` for standard/product |
+    87→    87→| `cta_primary` / `cta_secondary` | `{label, href}` | Magnetic Button on desktop |
+    88→    88→| `ambient_audio` | asset path, optional | Only on `interactive-3d` and `fullscreen-scroll-lock` variants; user-gesture-gated |
+    89→    89→
+    90→    90→### CTA Banner
+    91→    91→Variants: `light` · `dark` · `video-bg` · `illustration-bg`
+    92→    92→Always positioned directly above the footer, per Page Blueprint rule (§6 of Doc-level rules below), except Home.
+    93→    93→
+    94→    94→### Bento Grid
+    95→    95→Variants by card count: `2` · `3` · `4` · `6` · `9` · `12`
+    96→    96→Uses **Bento Stack** animation on scroll entrance. Each card supports **Card Lift** on hover.
+    97→    97→
+    98→    98→### Feature Grid
+    99→    99→Icon + headline + one-line description, 3–6 columns responsive. Uses **Fade Cascade**.
+   100→   100→
+   101→   101→### Timeline
+   102→   102→Vertical or horizontal step sequence (used on Platform, Solution, and How-it-Works content). Uses **Text Glide** per step as it enters viewport.
+   103→   103→
+   104→   104→### Comparison Table
+   105→   105→Used on Comparison blueprint and select Pricing sections. Sticky header row on scroll within table bounds.
+   106→   106→
+   107→   107→### Testimonial
+   108→   108→Variants: `single-quote` · `carousel` · `video-testimonial`
+   109→   109→
+   110→   110→### Logo Wall
+   111→   111→Static or auto-scrolling marquee of partner/customer logos. Respects `prefers-reduced-motion` (marquee pauses, becomes static grid).
+   112→   112→
+   113→   113→### FAQ
+   114→   114→Accordion-based, one item open at a time by default (configurable to allow multiple).
+   115→   115→
+   116→   116→### Pricing
+   117→   117→Variants: `tiered-cards` · `comparison-matrix`. Toggle component for monthly/annual where applicable.
+   118→   118→
+   119→   119→### Cards
+   120→   120→Base card primitive underlying Bento Grid, Feature Grid, and standalone card use.
+   121→   121→
+   122→   122→### Statistics
+   123→   123→Uses **Counter** animation. 2–4 stat blocks per row, responsive to 1 column mobile.
+   124→   124→
+   125→   125→### Tabs
+   126→   126→Used for multi-variant content within one section (e.g., persona sub-views on Solution pages).
+   127→   127→
+   128→   128→### Accordions
+   129→   129→Base primitive underlying FAQ; also used for Documentation blueprint.
+   130→   130→
+   131→   131→### Forms
+   132→   132→`newsletter-inline` · `contact` · `demo-request`. React Hook Form + Zod validation, accessible error states.
+   133→   133→
+   134→   134→### Newsletter
+   135→   135→Footer-embedded and standalone variants of the `newsletter-inline` form.
+   136→   136→
+   137→   137→---
+   138→   138→
+   139→   139→## 5. Media Library Specification
+   140→   140→
+   141→   141→Every page's assets live under a predictable path pattern, mirroring the route structure. Claude Code and any contributor can derive the expected asset path for any page/section without a lookup table.
+   142→   142→
+   143→   143→### Path pattern (general rule)
+   144→   144→
+   145→   145→```
+   146→   146→public/
+   147→   147→  {portal-or-section}/
+   148→   148→    {page-slug}/
+   149→   149→      hero/
+   150→   150→        hero-model.glb          # if 3D hero
+   151→   151→        hero-bg.webp            # fallback / poster image
+   152→   152→        hero-bg.avif
+   153→   153→        hero-video.mp4          # if video hero
+   154→   154→        hero-video.webm
+   155→   155→        ambient.mp3             # if ambient audio present
+   156→   156→      section-2/
+   157→   157→        illustration.webp
+   158→   158→        illustration.avif
+   159→   159→        animation.json          # Lottie, if used
+   160→   160→      section-3/
+   161→   161→        ...
+   162→   162→      og-image.webp             # 1200x630, per-page Open Graph image
+   163→   163→```
+   164→   164→
+   165→   165→### Concrete pattern by IA section (see Doc 2 for full route list)
+   166→   166→
+   167→   167→```
+   168→   168→public/
+   169→   169→  home/
+   170→   170→    hero/                       # unique — see §7
+   171→   171→    section-1/  ... section-4/
+   172→   172→  solutions/
+   173→   173→    {audience-slug}/
+   174→   174→      {persona-slug}/
+   175→   175→        hero/
+   176→   176→        section-1/ ... section-4/
+   177→   177→  platform/
+   178→   178→    {product-slug}/
+   179→   179→      hero/
+   180→   180→      section-1/ ... section-4/
+   181→   181→  features/
+   182→   182→    {domain-slug}/
+   183→   183→      {feature-slug}/
+   184→   184→        hero/
+   185→   185→        section-1/ ... section-4/
+   186→   186→  integrations/
+   187→   187→    {integration-slug}/
+   188→   188→      hero/
+   189→   189→      section-1/ ... section-4/
+   190→   190→  pricing/
+   191→   191→    hero/
+   192→   192→    section-1/ ... section-4/
+   193→   193→  resources/
+   194→   194→    {resource-type}/
+   195→   195→      {slug}/
+   196→   196→  company/
+   197→   197→    {page-slug}/
+   198→   198→      hero/
+   199→   199→      section-1/ ... section-4/
+   200→   200→```
+   201→   201→
+   202→   202→Every page directory receives the same skeleton regardless of content: `hero/`, `section-1/` through `section-4/` (or however many sections its blueprint defines), each pre-populated with correctly-named, correctly-formatted **placeholder** files (solid-color `.webp`, 1-second silent `.mp4`, empty `.glb` cube, silent `.mp3`) so the build never breaks on a missing asset — real assets swap in without any path or filename change.
+   203→   203→
+   204→   204→---
+   205→   205→
+   206→   206→*(continued in following sections of this document — see §6 Blueprint Templates, §9 Interaction Specification, §10 Implementation Rules)*
+   207→   207→## 6. Page Blueprints
+   208→   208→
+   209→   209→**How to read this section:** each blueprint is a literal template with named, typed slots. A page is built by taking one blueprint and filling every slot with the values given for that route in `03-page-data.md`. There is no interpretation step — if a slot has no value in Doc 3 for a given page, that page is incomplete, not "use your judgment."
+   210→   210→
+   211→   211→Every blueprint except **Home** and **Landing** follows the same 4-section-plus-CTA-plus-footer skeleton described in §6.0. Home and Landing are structurally unique and are specified separately (§7, §6.9).
+   212→   212→
+   213→   213→### 6.0 Shared skeleton (all blueprints except Home)
+   214→   214→
+   215→   215→```
+   216→   216→[Header — Creative Menu, persistent, see §9]
+   217→   217→[Section 1 — Hero]
+   218→   218→[Section 2]
+   219→   219→[Section 3]
+   220→   220→[Section 4]
+   221→   221→[CTA Banner — 2-column, animated, directly above footer]
+   222→   222→[Footer — Footer Reveal animation]
+   223→   223→```
+   224→   224→
+   225→   225→Each blueprint below defines what Sections 1–4 *mean* for that page type (what content role each section plays), which components fill them, and which slots need data.
+   226→   226→
+   227→   227→---
+   228→   228→
+   229→   229→### 6.1 Feature Page Blueprint
+   230→   230→
+   231→   231→Used by all `/features/{domain}/{feature}` routes (120 pages).
+   232→   232→
+   233→   233→| Section | Role | Component | Slots |
+   234→   234→|---|---|---|---|
+   235→   235→| Hero | State the capability in one sentence + show it | `Hero / standard` or `Hero / product` | `headline`, `subhead`, `hero_media` (illustration or product screenshot render), `cta_primary` (→ implementing portal route), `cta_secondary` (→ "See it on Artist Portal" etc. if multi-portal) |
+   236→   236→| 2 — Problem | Name the friction this feature removes | `Feature Grid` (3 items) or `Text + illustration split` | `problem_headline`, `problem_points[3]`, `section2_media` |
+   237→   237→| 3 — How it works | Show the mechanism | `Timeline` (3–4 steps) or `Bento Grid/3` | `how_it_works_steps[]`, `section3_media` |
+   238→   238→| 4 — Cross-portal availability | Show where this capability lives | `Logo/Portal wall` (Artist / Studio / Enterprise icons, linked) | `available_in_portals[]` (pulled directly from Capability Map §7.x "Used by") |
+   239→   239→| CTA | Drive to relevant portal signup or docs | `CTA Banner / light` | `cta_headline`, `cta_button` |
+   240→   240→
+   241→   241→**Media path:** `public/features/{domain-slug}/{feature-slug}/`
+   242→   242→
+   243→   243→---
+   244→   244→
+   245→   245→### 6.2 Audience (Solutions/Persona) Page Blueprint
+   246→   246→
+   247→   247→Used by all `/solutions/{hub}/{persona}` routes (25 pages) plus the 2 hub pages.
+   248→   248→
+   249→   249→| Section | Role | Component | Slots |
+   250→   250→|---|---|---|---|
+   251→   251→| Hero | Speak directly to this persona's identity and ambition | `Hero / split` | `headline` (persona-voiced), `subhead`, `hero_media` (persona-in-context illustration), `cta_primary` (→ signup for owning portal) |
+   252→   252→| 2 — Problem | This persona's specific pain today | `Text + illustration split` | `pain_headline`, `pain_body`, `section2_media` |
+   253→   253→| 3 — Capabilities | The subset of platform features most relevant to this persona | `Bento Grid/6` | `relevant_features[6]` (each links to its Feature Page) |
+   254→   254→| 4 — Social proof / outcome | Testimonial or outcome stat specific to this persona type | `Testimonial / single-quote` + `Statistics` | `testimonial`, `stat_blocks[2-4]` |
+   255→   255→| CTA | Persona-specific signup | `CTA Banner / illustration-bg` | `cta_headline`, `cta_button` |
+   256→   256→
+   257→   257→**Media path:** `public/solutions/{hub-slug}/{persona-slug}/`
+   258→   258→
+   259→   259→**Counterparty roles** (Booking Agents, Venues, Promoters, Brands, Music Supervisors, Sync Agents) use this same blueprint but Section 3 becomes "Scoped Access" (what they can see/do) instead of full feature Bento, and CTA becomes "Request Access" not "Sign Up" — reflecting their invite-only entry per Capability Map §1.2.
+   260→   260→
+   261→   261→---
+   262→   262→
+   263→   263→### 6.3 Platform (Product) Page Blueprint
+   264→   264→
+   265→   265→Used by all `/platform/{product}` routes (13 pages).
+   266→   266→
+   267→   267→| Section | Role | Component | Slots |
+   268→   268→|---|---|---|---|
+   269→   269→| Hero | Position the service at platform-story level (not portal-specific) | `Hero / standard` | `headline`, `subhead`, `hero_media` |
+   270→   270→| 2 — Core capabilities | What this service actually does | `Feature Grid` (per Capability Map "Core Capabilities" list) | `capabilities[]` |
+   271→   271→| 3 — Consuming portals | Which portals rely on this service | `Timeline` or `Logo wall` | `consuming_portals[]` (from Capability Map "Consuming Portals") |
+   272→   272→| 4 — For developers | API-level entry point | `Comparison Table` or `Code snippet block` | `api_methods[]` (from Capability Map "APIs"), `cta_to_docs` |
+   273→   273→| CTA | Platform-level, not persona-specific | `CTA Banner / dark` | `cta_headline`, `cta_button` |
+   274→   274→
+   275→   275→**Media path:** `public/platform/{product-slug}/`
+   276→   276→
+   277→   277→---
+   278→   278→
+   279→   279→### 6.4 Integration Page Blueprint
+   280→   280→
+   281→   281→Used by all `/integrations/{integration}` routes (20–50 pages, e.g. Xero, QuickBooks, NetSuite).
+   282→   282→
+   283→   283→| Section | Role | Component | Slots |
+   284→   284→|---|---|---|---|
+   285→   285→| Hero | Name the integration, show both logos | `Hero / product` | `headline` ("Musicosy + {integration_name}"), `hero_media` (dual-logo render), `cta_primary` (→ connect flow, gated to logged-in) |
+   286→   286→| 2 — What syncs | Concrete data/field mapping | `Comparison Table` (2-column: Musicosy field ↔ {integration} field) | `sync_fields[]` |
+   287→   287→| 3 — Setup steps | How to connect | `Timeline` (3 steps) | `setup_steps[3]` |
+   288→   288→| 4 — FAQ | Common setup/troubleshooting questions | `FAQ` | `faq_items[]` |
+   289→   289→| CTA | Connect now | `CTA Banner / light` | `cta_headline`, `cta_button` |
+   290→   290→
+   291→   291→**Media path:** `public/integrations/{integration-slug}/`
+   292→   292→
+   293→   293→---
+   294→   294→
+   295→   295→### 6.5 Pricing Blueprint
+   296→   296→
+   297→   297→Single page, `/pricing`, with tab-routed sub-views per Doc 2 (`/pricing/distribution`, `/pricing/identity-verification`, `/pricing/enterprise`, `/pricing/api`).
+   298→   298→
+   299→   299→| Section | Role | Component | Slots |
+   300→   300→|---|---|---|---|
+   301→   301→| Hero | State the pricing philosophy in one line | `Hero / standard` (no 3D) | `headline`, `subhead` |
+   302→   302→| 2 — Tiers | The actual plan comparison | `Pricing / tiered-cards` with monthly/annual toggle | `tiers[]` (name, price, features[], cta) |
+   303→   303→| 3 — Detailed comparison | Full feature-by-tier matrix | `Comparison Table` | `comparison_rows[]` |
+   304→   304→| 4 — FAQ | Billing/plan questions | `FAQ` | `faq_items[]` |
+   305→   305→| CTA | Enterprise contact path | `CTA Banner / dark` | `cta_headline` ("Need something bigger?"), `cta_button` (→ Contact Sales) |
+   306→   306→
+   307→   307→**Media path:** `public/pricing/`
+   308→   308→
+   309→   309→---
+   310→   310→
+   311→   311→### 6.6 Resource Blueprint
+   312→   312→
+   313→   313→Used by Help Center, Support, Documentation index, Learning Center, Community, Blog index, Release Notes (structural pages — individual articles use **Documentation Blueprint** §6.8 or a lighter **Article** template outside this system's scope).
+   314→   314→
+   315→   315→| Section | Role | Component | Slots |
+   316→   316→|---|---|---|---|
+   317→   317→| Hero | Orient the visitor, provide search | `Hero / standard` + search input | `headline`, `search_placeholder` |
+   318→   318→| 2 — Categories | Browse-by-topic entry points | `Bento Grid/9` or `Feature Grid` | `categories[]` |
+   319→   319→| 3 — Popular/Recent | Surfaced content | `Cards` (list) | `featured_items[]` |
+   320→   320→| 4 — Still need help | Escalation path | `Text + CTA` | `escalation_headline`, `escalation_cta` |
+   321→   321→| CTA | — (Resources pages may omit standard CTA banner in favor of escalation in §4) | — | — |
+   322→   322→
+   323→   323→**Media path:** `public/resources/{resource-type}/`
+   324→   324→
+   325→   325→---
+   326→   326→
+   327→   327→### 6.7 Company Blueprint
+   328→   328→
+   329→   329→Used by About, Careers, Press, Blog (index), Customers, Partners, Contact.
+   330→   330→
+   331→   331→| Section | Role | Component | Slots |
+   332→   332→|---|---|---|---|
+   333→   333→| Hero | Mission/identity statement | `Hero / standard` | `headline`, `subhead`, `hero_media` |
+   334→   334→| 2 — Story/Values | Varies per sub-page (About = story, Careers = culture, Customers = logo wall + case studies) | `Text + illustration split` or `Logo Wall` | page-specific, see Doc 3 |
+   335→   335→| 3 — Proof | Team, stats, or testimonials depending on sub-page | `Statistics` or `Testimonial / carousel` | page-specific, see Doc 3 |
+   336→   336→| 4 — Open opportunity | Jobs (Careers), press kit (Press), partner application (Partners), etc. | varies | page-specific, see Doc 3 |
+   337→   337→| CTA | Contextual to sub-page | `CTA Banner / light` | `cta_headline`, `cta_button` |
+   338→   338→
+   339→   339→**Media path:** `public/company/{page-slug}/`
+   340→   340→
+   341→   341→---
+   342→   342→
+   343→   343→### 6.8 Documentation Blueprint
+   344→   344→
+   345→   345→Used by Developer Portal docs (`developers.musicosy.com/docs`, API reference pages).
+   346→   346→
+   347→   347→Structurally different — sidebar navigation + content pane, not scroll-storytelling sections. No Hero, no CTA Banner, no Footer Reveal (docs use a compact footer).
+   348→   348→
+   349→   349→| Region | Role | Component |
+   350→   350→|---|---|---|
+   351→   351→| Sidebar | Persistent nested nav tree | `Accordions` (nested) |
+   352→   352→| Content pane | Article body, code samples | Static MDX render, no GSAP/R3F |
+   353→   353→| Top bar | Search, version selector | `Forms` (search) |
+   354→   354→
+   355→   355→**Media path:** `public/developers/docs/{doc-slug}/` — code diagrams and screenshots only, no hero/3D assets.
+   356→   356→
+   357→   357→---
+   358→   358→
+   359→   359→### 6.9 Landing Page Blueprint (campaign/paid-traffic pages)
+   360→   360→
+   361→   361→Used for one-off marketing campaigns not part of the permanent IA (e.g. a conference landing page, a paid-ad destination). Not in Doc 2's sitemap since these are ephemeral, but the blueprint is defined here for reuse.
+   362→   362→
+   363→   363→Single-section-focused, high-conversion-intent structure:
+   364→   364→
+   365→   365→```
+   366→   366→[Hero — single headline, single CTA, no navigation menu]
+   367→   367→[Social proof strip — logo wall or stat line]
+   368→   368→[Value props — Feature Grid, 3 items max]
+   369→   369→[Single CTA Banner]
+   370→   370→[Minimal footer — legal links only]
+   371→   371→```
+   372→   372→
+   373→   373→No Creative Menu header (§9) on Landing pages — intentionally removes exit paths other than the CTA, standard paid-landing-page practice.
+   374→   374→
+   375→   375→---
+   376→   376→
+   377→   377→### 6.10 Comparison Page Blueprint
+   378→   378→
+   379→   379→Used for `/compare/{competitor}` style pages (not yet in Doc 2 IA — flagged as a future addition if competitive-comparison content is planned).
+   380→   380→
+   381→   381→| Section | Role | Component | Slots |
+   382→   382→|---|---|---|---|
+   383→   383→| Hero | State the comparison | `Hero / standard` | `headline` ("Musicosy vs {competitor}") |
+   384→   384→| 2 — Comparison matrix | Feature-by-feature | `Comparison Table` | `comparison_rows[]` |
+   385→   385→| 3 — Why teams switch | Migration narrative | `Testimonial` + `Timeline` (migration steps) | `switch_testimonial`, `migration_steps[]` |
+   386→   386→| 4 — FAQ | Objection handling | `FAQ` | `faq_items[]` |
+   387→   387→| CTA | Switch/migrate CTA | `CTA Banner / dark` | `cta_headline`, `cta_button` |
+   388→   388→
+   389→   389→**Media path:** `public/compare/{competitor-slug}/`
+   390→   390→## 7. Home Page Blueprint (unique — the exception to §6.0)
+   391→   391→
+   392→   392→Home does not follow the 4-section-plus-CTA skeleton. It is fullscreen, scroll-locked, and cinematic for its first act, then transitions into a lighter version of the standard pattern for its second act.
+   393→   393→
+   394→   394→```
+   395→   395→[No standard header on load — Creative Menu fades in after Intro Reveal completes]
+   396→   396→
+   397→   397→ACT I — Immersive (fullscreen, scroll-locked)
+   398→   398→  [Intro Reveal]                     — logo particle formation, 1.2-2s, plays once per session
+   399→   399→  [Hero — Scroll Lock Hero variant]  — 3D model interactive on pointer/touch (Hero Rotation),
+   400→   400→                                        pins in viewport, scroll input drives camera through
+   401→   401→                                        3–4 "beats" that introduce the platform concept
+   402→   402→                                        (Artist → Studio → Enterprise → Streaming, one beat each)
+   403→   403→  [Scroll Indicator]                 — visible throughout Act I only
+   404→   404→
+   405→   405→ACT II — Standard storytelling (unlocks after final beat)
+   406→   406→  [Section — Platform Overview]      — Bento Stack grid, one card per portal (6 cards),
+   407→   407→                                        each links to that portal's Solutions/Platform page
+   408→   408→  [Section — Proof]                  — Statistics (Counter) + Logo Wall (customer/partner logos)
+   409→   409→  [Section — Streaming spotlight]    — the one genuinely new surface (per Capability Map §1.1),
+   410→   410→                                        video-bg Hero-style module, links to /solutions/fans
+   411→   411→                                        and listen.musicosy.com
+   412→   412→  [CTA Banner — video-bg variant]
+   413→   413→  [Footer — Footer Reveal]
+   414→   414→```
+   415→   415→
+   416→   416→### Home Hero slot data
+   417→   417→
+   418→   418→| Slot | Value type | Notes |
+   419→   419→|---|---|---|
+   420→   420→| `intro_reveal_asset` | `.glb` or Lottie | Logo particle formation source |
+   421→   421→| `hero_model` | `.glb` | The central interactive 3D object — see Doc 3 for what this object is |
+   422→   422→| `hero_beats[4]` | `{camera_position, headline, subhead}[]` | One per portal category, drives Scroll Lock Hero camera moves |
+   423→   423→| `ambient_audio` | `.mp3` | Looping ambient bed, starts muted, user-gesture unmute control visible |
+   424→   424→| `og_image` | `.webp` 1200×630 | Home-specific OG image, not auto-generated |
+   425→   425→
+   426→   426→**Media path:** `public/home/hero/`, `public/home/section-1/` (Platform Overview) through `public/home/section-3/` (Streaming spotlight)
+   427→   427→
+   428→   428→**Why Home breaks the pattern:** every other page exists to be found (SEO-driven, long-tail intent) and to convert a specific persona. Home exists to be *experienced* — it's the one page where dwell time and impression are the success metric, not immediate conversion. That's the entire rationale for the Act I / Act II split, and it's why Home is the only page permitted to suppress the standard header on load.
+   429→   429→
+   430→   430→---
+   431→   431→
+   432→   432→## 8. Asset Index — how Doc 3 uses this
+   433→   433→
+   434→   434→Every page's slot data in `03-page-data.md` includes an **Asset Index** sub-table listing every media file that section needs, in the exact path from §5. Example shape (this is the pattern, not a specific page — see Doc 3 for actual Artist/Producer/Label entries):
+   435→   435→
+   436→   436→```
+   437→   437→Route: /solutions/artists/artists
+   438→   438→Blueprint: Audience
+   439→   439→
+   440→   440→Hero:
+   441→   441→  - hero-model.glb OR hero-bg.webp   (illustration: artist in home studio context)
+   442→   442→  - ambient.mp3                      (optional, low-priority)
+   443→   443→Section 2 (Problem):
+   444→   444→  - illustration.webp                (scattered catalog/rights chaos visual)
+   445→   445→Section 3 (Capabilities):
+   446→   446→  - 6x card icons (Lottie .json, small looping)
+   447→   447→Section 4 (Proof):
+   448→   448→  - testimonial-headshot.webp
+   449→   449→```
+   450→   450→
+   451→   451→Claude Code reads this table to know exactly which placeholder files must exist at build time — every path referenced in Doc 3 has a corresponding placeholder already scaffolded in `public/` (see delivered zip).
+   452→   452→
+   453→   453→---
+   454→   454→
+   455→   455→## 9. Interaction Specification
+   456→   456→
+   457→   457→Every non-trivial interaction is documented as an explicit input → response chain. Blueprints reference these by name; they are not redefined per page.
+   458→   458→
+   459→   459→### 9.1 Home Hero — Desktop
+   460→   460→
+   461→   461→```
+   462→   462→Pointer movement
+   463→   463→  ↓
+   464→   464→Model rotates (Hero Rotation, bounded ±45° from resting angle)
+   465→   465→  ↓
+   466→   466→Lighting rig shifts to follow pointer (R3F directional light target)
+   467→   467→  ↓
+   468→   468→Contact shadow moves under model
+   469→   469→  ↓
+   470→   470→Hero headline shifts opacity/position slightly (parallax, 4px max)
+   471→   471→  ↓
+   472→   472→Particle field (if present) reacts with subtle attraction toward pointer
+   473→   473→  ↓
+   474→   474→Primary CTA gains Cursor Glow when pointer enters its bounding box
+   475→   475→```
+   476→   476→
+   477→   477→### 9.2 Home Hero — Touch
+   478→   478→
+   479→   479→```
+   480→   480→Finger drag on model
+   481→   481→  ↓
+   482→   482→Model rotates 1:1 with drag delta
+   483→   483→  ↓
+   484→   484→On release: momentum easing continues rotation, decays over ~800ms
+   485→   485→  ↓
+   486→   486→If no further interaction within 3s: snaps back to resting angle (600ms ease)
+   487→   487→  ↓
+   488→   488→Vertical scroll gesture (outside model bounding box) advances Scroll Lock Hero beat
+   489→   489→```
+   490→   490→
+   491→   491→### 9.3 Scroll Lock Hero — beat advancement (all input types)
+   492→   492→
+   493→   493→```
+   494→   494→User scrolls within locked hero region
+   495→   495→  ↓
+   496→   496→ScrollTrigger progress (0→1) mapped to camera position along predefined path
+   497→   497→  ↓
+   498→   498→At each beat threshold (0.25, 0.5, 0.75, 1.0): headline/subhead swap (Text Glide out → in)
+   499→   499→  ↓
+   500→   500→At progress = 1.0: pin releases, normal page scroll resumes, Creative Menu header fades in
+   501→   501→  ↓
+   502→   502→Scroll Indicator dots update fill state per beat crossed
+   503→   503→```
+   504→   504→
+   505→   505→### 9.4 Bento Stack — scroll entrance (any page)
+   506→   506→
+   507→   507→```
+   508→   508→Grid container enters viewport (IntersectionObserver / ScrollTrigger start)
+   509→   509→  ↓
+   510→   510→Cards animate from initial state (offset Y + slight rotation + opacity 0)
+   511→   511→  to resting grid position, staggered 60ms per card
+   512→   512→  ↓
+   513→   513→Scroll continues past grid: cards settle, no further scroll-scrub after full reveal
+   514→   514→  ↓
+   515→   515→Hover per card: Card Lift
+   516→   516→```
+   517→   517→
+   518→   518→### 9.5 Creative Menu — header interaction
+   519→   519→
+   520→   520→```
+   521→   521→Default state: minimal, logo + hamburger/menu-trigger only
+   522→   522→  ↓
+   523→   523→Click/tap trigger
+   524→   524→  ↓
+   525→   525→Fullscreen (or large panel) menu overlay opens — Framer Motion layout transition
+   526→   526→  ↓
+   527→   527→Mega-menu categories (Solutions/Platform/Features/Resources/Pricing/Company)
+   528→   528→  revealed with Fade Cascade stagger
+   529→   529→  ↓
+   530→   530→Hover over category (desktop): preview panel slides in showing sub-items + a small
+   531→   531→  illustrative Lottie or static image per category
+   532→   532→  ↓
+   533→   533→Selection or outside-click/Esc closes overlay, returns focus to trigger (a11y requirement)
+   534→   534→```
+   535→   535→
+   536→   536→### 9.6 Magnetic Button — CTA interaction (desktop only)
+   537→   537→
+   538→   538→```
+   539→   539→Pointer enters button's magnetic radius (~40px beyond visual bounds)
+   540→   540→  ↓
+   541→   541→Button translates toward pointer position, capped at 8px max offset
+   542→   542→  ↓
+   543→   543→Pointer leaves radius: button snaps back to origin (spring easing)
+   544→   544→  ↓
+   545→   545→Click: standard press state, no magnetic effect during active click
+   546→   546→```
+   547→   547→
+   548→   548→### 9.7 3.5mm Headphone Jack Interaction (Home or Audio-related feature banner)
+   549→   549→
+   550→   550→A specific tactile moment referenced in the source brief — specced explicitly since it's a named, distinctive interaction:
+   551→   551→
+   552→   552→```
+   553→   553→User hovers/drags a 3D headphone jack toward a socket in the banner illustration
+   554→   554→  ↓
+   555→   555→Magnetic snap-assist pulls jack into alignment within ~20px of correct position
+   556→   556→  ↓
+   557→   557→On connection: subtle "click" sound (Howler, user-gesture-gated), socket LED
+   558→   558→  illustration lights up, connected-state animation plays (waveform or pulse)
+   559→   559→  ↓
+   560→   560→Triggers section's primary reveal (e.g. reveals audio-related feature copy/CTA)
+   561→   561→  ↓
+   562→   562→Touch equivalent: drag gesture, same snap-assist and connection behavior
+   563→   563→```
+   564→   564→
+   565→   565→**Media path:** `public/home/section-{n}/jack-model.glb` or wherever this banner lives per Doc 3 assignment.
+   566→   566→
+   567→   567→---
+   568→   568→
+   569→   569→## 10. Implementation Rules (non-negotiable)
+   570→   570→
+   571→   571→1. Every animation must degrade gracefully — a broken/unloaded asset never blocks page content from being visible or readable.
+   572→   572→2. No animation blocks interaction — a user can always scroll past, tab past, or click through an in-progress animation.
+   573→   573→3. All motion respects `prefers-reduced-motion: reduce` — see per-animation fallback column in §3.
+   574→   574→4. All 3D assets (`.glb`) lazy-load, code-split from the main bundle, with a static poster image (`hero-bg.webp`) shown until the 3D scene mounts.
+   575→   575→5. Videos pause when scrolled off-screen (IntersectionObserver-gated `play()`/`pause()`).
+   576→   576→6. All images use `next/image` — no raw `<img>` tags anywhere in the codebase.
+   577→   577→7. GSAP + ScrollTrigger owns timeline/scroll-scrubbed animation. Framer Motion owns discrete UI state transitions (hover, tap, mount/unmount, layout). These two libraries are never used to animate the same property on the same element.
+   578→   578→8. Three.js/R3F is reserved for genuinely immersive scenes (Home hero, and any page-specific `interactive-3d` Hero variant called out in Doc 3) — it is never used for simple icon or decorative motion where Lottie or CSS suffices.
+   579→   579→9. Components are Server Components by default. A component becomes a Client Component only when it directly uses `useState`/`useEffect`/`useRef` for animation, browser APIs, or the libraries in §2. This boundary is enforced at the component-file level — a Server Component wraps and lazy-loads Client Component islands, never the reverse.
+   580→   580→10. Audio (Howler) never autoplays on page load without an explicit prior user gesture (click/tap) — browser autoplay policy compliance and user-respect both require this. Ambient audio starts muted with a visible unmute toggle.
+   581→   581→11. Every page must score 90+ on Lighthouse (Performance, Accessibility, Best Practices, SEO) in production build — this is a merge-blocking CI check, not a goal.
+   582→   582→12. Every interactive element supports both keyboard navigation (visible focus states, logical tab order) and touch input — no hover-only interactions gate access to content or navigation.
+   583→   583→13. All assets ship in modern formats: images as WebP with AVIF fallback disabled where AVIF is primary (`next/image` handles negotiation), 3D as compressed/Draco-encoded `.glb`, video as adaptive MP4 (H.264 baseline) + WebM.
+   584→   584→14. Every page defines its own `generateMetadata` (title, description, OG image, canonical URL) — no page inherits a generic fallback in production.
+   585→   585→15. No `#` hash-fragment routing anywhere (carried forward from the Route Map's own rule) — every SEO-relevant surface is a real file-system route with its own `page.tsx`.
