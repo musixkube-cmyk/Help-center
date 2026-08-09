@@ -161,3 +161,26 @@ Verification (Agent Browser):
 
 Stage Summary:
 - Hero now has a play/pause button + a mute/unmute button (bottom-right). Video autoplays muted (compliant) for visual motion on load; clicking the unmute button (a real user gesture) enables audio so the brand video's sound is heard, and the play/pause button controls playback. Lint clean, dev server clean, browser-verified (unmute → muted=false = sound audible; play/pause toggles correctly; responsive; no errors; footer/layout intact).
+
+---
+Task ID: 7
+Agent: main (Z.ai Code)
+Task: (1) Remove scrollbar beneath the hero. (2) Remove sub-headline descriptors under section headings. (3) Convert the two-row grids into single horizontal left-to-right carousels. (4) Apply the carousel pattern across the whole home page and add new sections: Shows to try, Discover podcast, Popular artist, Recommended for you, New Single releases, The album trending playlist.
+
+Work Log:
+- (1) Scrollbar fix: root cause was the hero <video> has scale-105 (renders 1512px on a 1440 viewport) — section overflow-hidden clips it visually, but at certain viewport widths it could push the page wider and show a horizontal scrollbar beneath the hero. Added `html, body { overflow-x: hidden; }` to the @layer base block in src/app/globals.css so no horizontal page scrollbar can ever appear from the scaled video or any carousel overflow.
+- (2) Descriptors removed: deleted the <p className="mt-2 text-muted-foreground">…</p> sub-headlines under "Trending this week" ("Ranked by real plays…") and "Newly dropped" ("Straight off distribution…"). Also removed the "See all" links that sat next to them. Pick your lane's blurb kept (it's a different section, not a media grid).
+- (3)+(4) Carousels: expanded src/data/releases.ts — added Artist + Playlist types and 6 new arrays (showsToTry, discoverPodcasts, popularArtists, recommendedForYou, newSingles, albumTrendingPlaylists, 8 items each; also extended trending/newlyDropped to 8 items each). Created src/components/site/section-carousel.tsx ('use client') — a reusable component taking {title, items[]} that renders an h2 + a shadcn Carousel (embla) with opts {align:'start', dragFree:true, containScroll:'trimSnips'} so it scrolls freely left-to-right, each card basis-[160px]→lg:basis-[210px], with prev/next buttons repositioned inside the carousel edges (-left-2/-right-2, bg-card/90 backdrop-blur). Card = gradient artwork + disco-sheen + hover play button + title/subtitle/meta (normalizes Track/Artist/Playlist shapes). Rewrote src/app/page.tsx to render 8 <SectionCarousel> instances (Trending this week, Newly dropped, Shows to try, Discover podcast, Popular artist, Recommended for you, New Single releases, The album trending playlist) + the existing Ticker + Pick your lane. Deleted the old inline TrackCard + grid markup. page.tsx stays a Server Component (metadata); SectionCarousel is the only client piece.
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200).
+
+Verification (Agent Browser):
+- No horizontal scrollbar: hasHScroll=false on both desktop (1440, scrollW=1440=clientW) and mobile (390, scrollW=390=clientW). bodyOverflowX=hidden.
+- 8 carousel sections + Pick your lane: h2Titles = ["Trending this week","Newly dropped","Shows to try","Discover podcast","Popular artist","Recommended for you","New Single releases","The album trending playlist","Pick your lane"]. carouselCount=8 ([data-slot=carousel]), totalCards=64 (8×8).
+- Descriptors gone: hasRankedByRealPlays=false, hasStraightOffDistribution=false, hasSeeAll=false. VLM confirmed "no descriptive sentences under the section headings… solely headings followed immediately by the carousel."
+- Carousel scrolls left-to-right: first carousel inner scrollWidth=1680 > clientWidth=1372 (can scroll). Clicked "Next slide" button → inner transform went matrix(1,0,0,1,0,0) → matrix(1,0,0,1,-209.13,0) (negative translateX = content moved left = scrolled to reveal more on the right = left-to-right). Prev button correctly disabled at start, enabled after scrolling.
+- No page/console errors.
+- Mobile (390x844): 8 carousels, no h-scroll, first carousel can scroll, footer intact (min-h-screen flex flex-col shell + flex-1).
+- Footer intact.
+
+Stage Summary:
+- Home restructured per spec: scrollbar beneath hero eliminated (overflow-x:hidden on html/body); all section sub-headline descriptors removed; the two old grids replaced by single-row horizontal carousels; the carousel pattern applied uniformly across 8 media sections (Trending, Newly dropped, Shows to try, Discover podcast, Popular artist, Recommended for you, New Single releases, The album trending playlist) — each scrolls left-to-right via drag or prev/next buttons (embla dragFree). Pick your lane kept. Lint clean, dev server clean, browser-verified (no h-scroll, 8 carousels, 64 cards, scroll confirmed, responsive, footer intact, no errors).
