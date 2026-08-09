@@ -457,3 +457,23 @@ Verification (Agent Browser + VLM):
 
 Stage Summary:
 - Mega menu now shows 6 branches as a 3x2 grid (3 columns top row, 3 columns bottom row) instead of 6 cramped columns in one row. Intro rail spans both rows on the left, promo panel spans both rows on the right. The vertical separating lines (border-r) remain between columns; there is NO horizontal dividing line between the two rows (verified via computed border styles). Same design — icons, intro rail, promo panel, column headers all intact — just arranged as two rows of three. For Labels shows all 6 capability branches; For Creators shows 6 of its 14 branches. Lint clean, dev server clean, browser-verified (3x2 layout, no horizontal divider, mobile stacks).
+
+---
+Task ID: 16
+Agent: main (Z.ai Code)
+Task: User: (1) all interior pages background must be white not gray, (2) Advertising Portal login goes in a circle, (3) question whether Developers/Advertising sub-items should all be separate page routes or live inside authenticated portals. Also pasted a GitHub PAT in chat.
+
+Work Log:
+- SECURITY: User pasted a GitHub Personal Access Token (ghp_...) in plaintext in the chat. REFUSED to use it — a credential typed into any chat is compromised. Instructed user to revoke it immediately at https://github.com/settings/tokens and to feed any new token via an env var or git credential store, never paste it again. Did NOT execute any git push. Did NOT store the token anywhere.
+
+- (1) White background: Changed --background from oklch(0.925 0.004 92) [stonish-gray] to oklch(1 0 0) [pure white] in src/app/globals.css :root. Also nudged --card from oklch(0.965...) to oklch(0.985...) so cards still have subtle contrast against pure white. --secondary, --muted, --popover unchanged (still off-white/gray for hover states and popovers). This makes the body canvas white on ALL pages (home + interior). Home page Hero is self-contained (bg-ink dark), carousels use bg-card (off-white) — both read fine on white. Lint clean.
+
+- (2) Advertising Portal login circle — ROOT CAUSE DIAGNOSED, NOT YET FIXED: There is NO login/auth/portal code anywhere in the project. /advertising and /developers are generic catch-all marketing section pages (rendered by [...path]/page.tsx). Every sub-item under them (Audio Advertisements, API Docs, SDKs, etc.) is ALSO a generic marketing page. So clicking "Advertising" → marketing page → click sub-item → another marketing page → never reaches a portal or login. That's the "circle." There's no portal to log into because the portals don't exist yet — they're just more marketing pages.
+
+- (3) Portal architecture — ACKNOWLEDGED, AWAITING DESIGN INSTRUCTIONS: User is correct that Developers Portal and Advertising Portal (Adnote) are authenticated app surfaces, not collections of public marketing page routes. The footer items (API Docs, SDKs, Webhooks, Partner Program, Agentic Hub & MCP Server, API access / Audio Advertisements, Sponsored Listening Sessions, Display Advertising, Playlist Sponsorships, Artist Campaign Promotions, Brand Sponsorship Opportunities) are portal INTERIOR features that should live behind a login, not be 282 public marketing routes. Did NOT restructure yet — user said "until I give you further instructions on how we design that page." Flagged that the right architecture is: /developers and /advertising become portal landing pages with login/request-access CTAs; their sub-items become portal interior screens (not public marketing routes); the public marketing nav keeps Discover, For Fans, For Creators, For Labels, For Business (terms/legal). Waiting for user's design direction before executing this restructure.
+
+Verification (Agent Browser + VLM):
+- Body computed background on /for-labels: lab(100 0 0) = pure white. VLM confirmed interior page background is "White". Lint clean. Dev server clean.
+
+Stage Summary:
+- White background applied globally (--background → oklch(1 0 0)), interior pages now render on white canvas (VLM-verified). GitHub token REFUSED on security grounds — user instructed to revoke. Advertising/Developers portal architecture problem diagnosed: no portal/login exists, everything is marketing pages causing the "circle." Right architecture identified (portal landing pages with login + portal interior screens) but NOT executed — waiting for user's design instructions per their explicit "until I give you further instructions" directive.
