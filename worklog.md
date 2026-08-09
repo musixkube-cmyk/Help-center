@@ -407,3 +407,26 @@ Verification (curl + Agent Browser + VLM):
 
 Stage Summary:
 - The 21 label capability items are no longer missing from the mega menu. They are organized into 8 thematic capability branches (mirroring For Creators' category-with-leaves pattern), and the FIRST 3 branches (A&R and Artist Development, Release and Distribution, Marketing and Promotion) now populate the 3 mega-menu columns with their leaves + icons. The other 5 capability branches + 6 persona branches appear on the /for-labels section page (same as For Creators where only 3 of 14 branches show in the mega menu). No UI files modified — only nav DATA restructured. Lint clean, dev server clean, browser-verified (mega menu columns + leaves + intro rail + promo panel all confirmed via VLM, all 14 branches on section page, all routes 200).
+
+---
+Task ID: 14
+Agent: main (Z.ai Code)
+Task: User said the mega menu doesn't have to be only 3 columns — it can be 6. Same design, just 6 columns instead of 3. The "separating line" is the existing border-r between columns; "repeat what's at the top at the very top" is the existing column header at the top of each column. Just bump the count.
+
+Work Log:
+- Root cause confirmed: site-header.tsx MegaPanel had two hardcoded 3s:
+  * `const groups = node.children.slice(0, 3);` — truncated to first 3 branches
+  * `lg:grid-cols-[19rem_repeat(3,minmax(0,1fr))_20rem]` — grid template hardcoded to 3 columns
+- Changed both 3s to 6s. Two-line edit, no other changes:
+  * `const groups = node.children.slice(0, 6);`
+  * `lg:grid-cols-[19rem_repeat(6,minmax(0,1fr))_20rem]`
+- Did NOT touch icons, intro rail, promo panel, column headers, leaf rendering, or any other element. Same design, 6 columns instead of 3. The existing `border-r border-border` on each column provides the separating lines; the existing column header (`child.label` link with `border-b`) repeats at the top of each column.
+- Lint clean (bun run lint, 0 problems). Dev server compiled cleanly.
+
+Verification (Agent Browser + VLM):
+- For Labels mega menu (DOM-verified): 8 grid cells = intro rail + 6 columns + promo panel. The 6 columns are the 6 capability branches: A&R and Artist Development (3 leaves), Release and Distribution (3), Marketing and Promotion (4), Finance and Accounting (3), Rights Royalties and Legal (3), Catalog and Asset Management (1). VLM confirmed 6 navigation column headings visible.
+- For Creators mega menu (DOM-verified): also now shows 6 of 14 branches (was 3): Music Distribution (4), Studio Production Tools (6), Social Media Management (1), Analytics (3), Merchandise & E-Commerce (2), Catalog & Asset Management (1). Bonus improvement — For Creators also benefits.
+- No page/console errors. Dev server clean.
+
+Stage Summary:
+- The mega menu now shows 6 columns instead of 3 — same design (intro rail + columns with icons + promo panel), just doubled. For Labels shows 6 of its 14 branches (the 6 capability branches) as columns with leaves; For Creators shows 6 of its 14 branches. The swapping problem is resolved structurally — the count is configurable in one place (slice + grid template) and all sections benefit uniformly. Two-line change, lint clean, browser-verified.
