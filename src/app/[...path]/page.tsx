@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
-import { findNode, findTrail, type NavNode } from "@/data/nav";
+import { findNode, findTrail } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
 import { Button } from "@/components/ui/button";
 
@@ -33,44 +33,6 @@ export async function generateMetadata({
   };
 }
 
-/* A leaf card (a node with no children) */
-function LeafCard({ node }: { node: NavNode }) {
-  return (
-    <NavLink
-      href={node.path}
-      className="group flex items-center justify-between gap-3 bg-card p-5 transition-colors hover:bg-secondary"
-    >
-      <span className="text-sm font-medium leading-tight text-foreground">
-        {node.label}
-      </span>
-      <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-accent" />
-    </NavLink>
-  );
-}
-
-/* A category block: heading + grid of its leaves */
-function CategoryBlock({ node }: { node: NavNode }) {
-  const leaves = node.children ?? [];
-  return (
-    <div>
-      <NavLink
-        href={node.path}
-        className="group/head inline-flex items-center gap-2 border-b border-border pb-3 font-display text-2xl tracking-wide text-foreground transition-colors hover:text-accent"
-      >
-        <span>{node.label}</span>
-        <ArrowUpRight className="h-4 w-4 text-muted-foreground transition-colors group-hover/head:text-accent" />
-      </NavLink>
-      {leaves.length > 0 && (
-        <div className="mt-4 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {leaves.map((leaf) => (
-            <LeafCard key={leaf.path} node={leaf} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default async function SectionPage({
   params,
 }: {
@@ -82,14 +44,8 @@ export default async function SectionPage({
   if (!node) notFound();
   const trail = findTrail(path);
 
-  // Split children into direct leaves (no sub-children) and categories (have children)
-  const children = node.children ?? [];
-  const directLeaves = children.filter((c) => !c.children?.length);
-  const categories = children.filter((c) => !!c.children?.length);
-
   return (
     <main className="w-full px-6 lg:px-10 py-16">
-      {/* Breadcrumb */}
       <nav className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
         <NavLink href="/" className="hover:text-accent">
           Home
@@ -104,7 +60,6 @@ export default async function SectionPage({
         ))}
       </nav>
 
-      {/* Heading */}
       <h1 className="mt-6 max-w-4xl text-5xl leading-[0.95] sm:text-7xl">{node.label}</h1>
       <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
         {node.blurb ??
@@ -115,26 +70,19 @@ export default async function SectionPage({
         <Button className="rounded-none uppercase tracking-widest">Get started</Button>
       </div>
 
-      {/* Full tree: parent → child → leaf */}
-      {children.length > 0 && (
-        <div className="mt-16 space-y-12">
-          {/* Direct leaves first (if any) */}
-          {directLeaves.length > 0 && (
-            <div>
-              <h2 className="border-b border-border pb-3 font-display text-2xl tracking-wide text-foreground">
-                Browse
-              </h2>
-              <div className="mt-4 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {directLeaves.map((leaf) => (
-                  <LeafCard key={leaf.path} node={leaf} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Categories with their leaves */}
-          {categories.map((cat) => (
-            <CategoryBlock key={cat.path} node={cat} />
+      {node.children && (
+        <div className="mt-16 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+          {node.children.map((child) => (
+            <NavLink
+              key={child.path}
+              href={child.path}
+              className="group flex flex-col justify-between bg-card p-6 transition-colors hover:bg-secondary"
+            >
+              <span className="font-display text-2xl tracking-wide">{child.label}</span>
+              <span className="mt-6 flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-accent">
+                Explore <ArrowUpRight className="h-3.5 w-3.5" />
+              </span>
+            </NavLink>
           ))}
         </div>
       )}

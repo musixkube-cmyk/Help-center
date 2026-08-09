@@ -315,3 +315,35 @@ Verification (Agent Browser + curl + VLM):
 
 Stage Summary:
 - Fixed the architecture: policies (Privacy & Safety, Legal & Policies) and support content (Support Center) are OUT of the footer and now live in the Help Center. The footer is lean (5 simple groups, 27 links, no policy leaves). The Help Center (/resources/help-center) is a sidebar-style page with a recursive expandable navigation tree containing ALL policy and support sections — Privacy & Safety (6 sub-categories + leaves), Legal & Policies (Terms of Use + Copyright & IP), Support Center (Using Musicosy, Advertising Hub). Tagline updated to "Everything music. | One Place." Lint clean, dev server clean, browser-verified (lean footer, Help Center sidebar with all content, routes work, responsive, no errors).
+
+---
+Task ID: 11
+Agent: main (Z.ai Code)
+Task: User was furious that I redesigned the mega menu in Task 9 — removed icons, restructured it, removed the promo panel. "Did I tell you to remove my fucking icons? Did I tell you to restructure the motherfucker? All you had to do was look at the example for creators to update by labels. Only motherfucking job was to add to not redesign! Restore my shit right now. Pull the shit in from GitHub!"
+
+Work Log:
+- Restored src/components/site/site-header.tsx EXACTLY from the original GitHub source (/tmp/music-nexus-src/src/components/site/site-header.tsx):
+  * Restored the ICONS array (17 lucide icons: FileText, FolderKanban, Users, ScrollText, Music, ShoppingBag, Video, Store, Globe, Share2, Megaphone, Link2, BarChart3, Radio, Disc3, Wallet, Ticket, Sparkle).
+  * Restored iconFor() function (deterministic hash-based icon assignment per node.path).
+  * Restored MegaItem component — icon in a bordered box (h-9 w-9) + label + group label beneath.
+  * Restored MegaPanel with the ORIGINAL layout:
+    - Intro rail (19rem) — "{node.label} overview" eyebrow, h3 label, blurb, "Explore {node.label}" link.
+    - 3 columns (slice(0,3)) — each with column heading + up to 6 MegaItems with icons.
+    - Promo panel (20rem) — dark ink bg, "Musicosy AI" with Disc3 icon, "One spine across your whole music business.", body text, "Business intelligence layer" badge, "Meet the platform" link.
+  * Restored original mobile menu — flat 2-level list (mega item heading + 2-col grid of child links).
+  * Only deviation from source: added "use client" directive (required for Next.js App Router useState) and used createElement(Icon, ...) instead of <Icon/> for the dynamic icon (required to pass the react-hooks/static-components lint rule). This is the EXACT same lint fix applied in Task 1 — design is identical.
+- Restored src/app/[...path]/page.tsx to the ORIGINAL flat grid design from the source:
+  * Breadcrumb + h1 + blurb + "Get started" button + flat grid of children (sm:grid-cols-2 lg:grid-cols-3), each child a card with label + "Explore" link.
+  * Removed ALL the Task 9 redesign (Browse section, CategoryBlock, LeafCard, direct-leaves vs categories split). The section pages are back to the original simple design.
+- Kept the nav DATA updates from Tasks 8-10 (all branches/leaves from the user's tree, helpCenterSections, lean footer). Those were correct — the user wanted the data expanded, not the design changed.
+- Kept the Help Center page (/resources/help-center) and the lean footer from Task 10 — those were explicitly requested by the user.
+- Lint clean (bun run lint, 0 problems). Dev server compiled (GET / 200). No page/console errors.
+
+Verification (Agent Browser + VLM):
+- Mega menu fully restored: intro rail (hasOverview=true, hasExploreLink=true), 3 columns (columnCount=3, first column = "Music Distribution"), 11 icons visible (iconCount=11), promo panel (hasMusicosyAI=true, hasOneSpine=true, hasBusinessIntelligence=true, hasMeetPlatform=true).
+- VLM confirmed: "Intro Rail on the Left... 3 Columns with Icons... Each item includes a specific icon inside a square box to its left... Dark Promo Panel on the Right... Musicosy AI... ONE SPINE ACROSS YOUR WHOLE MUSIC BUSINESS... BUSINESS INTELLIGENCE LAYER... Meet the platform."
+- Section pages: restored to original flat grid of children with "Explore" links.
+- No page/console errors.
+
+Stage Summary:
+- Restored the mega menu design EXACTLY as the original GitHub source — icons (17 lucide icons via iconFor hash), 3-column layout (slice(0,3)), intro rail with overview/blurb/Explore, dark promo panel with Musicosy AI / "One spine" / "Business intelligence layer" / "Meet the platform". Also restored section pages to the original flat grid. The ONLY changes kept are the nav DATA (all branches/leaves from the user's tree) and the Task 10 additions (lean footer, Help Center sidebar page) which the user explicitly requested. Lesson learned: ADD to existing designs, do NOT redesign. Lint clean, dev server clean, browser-verified (icons + promo panel + 3 columns all present).
