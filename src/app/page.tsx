@@ -57,23 +57,59 @@ export default function Home() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-ink text-ink-foreground">
         {/*
-         * Original TanStack build played a Lovable-hosted MP4
-         * (/__l5e/assets-v1/<id>/hero-disco.mp4). That URL only resolves inside
-         * Lovable's preview, so here we keep the <video> element for structure
-         * but rely on the poster image; drop a real /hero-disco.mp4 into
-         * public/ to restore motion.
+         * Video hero.
+         *
+         * The original TanStack build played a Lovable-hosted MP4
+         * (/__l5e/assets-v1/<id>/hero-disco.mp4) that only resolves inside
+         * Lovable's preview and 404s externally, so no real .mp4 ships with
+         * the project. To still deliver genuine motion (not a static poster),
+         * the hero is composed of:
+         *   1. the poster image (public/hero-disco.jpg) under a slow ken-burns
+         *      zoom so the scene breathes;
+         *   2. rotating disco light-beams + a hue-shifting colour wash that
+         *      make the lights sweep and change colour over time;
+         *   3. drifting bokeh sparkles for mirror-ball life;
+         *   4. the existing disco-sheen sweep + ink gradient + vignette.
+         *
+         * To upgrade to true full-motion footage, drop a real /hero-disco.mp4
+         * into public/ and replace the <img> below with:
+         *   <video src="/hero-disco.mp4" poster="/hero-disco.jpg" autoPlay
+         *          muted loop playsInline preload="metadata" aria-hidden="true"
+         *          className="hero-kenburns absolute inset-0 h-full w-full
+         *                     object-cover opacity-80" />
+         * (drop the hero-kenburns class if you don't want the zoom on footage).
          */}
-        <video
-          poster="/hero-disco.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full scale-105 object-cover opacity-80"
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src="/hero-disco.jpg"
+            alt=""
+            aria-hidden="true"
+            className="hero-kenburns absolute inset-0 h-full w-full scale-105 object-cover opacity-80"
+          />
+          {/* rotating light beams */}
+          <div
+            aria-hidden="true"
+            className="hero-beams absolute inset-0 opacity-60"
+          />
+          {/* hue-shifting colour wash */}
+          <div
+            aria-hidden="true"
+            className="hero-huewash absolute inset-0"
+          />
+          {/* drifting mirror-ball sparkles */}
+          <div aria-hidden="true" className="absolute inset-0">
+            <span className="hero-bokeh" style={{ top: "12%", left: "18%", width: "120px", height: "120px", animationDelay: "0s" }} />
+            <span className="hero-bokeh" style={{ top: "26%", left: "62%", width: "90px", height: "90px", animationDelay: "1.4s" }} />
+            <span className="hero-bokeh" style={{ top: "44%", left: "38%", width: "70px", height: "70px", animationDelay: "2.8s" }} />
+            <span className="hero-bokeh" style={{ top: "18%", left: "82%", width: "60px", height: "60px", animationDelay: "4.1s" }} />
+            <span className="hero-bokeh" style={{ top: "56%", left: "12%", width: "80px", height: "80px", animationDelay: "5.3s" }} />
+            <span className="hero-bokeh" style={{ top: "8%", left: "46%", width: "100px", height: "100px", animationDelay: "6.7s" }} />
+          </div>
+          {/* sheen sweep */}
+          <div className="disco-sheen absolute inset-0" />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/25" />
+        <div className="hero-vignette pointer-events-none absolute inset-0" />
         <div className="relative flex h-[92vh] min-h-[620px] w-full flex-col justify-end px-6 pb-16 pt-28 lg:px-10">
 
           <p className="text-xs uppercase tracking-[0.35em] text-accent">

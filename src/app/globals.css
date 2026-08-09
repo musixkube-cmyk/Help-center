@@ -193,3 +193,136 @@
     background-position: -20% 0;
   }
 }
+
+/*
+ * Video-hero motion layers.
+ *
+ * The original TanStack build played a Lovable-hosted MP4 (hero-disco.mp4)
+ * that only resolves inside Lovable's preview and now 404s externally, so no
+ * real .mp4 ships with the project. These utilities compose a looping,
+ * genuinely-moving disco hero out of the poster image plus CSS motion:
+ *
+ *   .hero-kenburns  — slow breathing zoom on the base image (parallax life)
+ *   .hero-beams     — slowly rotating cone-of-light beams from the top
+ *   .hero-huewash   — hue-rotating colour wash that shifts the lights over time
+ *   .hero-bokeh     — drifting blurred light particles (mirror-ball sparkles)
+ *   .hero-vignette  — soft edge falloff to seat the content
+ *
+ * Drop a real /hero-disco.mp4 into public/ and swap the <img> for a <video> if
+ * you ever want true full-motion footage instead.
+ */
+
+@utility hero-kenburns {
+  animation: hero-kenburns 26s ease-in-out infinite alternate;
+}
+
+@keyframes hero-kenburns {
+  0% {
+    transform: scale(1.05) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.16) translate3d(-1.5%, -1.5%, 0);
+  }
+}
+
+@utility hero-beams {
+  background-image: conic-gradient(
+    from 0deg at 50% -8%,
+    transparent 0deg,
+    color-mix(in oklab, var(--accent) 28%, transparent) 6deg,
+    transparent 14deg,
+    color-mix(in oklab, #ffd9a0 22%, transparent) 22deg,
+    transparent 30deg,
+    color-mix(in oklab, var(--accent) 26%, transparent) 38deg,
+    transparent 46deg,
+    color-mix(in oklab, #ff8a3d 20%, transparent) 54deg,
+    transparent 62deg,
+    color-mix(in oklab, var(--accent) 28%, transparent) 70deg,
+    transparent 78deg,
+    color-mix(in oklab, #ffe0b0 22%, transparent) 86deg,
+    transparent 94deg
+  );
+  background-size: 140% 140%;
+  background-repeat: no-repeat;
+  animation: hero-beams 18s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes hero-beams {
+  from {
+    transform: rotate(0deg) scale(1.1);
+  }
+  to {
+    transform: rotate(360deg) scale(1.1);
+  }
+}
+
+@utility hero-huewash {
+  background: linear-gradient(
+    120deg,
+    color-mix(in oklab, var(--accent) 40%, transparent),
+    color-mix(in oklab, #ff5a2c 30%, transparent) 35%,
+    color-mix(in oklab, #ffb347 25%, transparent) 60%,
+    color-mix(in oklab, #7a4dff 22%, transparent) 100%
+  );
+  mix-blend-mode: color;
+  animation: hero-huewash 14s ease-in-out infinite alternate;
+}
+
+@keyframes hero-huewash {
+  0% {
+    opacity: 0.55;
+    filter: hue-rotate(0deg);
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 0.8;
+    filter: hue-rotate(38deg);
+    transform: translate3d(2%, -1%, 0);
+  }
+}
+
+@utility hero-bokeh {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in oklab, var(--accent) 60%, white 10%) 0%,
+    color-mix(in oklab, var(--accent) 30%, transparent) 45%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  animation: hero-bokeh 9s ease-in-out infinite;
+}
+
+@keyframes hero-bokeh {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.85);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(18px, -26px, 0) scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(-12px, 14px, 0) scale(0.9);
+    opacity: 0.3;
+  }
+}
+
+@utility hero-vignette {
+  background: radial-gradient(
+    120% 90% at 50% 18%,
+    transparent 35%,
+    color-mix(in oklab, var(--ink) 55%, transparent) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns,
+  .hero-beams,
+  .hero-huewash,
+  .hero-bokeh {
+    animation: none !important;
+  }
+}
