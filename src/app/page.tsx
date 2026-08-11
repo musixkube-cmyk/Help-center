@@ -1,14 +1,4 @@
 import type { Metadata } from "next";
-import {
-  ArrowUpRight,
-  Headphones,
-  Settings,
-  ShieldCheck,
-  Scale,
-  BookOpen,
-  LifeBuoy,
-  Compass,
-} from "lucide-react";
 import { NavLink } from "@/components/site/nav-link";
 
 export const metadata: Metadata = {
@@ -24,37 +14,31 @@ export const metadata: Metadata = {
 
 const HELP_CARDS = [
   {
-    icon: Headphones,
     label: "Using Musicosy",
     blurb: "Guides on discovering, playing, collecting and managing your music.",
     href: "/resources/help-center/using-musicosy",
   },
   {
-    icon: Settings,
     label: "Managing Your Account",
     blurb: "Account settings, billing, subscriptions and account status.",
     href: "/support/managing-your-account",
   },
   {
-    icon: ShieldCheck,
     label: "Safety & Security",
     blurb: "How we collect, protect and respect your data — plus safety controls.",
     href: "/privacy-and-safety",
   },
   {
-    icon: Scale,
     label: "Rules & Policies",
     blurb: "Terms of use, copyright, IP and distribution agreements.",
     href: "/legal-and-policies",
   },
   {
-    icon: BookOpen,
     label: "Resources",
     blurb: "Guides, glossary, new-user FAQ and accessibility.",
     href: "/resources",
   },
   {
-    icon: Compass,
     label: "Help Center",
     blurb: "Browse every support topic, policy and safety article in one place.",
     href: "/resources/help-center",
@@ -67,32 +51,32 @@ const QUICK_LINKS = [
   { label: "Accessibility", href: "/resources/accessibility" },
   { label: "Contact us", href: "/support/contact-us" },
   { label: "Developer docs", href: "/developers" },
-  { label: "Ads Help Center", href: "/advertising" },
+  { label: "Advertise", href: "/advertise" },
 ];
 
 export default function Home() {
   return (
     <main className="w-full bg-white">
-      {/* Support hero */}
-      <section className="w-full px-6 lg:px-10 pt-14 pb-10">
-        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+      {/* Hero */}
+      <section className="w-full px-6 lg:px-10 pt-20 pb-14">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
           Musicosy Help Center
         </p>
-        <h1 className="mt-4 font-display text-5xl leading-[0.95] tracking-wide sm:text-6xl">
+        <h1 className="mt-5 font-display text-5xl leading-[0.95] tracking-wide sm:text-7xl">
           How can we help you?
         </h1>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+        <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
           Everything you need to use Musicosy safely — account guides, safety
           controls, rules and policies, developer docs and business resources.
         </p>
 
-        {/* Quick links */}
-        <div className="mt-6 flex flex-wrap gap-2">
+        {/* Quick links — plain text, no chips */}
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
           {QUICK_LINKS.map((q) => (
             <NavLink
               key={q.href}
               href={q.href}
-              className="border border-border bg-card px-3 py-1.5 text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:border-accent/50 hover:text-accent"
+              className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
             >
               {q.label}
             </NavLink>
@@ -100,53 +84,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Support cards — the landing surface, routing to help center pages */}
-      <section className="w-full px-6 lg:px-10 pb-16">
-        <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+      {/* Support cards — clean grid, no grid lines, no icons */}
+      <section className="w-full px-6 lg:px-10 pb-24">
+        <div className="grid gap-x-8 gap-y-12 border-t border-border pt-10 sm:grid-cols-2 lg:grid-cols-3">
           {HELP_CARDS.map((card) => (
-            <NavLink
-              key={card.href}
-              href={card.href}
-              className="group flex flex-col gap-3 bg-card p-6 transition-colors hover:bg-secondary"
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-sm border border-border bg-background text-accent">
-                <card.icon className="h-5 w-5" strokeWidth={1.6} />
-              </span>
-              <span className="font-display text-2xl tracking-wide text-foreground">
+            <NavLink key={card.href} href={card.href} className="group flex flex-col">
+              <span className="font-display text-2xl tracking-wide text-foreground transition-colors group-hover:text-accent">
                 {card.label}
               </span>
-              <span className="text-sm text-muted-foreground">
+              <span className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {card.blurb}
-              </span>
-              <span className="mt-2 flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-accent">
-                Explore <ArrowUpRight className="h-3 w-3" />
               </span>
             </NavLink>
           ))}
         </div>
       </section>
 
-      {/* Contact strip */}
-      <section className="w-full border-t border-border bg-card px-6 lg:px-10 py-12">
-        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-4">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-accent">
-              <LifeBuoy className="h-5 w-5" strokeWidth={1.6} />
-            </span>
-            <div>
-              <h2 className="font-display text-2xl tracking-wide text-foreground">
-                Still need a hand?
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Reach our support team directly — we&apos;ll get you sorted.
-              </p>
-            </div>
+      {/* Contact strip — clean, no icon, no fill */}
+      <section className="w-full border-t border-border px-6 lg:px-10 py-16">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-display text-3xl tracking-wide text-foreground">
+              Still need a hand?
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Reach our support team directly — we&apos;ll get you sorted.
+            </p>
           </div>
           <NavLink
             href="/support/contact-us"
-            className="inline-flex items-center gap-1.5 border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-widest text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex items-center text-sm font-semibold uppercase tracking-widest text-foreground underline-offset-4 transition-colors hover:text-accent hover:underline"
           >
-            Contact support <ArrowUpRight className="h-3.5 w-3.5" />
+            Contact support
           </NavLink>
         </div>
       </section>

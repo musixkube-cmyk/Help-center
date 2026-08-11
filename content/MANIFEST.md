@@ -520,6 +520,7 @@ description: "How to control who sees your account."
 |---|---|
 | `/` | `content/index.md` |
 | `/about` | `content/about.md` |
+| `/advertise` | `content/advertise.md` |
 | `/advertising` | `content/advertising.md` |
 | `/brand-toolkit` | `content/brand-toolkit.md` |
 | `/careers` | `content/careers.md` |
@@ -798,7 +799,7 @@ The footer has five columns. Each link points to a route documented above.
 
 ### Business resources (column heading → `/for-business`)
 
-- Advertise → `/advertising`
+- Advertise → `/advertise`
 - Musicosy for business → `/for-business`
 - Resources and guides → `/resources/guides`
 - Musicosy for marketers → `/for-business`

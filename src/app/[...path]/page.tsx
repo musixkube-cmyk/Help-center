@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
 import { findNode, findTrail } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
 import { Button } from "@/components/ui/button";
@@ -73,16 +72,18 @@ export default async function SectionPage({
       </div>
 
       {node.children && (
-        <div className="mt-16 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-x-8 gap-y-10 border-t border-border pt-10 sm:grid-cols-2 lg:grid-cols-3">
           {node.children.map((child) => (
             <NavLink
               key={child.path}
               href={child.path}
-              className="group flex flex-col justify-between bg-card p-6 transition-colors hover:bg-secondary"
+              className="group flex flex-col"
             >
-              <span className="font-display text-2xl tracking-wide">{child.label}</span>
-              <span className="mt-6 flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-accent">
-                Explore <ArrowUpRight className="h-3.5 w-3.5" />
+              <span className="font-display text-2xl tracking-wide text-foreground transition-colors group-hover:text-accent">
+                {child.label}
+              </span>
+              <span className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {child.blurb ?? "Browse this section."}
               </span>
             </NavLink>
           ))}

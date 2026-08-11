@@ -174,7 +174,7 @@ export const footerNav: NavNode[] = [
     label: "Business resources",
     path: "/for-business",
     children: [
-      { label: "Advertise", path: "/advertising" },
+      { label: "Advertise", path: "/advertise" },
       { label: "Musicosy for business", path: "/for-business" },
       { label: "Resources and guides", path: "/resources/guides" },
       { label: "Musicosy for marketers", path: "/for-business" },

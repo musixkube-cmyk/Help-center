@@ -619,3 +619,25 @@ Stage Summary:
 - Complete content scaffold generated at content/ with 222 stub .md files mirroring every route in the site.
 - content/MANIFEST.md is the reference doc: convention, full tree, flat index, footer mapping.
 - Workflow established: user writes content in the matching .md file -> pushes to GitHub -> I extract and place onto pages (content loader wiring is the next step when user is ready).
+
+---
+Task ID: minimalist-redesign
+Agent: main (Z.ai Code)
+Task: Advertise should route to a gate page (self-serve portal). Lose the icons. Go minimalist. Remove the grid-with-lines on the front page. Make the hero all white instead of stone gray. Clean and better readability.
+
+Work Log:
+- globals.css: changed --background, --card, --popover from cream oklch(0.925/0.965/0.975) to pure white oklch(1 0 0). Body + header + cards now render on a clean white foundation. Kept --secondary/--muted as light warm grays for hover states.
+- src/app/page.tsx: full minimalist rebuild. Removed ALL icon imports (Headphones, Settings, ShieldCheck, Scale, BookOpen, LifeBuoy, Compass) and icon badges. Removed the grid-with-lines pattern (grid gap-px border border-border bg-border). New layout: hero (eyebrow + h1 + blurb + plain-text quick links with no chip borders) → clean card grid (gap-x-8 gap-y-12, single top border divider, cards are just title + blurb, title goes accent on hover, no boxes/fills) → contact strip (no icon, no fill, clean text CTA). Added "Advertise" to quick links → /advertise.
+- src/app/advertise/page.tsx (new dedicated route): minimalist gate page for the self-serve ad portal. White bg, no icons. Hero ("Advertise on Musicosy." + value prop + "Open Ad Studio" primary CTA → /advertising + "Read the Ads Help Center" secondary link) → 3 clean text columns (Targeting / Formats / Reporting, no icons) → bottom CTA ("Ready to launch?" + Open Ad Studio).
+- src/data/nav.ts: footer Business resources "Advertise" path /advertising → /advertise (the gate page).
+- src/app/[...path]/page.tsx: cleaned the child grid for consistency — removed grid-with-lines (gap-px border bg-border) and bg-card fills, now uses gap-x-8 gap-y-10 + top border divider + title-only cards with hover accent. Removed unused ArrowUpRight import. Cards now show child.blurb as subtitle.
+- scripts/generate-content-scaffold.ts: regenerated content scaffold — 1 new stub (content/advertise.md), 222 existing. Total 223 routes.
+- Lint: clean. Agent Browser verified: homepage main bg = rgb(255,255,255), 0 SVG icons, no .bg-border grid, 6 cards, no chip borders, body bg = pure white. /advertise page: white, 0 icons, "Open Ad Studio" CTA + Targeting/Formats/Reporting present. Footer "Advertise" click → /advertise. Catch-all /privacy-and-safety: white, no grid lines, no icons, 6 clean cards. Mega menu still works (intro rail + dark promo panel preserved). No console/runtime errors.
+
+Stage Summary:
+- Entire site foundation is now pure white (was cream/stone-gray).
+- Homepage is minimalist: no icons, no grid lines, whitespace-driven layout, plain-text quick links, clean text cards with hover-accent titles.
+- /advertise is a dedicated gate page — the front door to the self-serve ad portal. Primary CTA "Open Ad Studio" leads into the portal.
+- Footer "Advertise" routes to the gate page.
+- Catch-all section pages follow the same clean card pattern for consistency.
+- Content scaffold regenerated to include /advertise.
