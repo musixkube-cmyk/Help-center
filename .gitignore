@@ -55,3 +55,4 @@ server.log
 .git-credentials
 .gitconfig.local
 tool-results/
+upload/
