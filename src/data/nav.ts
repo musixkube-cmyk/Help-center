@@ -32,15 +32,15 @@ function build(
 }
 
 /**
- * Mega menu — reorganized to host the help center documents.
- * Each top-level item is a help-center category; children are document
- * groups that surface in the mega panel columns.
+ * Mega menu — hosts the help-center documents only.
+ * Every top-level item is a help-center category; children are document
+ * groups that surface in the mega panel columns. No product/music entries.
  */
 export const megaMenu: NavNode[] = [
   {
     label: "Using Musicosy",
     path: "/resources/help-center",
-    blurb: "Discover, play, collect and manage your music.",
+    blurb: "Guides on discovering, playing, collecting and managing your music.",
     children: build("/resources/help-center/using-musicosy", [
       ["Discover & Browse", ["Discover content", "Feed", "For You feed", "Friends Tab", "Search"]],
       ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions"]],
@@ -53,7 +53,7 @@ export const megaMenu: NavNode[] = [
   {
     label: "Managing Your Account",
     path: "/support",
-    blurb: "Account settings, billing, subscriptions and status.",
+    blurb: "Account settings, billing, subscriptions and account status.",
     children: build("/support/managing-your-account", [
       "Account settings & privacy",
       "Notification settings",
@@ -90,28 +90,60 @@ export const megaMenu: NavNode[] = [
   {
     label: "Resources",
     path: "/resources",
-    blurb: "Blog, guides, glossary and help center.",
+    blurb: "Guides, glossary, FAQ, accessibility and the Help Center.",
     children: build("/resources", [
-      "Blog",
       "Guides",
       "Glossary",
       "Help Center",
       "New User FAQ",
       "Accessibility",
+      "Blog",
     ]),
-  },
-  {
-    label: "Discover",
-    path: "/discover",
-    blurb: "Trending, newly dropped, playlists and podcasts.",
   },
 ];
 
 /**
- * Footer navigation — X-platform style.
- * Three columns: Help Center, Developer resources, Business resources.
+ * Footer navigation — X-platform style, five columns.
+ * Using Musicosy · X Platform · Help Center · Developer resources · Business resources.
  */
 export const footerNav: NavNode[] = [
+  {
+    label: "Using Musicosy",
+    path: "/resources/help-center/using-musicosy",
+    children: [
+      { label: "Managing your account", path: "/support/managing-your-account" },
+      { label: "Safety and security", path: "/privacy-and-safety" },
+      { label: "Rules and policies", path: "/legal-and-policies" },
+      { label: "Resources", path: "/resources" },
+      { label: "New user FAQ", path: "/resources/new-user-faq" },
+      { label: "Glossary", path: "/resources/glossary" },
+      { label: "A safer Musicosy", path: "/privacy-and-safety/a-safer-musicosy" },
+      { label: "Accessibility", path: "/resources/accessibility" },
+      { label: "Our rules", path: "/legal-and-policies/our-rules" },
+      { label: "My privacy", path: "/privacy-and-safety/my-privacy" },
+      { label: "How we address misinformation", path: "/privacy-and-safety/how-we-address-misinformation" },
+      { label: "Recommender Systems", path: "/privacy-and-safety/recommender-systems" },
+      { label: "Sign in", path: "/support/sign-in" },
+      { label: "Contact Us", path: "/support/contact-us" },
+    ],
+  },
+  {
+    label: "X Platform",
+    path: "/about",
+    children: [
+      { label: "Status", path: "/status" },
+      { label: "Accessibility", path: "/resources/accessibility" },
+      { label: "Embed a post", path: "/developers/embed" },
+      { label: "Privacy Center", path: "/privacy-and-safety" },
+      { label: "Transparency Center", path: "/legal-and-policies/transparency-center" },
+      { label: "Download the app", path: "/download" },
+      { label: "About the company", path: "/about" },
+      { label: "Company news", path: "/resources/blog" },
+      { label: "Brand toolkit", path: "/brand-toolkit" },
+      { label: "Jobs and internships", path: "/careers" },
+      { label: "Investors", path: "/investors" },
+    ],
+  },
   {
     label: "Help Center",
     path: "/resources/help-center",
@@ -119,7 +151,7 @@ export const footerNav: NavNode[] = [
       { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
       { label: "Musicosy for creators", path: "/for-creators" },
       { label: "Ads Help Center", path: "/advertising" },
-      { label: "Managing your account", path: "/support" },
+      { label: "Managing your account", path: "/support/managing-your-account" },
       { label: "Email Preference Center", path: "/support/email-preferences" },
       { label: "Rules and policies", path: "/legal-and-policies" },
       { label: "Contact us", path: "/support/contact-us" },
@@ -151,24 +183,6 @@ export const footerNav: NavNode[] = [
       { label: "Ads Studio", path: "/advertising" },
     ],
   },
-];
-
-/**
- * Footer utility row — the horizontal link strip above the three columns
- * (X-platform style: Status, Accessibility, Embed a post, etc.)
- */
-export const footerUtilityLinks: { label: string; path: string }[] = [
-  { label: "Status", path: "/status" },
-  { label: "Accessibility", path: "/resources/accessibility" },
-  { label: "Embed a post", path: "/developers" },
-  { label: "Privacy Center", path: "/privacy-and-safety" },
-  { label: "Transparency Center", path: "/legal-and-policies" },
-  { label: "Download the app", path: "/download" },
-  { label: "About the company", path: "/about" },
-  { label: "Company news", path: "/resources/blog" },
-  { label: "Brand toolkit", path: "/brand-toolkit" },
-  { label: "Jobs and internships", path: "/careers" },
-  { label: "Investors", path: "/investors" },
 ];
 
 /**
@@ -323,7 +337,7 @@ export const helpCenterSections: NavNode[] = [
         "Using Musicosy",
         [
           "Discover & Browse",
-          "Content Interaction",
+          "ContentInteraction",
           "Collections",
           "Media & Playback",
           "Direct Messages",
@@ -352,7 +366,7 @@ export const helpCenterSections: NavNode[] = [
 
 /**
  * Platform persona routes — kept in allNav so the catch-all page can resolve
- * them, even though they're no longer in the mega menu or footer columns.
+ * them, even though they're no longer surfaced in the mega menu.
  */
 export const platformRoutes: NavNode[] = [
   { label: "For Fans", path: "/for-fans", blurb: "Stream, buy, collect and back the artists you love." },
@@ -361,7 +375,40 @@ export const platformRoutes: NavNode[] = [
   { label: "For Business", path: "/for-business", blurb: "Adnote — targeting built on real listening behavior." },
 ];
 
-export const allNav: NavNode[] = [...megaMenu, ...footerNav, ...helpCenterSections, ...platformRoutes];
+/** Flatten a node tree into a list of every node (self + descendants). */
+function flatten(nodes: NavNode[]): NavNode[] {
+  const out: NavNode[] = [];
+  const walk = (list: NavNode[]) => {
+    for (const n of list) {
+      out.push(n);
+      if (n.children) walk(n.children);
+    }
+  };
+  walk(nodes);
+  return out;
+}
+
+/**
+ * allNav — every resolvable path. Includes the mega menu, help-center
+ * sections, platform routes, and a flattened copy of the footer so every
+ * footer link resolves to a page.
+ */
+export const allNav: NavNode[] = (() => {
+  const merged = [
+    ...megaMenu,
+    ...helpCenterSections,
+    ...platformRoutes,
+    ...flatten(footerNav),
+  ];
+  const seen = new Set<string>();
+  const deduped: NavNode[] = [];
+  for (const n of merged) {
+    if (seen.has(n.path)) continue;
+    seen.add(n.path);
+    deduped.push(n);
+  }
+  return deduped;
+})();
 
 export function findNode(path: string, nodes: NavNode[] = allNav): NavNode | undefined {
   for (const node of nodes) {

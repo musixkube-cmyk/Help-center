@@ -1,26 +1,24 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Headphones, Settings, ShieldCheck, Scale, BookOpen, Compass } from "lucide-react";
 import {
-  trending,
-  newlyDropped,
-  showsToTry,
-  discoverPodcasts,
-  popularArtists,
-  recommendedForYou,
-  newSingles,
-  albumTrendingPlaylists,
-} from "@/data/releases";
+  ArrowUpRight,
+  Headphones,
+  Settings,
+  ShieldCheck,
+  Scale,
+  BookOpen,
+  LifeBuoy,
+  Compass,
+} from "lucide-react";
 import { NavLink } from "@/components/site/nav-link";
-import { SectionCarousel } from "@/components/site/section-carousel";
 
 export const metadata: Metadata = {
-  title: "Musicosy — One Platform.",
+  title: "Musicosy Help Center — Support, safety and policies",
   description:
-    "Musicosy is where listening, catalog, commerce and royalties share one spine. Discover what's trending, hear what just dropped, and run your release from studio to payout.",
+    "Musicosy is a support and documentation hub. Find guides on using your account, safety and security, rules and policies, developer resources and business tools.",
   openGraph: {
-    title: "Musicosy — One Platform.",
+    title: "Musicosy Help Center — Support, safety and policies",
     description:
-      "Trending tracks, fresh drops, and the full creator stack: distribution, studio tools, merch, rights and royalties.",
+      "Find guides on using your account, safety and security, rules and policies, developer resources and business tools.",
   },
 };
 
@@ -28,19 +26,19 @@ const HELP_CARDS = [
   {
     icon: Headphones,
     label: "Using Musicosy",
-    blurb: "Discover, play, collect and manage your music.",
-    href: "/resources/help-center",
+    blurb: "Guides on discovering, playing, collecting and managing your music.",
+    href: "/resources/help-center/using-musicosy",
   },
   {
     icon: Settings,
     label: "Managing Your Account",
-    blurb: "Account settings, billing, subscriptions and status.",
-    href: "/support",
+    blurb: "Account settings, billing, subscriptions and account status.",
+    href: "/support/managing-your-account",
   },
   {
     icon: ShieldCheck,
     label: "Safety & Security",
-    blurb: "How we collect, protect and respect your data.",
+    blurb: "How we collect, protect and respect your data — plus safety controls.",
     href: "/privacy-and-safety",
   },
   {
@@ -52,31 +50,59 @@ const HELP_CARDS = [
   {
     icon: BookOpen,
     label: "Resources",
-    blurb: "Blog, guides, glossary and help center.",
+    blurb: "Guides, glossary, new-user FAQ and accessibility.",
     href: "/resources",
   },
   {
     icon: Compass,
-    label: "Discover",
-    blurb: "Trending, newly dropped, playlists and podcasts.",
-    href: "/discover",
+    label: "Help Center",
+    blurb: "Browse every support topic, policy and safety article in one place.",
+    href: "/resources/help-center",
   },
+];
+
+const QUICK_LINKS = [
+  { label: "New user FAQ", href: "/resources/new-user-faq" },
+  { label: "Glossary", href: "/resources/glossary" },
+  { label: "Accessibility", href: "/resources/accessibility" },
+  { label: "Contact us", href: "/support/contact-us" },
+  { label: "Developer docs", href: "/developers" },
+  { label: "Ads Help Center", href: "/advertising" },
 ];
 
 export default function Home() {
   return (
     <main className="w-full bg-white">
-      {/* Help center cards — the landing surface, routing to help center pages */}
-      <section className="w-full px-6 lg:px-10 pt-12 pb-10">
-        <h1 className="font-display text-5xl leading-[0.95] tracking-wide sm:text-6xl">
-          Everything music. One place.
+      {/* Support hero */}
+      <section className="w-full px-6 lg:px-10 pt-14 pb-10">
+        <p className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+          Musicosy Help Center
+        </p>
+        <h1 className="mt-4 font-display text-5xl leading-[0.95] tracking-wide sm:text-6xl">
+          How can we help you?
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          Fans listen and buy, creators ship and get paid, and every play settles
-          back to the people who made it.
+          Everything you need to use Musicosy safely — account guides, safety
+          controls, rules and policies, developer docs and business resources.
         </p>
 
-        <div className="mt-8 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+        {/* Quick links */}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {QUICK_LINKS.map((q) => (
+            <NavLink
+              key={q.href}
+              href={q.href}
+              className="border border-border bg-card px-3 py-1.5 text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:border-accent/50 hover:text-accent"
+            >
+              {q.label}
+            </NavLink>
+          ))}
+        </div>
+      </section>
+
+      {/* Support cards — the landing surface, routing to help center pages */}
+      <section className="w-full px-6 lg:px-10 pb-16">
+        <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {HELP_CARDS.map((card) => (
             <NavLink
               key={card.href}
@@ -100,93 +126,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trending this week */}
-      <SectionCarousel
-        title="Trending this week"
-        items={trending.map((t) => ({
-          title: t.title,
-          subtitle: t.artist,
-          meta: t.meta,
-          hue: t.hue,
-        }))}
-      />
-
-      {/* Newly dropped */}
-      <SectionCarousel
-        title="Newly dropped"
-        items={newlyDropped.map((t) => ({
-          title: t.title,
-          subtitle: t.artist,
-          meta: t.meta,
-          hue: t.hue,
-        }))}
-      />
-
-      {/* Shows to try */}
-      <SectionCarousel
-        title="Shows to try"
-        items={showsToTry.map((s) => ({
-          title: s.title,
-          subtitle: s.artist,
-          meta: s.meta,
-          hue: s.hue,
-        }))}
-      />
-
-      {/* Discover podcast */}
-      <SectionCarousel
-        title="Discover podcast"
-        items={discoverPodcasts.map((p) => ({
-          title: p.title,
-          subtitle: p.artist,
-          meta: p.meta,
-          hue: p.hue,
-        }))}
-      />
-
-      {/* Popular artist */}
-      <SectionCarousel
-        title="Popular artist"
-        items={popularArtists.map((a) => ({
-          title: a.name,
-          subtitle: a.genre,
-          meta: a.meta,
-          hue: a.hue,
-        }))}
-      />
-
-      {/* Recommended for you */}
-      <SectionCarousel
-        title="Recommended for you"
-        items={recommendedForYou.map((r) => ({
-          title: r.title,
-          subtitle: r.artist,
-          meta: r.meta,
-          hue: r.hue,
-        }))}
-      />
-
-      {/* New Single releases */}
-      <SectionCarousel
-        title="New Single releases"
-        items={newSingles.map((s) => ({
-          title: s.title,
-          subtitle: s.artist,
-          meta: s.meta,
-          hue: s.hue,
-        }))}
-      />
-
-      {/* The album trending playlist */}
-      <SectionCarousel
-        title="The album trending playlist"
-        items={albumTrendingPlaylists.map((p) => ({
-          title: p.title,
-          subtitle: p.curator,
-          meta: p.meta,
-          hue: p.hue,
-        }))}
-      />
+      {/* Contact strip */}
+      <section className="w-full border-t border-border bg-card px-6 lg:px-10 py-12">
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-4">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border border-border bg-background text-accent">
+              <LifeBuoy className="h-5 w-5" strokeWidth={1.6} />
+            </span>
+            <div>
+              <h2 className="font-display text-2xl tracking-wide text-foreground">
+                Still need a hand?
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Reach our support team directly — we&apos;ll get you sorted.
+              </p>
+            </div>
+          </div>
+          <NavLink
+            href="/support/contact-us"
+            className="inline-flex items-center gap-1.5 border border-accent px-4 py-2 text-xs font-semibold uppercase tracking-widest text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            Contact support <ArrowUpRight className="h-3.5 w-3.5" />
+          </NavLink>
+        </div>
+      </section>
     </main>
   );
 }

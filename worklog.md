@@ -575,3 +575,25 @@ Stage Summary:
 - Browser-verified: 13 chevron buttons in mega menu, aria-expanded=false by default; clicking "Expand Music Distribution" → aria-expanded=true + label flips to "Collapse..." + child link "Distribute to third-party streaming platforms" appears in DOM; second column "Studio Production Tools" expands independently; non-clicked "Social Engagement" stays collapsed.
 - Vision-verified: help center sidebar shows readable dark text on light bg, section labels visible, no invisible text; mega menu has no dark promo panel, clean light documentation style, chevron icons on headers.
 - Dark "Musicosy AI" promo panel removed (0 occurrences). Help center sidebar ink-foreground removed (now uses muted-foreground).
+
+---
+Task ID: support-only-purge
+Agent: main (Z.ai Code)
+Task: Dedicate the entire site to support until further notice. Kill all music placeholders and anything that doesn't align with support. Reorganize mega menu to house documents + single help center, landing page becomes cards routing to help center pages, footer becomes X-style 5-column structure.
+
+Work Log:
+- Deleted music-placeholder files: src/data/releases.ts (fake tracks/artists/playlists), src/components/site/section-carousel.tsx (music carousel), src/components/site/hero.tsx (video hero — dead code referencing /discover + /for-creators).
+- Rewrote src/data/nav.ts: dropped "Discover" from megaMenu (now 5 help-center document categories: Using Musicosy, Managing Your Account, Safety & Security, Rules & Policies, Resources). Rewrote footerNav to 5 X-style columns (Using Musicosy, X Platform, Help Center, Developer resources, Business resources) with the exact link lists the user specified. Removed footerUtilityLinks (folded into X Platform column). Added flatten()+dedup so every footer link path resolves via allNav. Kept helpCenterSections + platformRoutes intact.
+- Rewrote src/components/site/site-footer.tsx: 5-column grid + copyright row (© 2026 Musicosy Corp. / Cookies / Privacy / Terms and conditions / English). No separate utility row.
+- Rewrote src/app/page.tsx: support hero "How can we help you?" + quick-link chips + 6 support cards (Using Musicosy, Managing Your Account, Safety & Security, Rules & Policies, Resources, Help Center) + "Still need a hand?" contact strip. Removed all 8 music carousels and the "Discover" card.
+- Edited src/components/site/site-header.tsx: repurposed the dark promo panel from marketing ("Musicosy AI / One spine across your whole music business / Meet the platform → /discover") to a support CTA ("Need a hand? / Search the Help Center / Support hub / Open Help Center → /resources/help-center"). Swapped right-side buttons from "Plans"/"Start listening" to "Sign in"/"Contact us". Replaced Disc3 icon with LifeBuoy in import + ICONS array.
+- Edited src/app/[...path]/page.tsx: changed marketing fallback blurb to support-oriented ("Find guides, policies and answers about X in the Musicosy Help Center.") and "Get started" button → "Browse Help Center" → /resources/help-center.
+- Edited src/app/layout.tsx: metadata title/description from "Stream, sell, settle — one music platform" to "Musicosy Help Center — support, safety, rules, developer and business resources."
+- Lint: clean. Dev server restarted (was reaped). Agent Browser verified: homepage renders as support hub (no carousels/video), mega menu has no Discover, mega panel shows support CTA, footer is 5 columns, all 15 previously-missing footer paths return 200 (zero 404s), Help Center card routes correctly, no runtime errors.
+
+Stage Summary:
+- The entire site is now dedicated to SUPPORT until further notice.
+- Every music placeholder (fake track data, carousels, video hero, Discover nav, product CTAs, marketing copy) is killed.
+- Mega menu houses documents + the single help center. Landing page (/) is a card-based support hub routing to help-center pages. Footer is the X-style 5-column structure (Using Musicosy / X Platform / Help Center / Developer resources / Business resources) + copyright row.
+- All footer links resolve (no 404s) via the flattened+deduped allNav.
+- Promo panel preserved as a design element but repurposed to a support CTA (did NOT delete the panel the user previously protected).

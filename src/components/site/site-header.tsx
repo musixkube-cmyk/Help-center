@@ -20,7 +20,7 @@ import {
   Link2,
   BarChart3,
   Radio,
-  Disc3,
+  LifeBuoy,
   Wallet,
   Ticket,
   Sparkle,
@@ -44,7 +44,7 @@ const ICONS = [
   Link2,
   BarChart3,
   Radio,
-  Disc3,
+  LifeBuoy,
   Wallet,
   Ticket,
   Sparkle,
@@ -125,28 +125,28 @@ function MegaPanel({ node }: { node: NavNode }) {
             </div>
           ))}
 
-          {/* Promo panel — pinned to col 5, spans both rows */}
+          {/* Support CTA panel — pinned to col 5, spans both rows */}
           <div className="relative overflow-hidden bg-ink px-8 py-9 text-ink-foreground lg:col-start-5 lg:row-start-1 lg:row-span-2">
             <div className="pointer-events-none absolute -bottom-16 -right-10 h-56 w-56 rounded-full bg-accent/25 blur-3xl" />
             <div className="relative">
               <p className="flex items-center gap-2 text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-accent">
-                <Disc3 className="h-4 w-4" /> Musicosy AI
+                <LifeBuoy className="h-4 w-4" /> Need a hand?
               </p>
               <h4 className="mt-4 font-display text-2xl leading-[1.1] tracking-wide">
-                One spine across your whole music business.
+                Search the Help Center.
               </h4>
               <p className="mt-3 text-sm leading-relaxed text-ink-foreground/70">
-                Releases, royalties, contracts and analytics resolved together — not
-                stitched across eight disconnected tools.
+                Browse every guide, policy and safety article — or reach our
+                support team directly.
               </p>
               <span className="mt-6 inline-block border border-accent/50 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-accent">
-                Business intelligence layer
+                Support hub
               </span>
               <NavLink
-                href="/discover"
+                href="/resources/help-center"
                 className="mt-6 flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline"
               >
-                Meet the platform <ArrowUpRight className="h-4 w-4" />
+                Open Help Center <ArrowUpRight className="h-4 w-4" />
               </NavLink>
             </div>
           </div>
@@ -189,14 +189,14 @@ export function SiteHeader() {
             className="rounded-none text-[0.7rem] uppercase tracking-[0.18em]"
             asChild
           >
-            <NavLink href="/for-fans/streaming-plans">Plans</NavLink>
+            <NavLink href="/support/sign-in">Sign in</NavLink>
           </Button>
           <Button
             size="sm"
             className="rounded-none text-[0.7rem] uppercase tracking-[0.18em]"
             asChild
           >
-            <NavLink href="/discover">Start listening</NavLink>
+            <NavLink href="/support/contact-us">Contact us</NavLink>
           </Button>
         </div>
 

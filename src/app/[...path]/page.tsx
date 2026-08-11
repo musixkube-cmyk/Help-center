@@ -63,11 +63,13 @@ export default async function SectionPage({
       <h1 className="mt-6 max-w-4xl text-5xl leading-[0.95] sm:text-7xl">{node.label}</h1>
       <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
         {node.blurb ??
-          `${node.label} reads from the same catalog, audience and settlement layers as every other part of Musicosy — no re-entry, no second system.`}
+          `Find guides, policies and answers about ${node.label} in the Musicosy Help Center.`}
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        <Button className="rounded-none uppercase tracking-widest">Get started</Button>
+        <Button className="rounded-none uppercase tracking-widest" asChild>
+          <NavLink href="/resources/help-center">Browse Help Center</NavLink>
+        </Button>
       </div>
 
       {node.children && (

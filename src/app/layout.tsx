@@ -20,15 +20,15 @@ const barlow = Barlow({
 });
 
 export const metadata: Metadata = {
-  title: "Musicosy",
-  description: "Stream, sell, settle — one music platform.",
+  title: "Musicosy Help Center",
+  description: "Musicosy Help Center — support, safety, rules, developer and business resources.",
   authors: [{ name: "Musicosy" }],
   icons: {
     icon: "/favicon.ico",
   },
   openGraph: {
-    title: "Musicosy",
-    description: "Stream, sell, settle — one music platform.",
+    title: "Musicosy Help Center",
+    description: "Support, safety, rules, developer and business resources — all in one place.",
     type: "website",
   },
   twitter: {
