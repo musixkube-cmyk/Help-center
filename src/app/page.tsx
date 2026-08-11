@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Headphones, Settings, ShieldCheck, Scale, BookOpen, Compass } from "lucide-react";
 import {
   trending,
   newlyDropped,
@@ -10,9 +10,7 @@ import {
   newSingles,
   albumTrendingPlaylists,
 } from "@/data/releases";
-import { megaMenu } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
-import { Hero } from "@/components/site/hero";
 import { SectionCarousel } from "@/components/site/section-carousel";
 
 export const metadata: Metadata = {
@@ -26,11 +24,81 @@ export const metadata: Metadata = {
   },
 };
 
+const HELP_CARDS = [
+  {
+    icon: Headphones,
+    label: "Using Musicosy",
+    blurb: "Discover, play, collect and manage your music.",
+    href: "/resources/help-center",
+  },
+  {
+    icon: Settings,
+    label: "Managing Your Account",
+    blurb: "Account settings, billing, subscriptions and status.",
+    href: "/support",
+  },
+  {
+    icon: ShieldCheck,
+    label: "Safety & Security",
+    blurb: "How we collect, protect and respect your data.",
+    href: "/privacy-and-safety",
+  },
+  {
+    icon: Scale,
+    label: "Rules & Policies",
+    blurb: "Terms of use, copyright, IP and distribution agreements.",
+    href: "/legal-and-policies",
+  },
+  {
+    icon: BookOpen,
+    label: "Resources",
+    blurb: "Blog, guides, glossary and help center.",
+    href: "/resources",
+  },
+  {
+    icon: Compass,
+    label: "Discover",
+    blurb: "Trending, newly dropped, playlists and podcasts.",
+    href: "/discover",
+  },
+];
+
 export default function Home() {
   return (
-    <main>
-      {/* Hero */}
-      <Hero />
+    <main className="w-full bg-white">
+      {/* Help center cards — the landing surface, routing to help center pages */}
+      <section className="w-full px-6 lg:px-10 pt-12 pb-10">
+        <h1 className="font-display text-5xl leading-[0.95] tracking-wide sm:text-6xl">
+          Everything music. One place.
+        </h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+          Fans listen and buy, creators ship and get paid, and every play settles
+          back to the people who made it.
+        </p>
+
+        <div className="mt-8 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+          {HELP_CARDS.map((card) => (
+            <NavLink
+              key={card.href}
+              href={card.href}
+              className="group flex flex-col gap-3 bg-card p-6 transition-colors hover:bg-secondary"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-sm border border-border bg-background text-accent">
+                <card.icon className="h-5 w-5" strokeWidth={1.6} />
+              </span>
+              <span className="font-display text-2xl tracking-wide text-foreground">
+                {card.label}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {card.blurb}
+              </span>
+              <span className="mt-2 flex items-center gap-1 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-accent">
+                Explore <ArrowUpRight className="h-3 w-3" />
+              </span>
+            </NavLink>
+          ))}
+        </div>
+      </section>
 
       {/* Trending this week */}
       <SectionCarousel
@@ -119,36 +187,6 @@ export default function Home() {
           hue: p.hue,
         }))}
       />
-
-      {/* Routes into the platform */}
-      <section className="w-full px-6 lg:px-10 py-20">
-        <h2 className="text-4xl sm:text-5xl">Pick your lane</h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Fans, creators, labels and brands all work off the same catalog, the same
-          audience and the same ledger.
-        </p>
-        <div className="mt-8 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-4">
-          {megaMenu
-            .filter((n) => n.path !== "/discover")
-            .map((node) => (
-              <NavLink
-                key={node.path}
-                href={node.path}
-                className="group flex flex-col justify-between bg-card p-7 transition-colors hover:bg-ink hover:text-ink-foreground"
-              >
-                <div>
-                  <h3 className="font-display text-3xl tracking-wide">{node.label}</h3>
-                  <p className="mt-3 text-sm text-muted-foreground group-hover:text-ink-foreground/70">
-                    {node.blurb}
-                  </p>
-                </div>
-                <span className="mt-8 flex items-center gap-1 text-xs uppercase tracking-widest text-accent">
-                  Explore <ArrowUpRight className="h-3.5 w-3.5" />
-                </span>
-              </NavLink>
-            ))}
-        </div>
-      </section>
     </main>
   );
 }

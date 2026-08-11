@@ -31,293 +31,144 @@ function build(
   });
 }
 
+/**
+ * Mega menu — reorganized to host the help center documents.
+ * Each top-level item is a help-center category; children are document
+ * groups that surface in the mega panel columns.
+ */
 export const megaMenu: NavNode[] = [
   {
-    label: "Discover",
-    path: "/discover",
-    blurb: "Trending, newly dropped, playlists and podcasts.",
-  },
-  {
-    label: "For Fans",
-    path: "/for-fans",
-    blurb: "Stream, buy, collect and back the artists you love.",
-    children: build("/for-fans", [
-      "Follow artists",
-      ["Social Engagement", ["Like", "Share", "Comment"]],
-      "Purchase merchandise",
-      "Buy songs",
-      "Stream songs",
-      "Listen to podcasts",
-      "Curate playlists / Build collections",
-      "Engage with favorite artists",
-      "Streaming plans",
-      "See what friends are listening to",
-      "Repost",
+    label: "Using Musicosy",
+    path: "/resources/help-center",
+    blurb: "Discover, play, collect and manage your music.",
+    children: build("/resources/help-center/using-musicosy", [
+      ["Discover & Browse", ["Discover content", "Feed", "For You feed", "Friends Tab", "Search"]],
+      ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions"]],
+      ["Collections", ["Create collections", "Shared collections", "Playlists"]],
+      ["Media & Playback", ["Video playing", "Fullscreen", "On-demand playback", "Sound"]],
+      ["Account Management", ["Manage your account", "Account settings", "Notification settings"]],
+      ["Getting Started", ["Create an account", "Find friends", "Follow / unfollow"]],
     ]),
   },
   {
-    label: "For Creators",
-    path: "/for-creators",
-    blurb: "Studio, distribution, commerce and royalties in one spine.",
-    children: build("/for-creators", [
-      [
-        "Music Distribution",
-        [
-          "Distribute to third-party streaming platforms",
-          "Physical distribution",
-          "Video distribution on Musicosy",
-          "Video creation tools",
-        ],
-      ],
-      [
-        "Studio Production Tools",
-        [
-          "Mixing & mastering",
-          "Audio restoration",
-          "Stem separator",
-          "Beat marketplace",
-          "Sample library",
-          "Mixed-media playlists",
-          "In-browser player",
-          "Timeline comments",
-          "Version history",
-          "Public sharing",
-          "Video & streaming",
-          "Connected to releases",
-        ],
-      ],
-      ["Social Media Management", ["Sync posts to other platforms"]],
-      ["Analytics", ["Creator analytics", "Streaming analytics", "Campaign tracking"]],
-      ["Merchandise & E-Commerce", ["Sell merch", "Direct to fan"]],
-      [
-        "Catalog & Asset Management",
-        ["Manage stems, masters, press photos, contract drafts, deal memos, sync briefs"],
-      ],
-      ["Tour Management", ["Plan and manage tours"]],
-      ["Royalties & Accounting", ["Royalty tracking", "Financial reporting"]],
-      ["Release Planning", ["Barcode generation", "Release management"]],
-      ["Rights & Licensing", ["Rights management", "Sync & licensing marketplace"]],
-      ["Marketing & Branding", ["Marketing tools", "Branding resources"]],
-      ["Collaboration & File Sharing", ["Share projects and files"]],
-      ["CRM & Contracts", ["Contract management", "CRM tools"]],
-      ["Promotion", ["Website builder", "Social posts", "Smart links"]],
+    label: "Managing Your Account",
+    path: "/support",
+    blurb: "Account settings, billing, subscriptions and status.",
+    children: build("/support/managing-your-account", [
+      "Account settings & privacy",
+      "Notification settings",
+      "Push notifications",
+      "Account status",
+      "Account safety",
+      "Blocking someone",
+      "Muting",
+      "Remove followers",
     ]),
   },
   {
-    label: "For Labels",
-    path: "/for-labels",
-    blurb: "Roster-scale ops: A&R, accounting, rights and reporting.",
-    children: [
-      // Capability branches — the 21 label-level items organized into thematic
-      // categories with nested leaves. Mirrors For Creators exactly (Music
-      // Distribution > 4 items, Studio Production Tools > 12 items, etc.).
-      // First 3 branches populate the mega-menu columns.
-      ...build("/for-labels", [
-        [
-          "A&R and Artist Development",
-          [
-            "A&R and artist discovery",
-            "Artist relations",
-            "Roster & team management",
-          ],
-        ],
-        [
-          "Release and Distribution",
-          [
-            "Release management",
-            "Distribution beyond Musicosy",
-            "Audio file management",
-          ],
-        ],
-        [
-          "Marketing and Promotion",
-          [
-            "Marketing & PR",
-            "Social media management",
-            "Artist website",
-            "Time stacking / Geo stacking",
-          ],
-        ],
-        [
-          "Finance and Accounting",
-          [
-            "Accounting",
-            "Finance & budget allocation",
-            "Financial reporting",
-          ],
-        ],
-        [
-          "Rights, Royalties and Legal",
-          [
-            "Performance rights & royalty administration",
-            "Contract management",
-            "Legal & contracts",
-          ],
-        ],
-        [
-          "Catalog and Asset Management",
-          [
-            "Catalog management",
-          ],
-        ],
-        [
-          "Operations and Collaboration",
-          [
-            "Collaboration & audio sharing",
-            "Project management",
-            "CRM",
-          ],
-        ],
-        [
-          "Analytics and Reporting",
-          [
-            "Performance analytics",
-          ],
-        ],
-      ]),
-      // Persona branches — each role as its own top-level branch (siblings to
-      // the capability branches, NOT hidden under a "By Role" wrapper).
-      // Explicit paths preserve the /for-labels/by-role/* URLs used in the footer.
-      {
-        label: "For Managers",
-        path: "/for-labels/by-role/for-managers",
-        blurb: "Artist relations, projects and team ops for managers.",
-        children: build("/for-labels/by-role/for-managers", [
-          "Artist relations",
-          "Project management",
-          "Marketing & pitching",
-          "CRM",
-          "Finance & budgeting",
-          "Catalog management",
-          "Team management",
-        ]),
-      },
-      {
-        label: "For Publishers",
-        path: "/for-labels/by-role/for-publishers",
-        blurb: "Rights, royalties, catalog and sync for publishers.",
-        children: build("/for-labels/by-role/for-publishers", [
-          "Rights management",
-          "Royalty administration",
-          "Catalog management",
-          "Sync & licensing",
-        ]),
-      },
-      {
-        label: "For Music Supervisors",
-        path: "/for-labels/by-role/for-music-supervisors",
-        blurb: "Sync briefs, licensing and catalog discovery.",
-        children: build("/for-labels/by-role/for-music-supervisors", [
-          "Sync briefs",
-          "Licensing",
-          "Catalog discovery",
-        ]),
-      },
-      {
-        label: "For Producers & Engineers",
-        path: "/for-labels/by-role/for-producers-and-engineers",
-        blurb: "Studio tools, audio files and collaboration.",
-        children: build("/for-labels/by-role/for-producers-and-engineers", [
-          "Studio tools",
-          "Audio file management",
-          "Collaboration",
-        ]),
-      },
-      {
-        label: "For Songwriters",
-        path: "/for-labels/by-role/for-songwriters",
-        blurb: "Collaboration, metadata and rights for songwriters.",
-        children: build("/for-labels/by-role/for-songwriters", [
-          "Collaboration",
-          "Metadata",
-          "Rights management",
-        ]),
-      },
-      {
-        label: "For Tour Managers",
-        path: "/for-labels/by-role/for-tour-managers",
-        blurb: "Tour planning, logistics and budgeting.",
-        children: build("/for-labels/by-role/for-tour-managers", [
-          "Tour planning",
-          "Logistics",
-          "Budgeting",
-        ]),
-      },
-    ],
-  },
-  {
-    label: "For Business",
-    path: "/for-business",
-    blurb: "Adnote — targeting built on real listening behavior.",
-    children: build("/for-business", [
-      "Advertising Terms",
-      "Payment Terms",
-      "Commercial Terms of Service",
-      "Business Products (Data) Terms",
-      "Lead Generation Terms",
-      "Custom Audience Terms",
-      "Controller to Controller Data Terms",
-      ["Pricing", ["Platform Plans"]],
-    ]),
-  },
-];
-
-export const footerNav: NavNode[] = [
-  {
-    label: "Platform",
-    path: "/platform",
-    children: [
-      { label: "For Creators", path: "/for-creators" },
-      { label: "For Labels", path: "/for-labels" },
-      { label: "For Song Writers", path: "/for-labels/by-role/for-songwriters" },
-      { label: "For Producers", path: "/for-labels/by-role/for-producers-and-engineers" },
-      { label: "For Tour Managers", path: "/for-labels/by-role/for-tour-managers" },
-      { label: "For Business", path: "/for-business" },
-    ],
-  },
-  {
-    label: "Solutions",
-    path: "/solutions",
-    children: build("/solutions", [
-      "Podcasters",
-      "Independent Artists",
-      "Indie Labels",
-      "Touring Artists",
+    label: "Safety & Security",
+    path: "/privacy-and-safety",
+    blurb: "How we collect, protect and respect your data — plus safety controls.",
+    children: build("/privacy-and-safety", [
+      ["Privacy", ["Account privacy", "Your data rights", "Cookies policy", "Location detection"]],
+      ["Safety", ["Platform Rules", "Content Restrictions", "Reporting content", "Age verification"]],
+      ["Reporting", ["Report a post", "Report bullying", "Report impersonation", "Share feedback"]],
+      ["Security", ["Account safety", "Avoid phishing", "Content violations & bans", "Reporting vulnerabilities"]],
+      ["Content & Conduct", ["Community Guidelines", "Creator Code of Conduct", "Restricted Mode", "Content levels"]],
+      ["Law Enforcement", ["Law Enforcement Data Request Guidelines"]],
     ]),
   },
   {
-    label: "Developers",
-    path: "/developers",
-    children: [
-      { label: "API Docs", path: "/developers/developers/docs" },
-      { label: "SDKs", path: "/developers/developers/sdks" },
-      { label: "Webhooks", path: "/developers/developers/webhooks" },
-      { label: "Partner Program", path: "/developers/developers/partners" },
-      { label: "Agentic Hub & MCP Server", path: "/developers/developers/mcp" },
-      { label: "API access", path: "/developers/developers/keys" },
-    ],
-  },
-  {
-    label: "Advertising",
-    path: "/advertising",
-    children: build("/advertising", [
-      "Audio Advertisements",
-      "Sponsored Listening Sessions",
-      "Display Advertising",
-      "Playlist Sponsorships",
-      "Artist Campaign Promotions",
-      "Brand Sponsorship Opportunities",
+    label: "Rules & Policies",
+    path: "/legal-and-policies",
+    blurb: "Terms of use, copyright, IP and distribution agreements.",
+    children: build("/legal-and-policies", [
+      ["Terms of Use", ["Subscription Terms", "User Guidelines", "Distribution Agreement", "AI Services Terms"]],
+      ["Copyright & IP", ["Intellectual Property Policy", "DMCA Policy", "Copyright reporting", "Trademark & counterfeiting"]],
     ]),
   },
   {
     label: "Resources",
     path: "/resources",
+    blurb: "Blog, guides, glossary and help center.",
+    children: build("/resources", [
+      "Blog",
+      "Guides",
+      "Glossary",
+      "Help Center",
+      "New User FAQ",
+      "Accessibility",
+    ]),
+  },
+  {
+    label: "Discover",
+    path: "/discover",
+    blurb: "Trending, newly dropped, playlists and podcasts.",
+  },
+];
+
+/**
+ * Footer navigation — X-platform style.
+ * Three columns: Help Center, Developer resources, Business resources.
+ */
+export const footerNav: NavNode[] = [
+  {
+    label: "Help Center",
+    path: "/resources/help-center",
     children: [
-      ...build("/resources", ["Blog", "Guides", "Glossary"]),
-      { label: "Help Center", path: "/resources/help-center" },
-      { label: "Privacy & Safety", path: "/privacy-and-safety" },
+      { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
+      { label: "Musicosy for creators", path: "/for-creators" },
+      { label: "Ads Help Center", path: "/advertising" },
+      { label: "Managing your account", path: "/support" },
+      { label: "Email Preference Center", path: "/support/email-preferences" },
+      { label: "Rules and policies", path: "/legal-and-policies" },
+      { label: "Contact us", path: "/support/contact-us" },
     ],
   },
+  {
+    label: "Developer resources",
+    path: "/developers",
+    children: [
+      { label: "Developer home", path: "/developers" },
+      { label: "Documentation", path: "/developers/developers/docs" },
+      { label: "Forums", path: "/developers/developers/ecosystem" },
+      { label: "Communities", path: "/developers/developers/ecosystem" },
+      { label: "Developer blog", path: "/resources/blog" },
+      { label: "Engineering blog", path: "/resources/blog" },
+      { label: "Developer terms", path: "/legal-and-policies" },
+    ],
+  },
+  {
+    label: "Business resources",
+    path: "/for-business",
+    children: [
+      { label: "Advertise", path: "/advertising" },
+      { label: "Musicosy for business", path: "/for-business" },
+      { label: "Resources and guides", path: "/resources/guides" },
+      { label: "Musicosy for marketers", path: "/for-business" },
+      { label: "Marketing insights", path: "/for-business" },
+      { label: "Brand inspiration", path: "/for-business" },
+      { label: "Ads Studio", path: "/advertising" },
+    ],
+  },
+];
+
+/**
+ * Footer utility row — the horizontal link strip above the three columns
+ * (X-platform style: Status, Accessibility, Embed a post, etc.)
+ */
+export const footerUtilityLinks: { label: string; path: string }[] = [
+  { label: "Status", path: "/status" },
+  { label: "Accessibility", path: "/resources/accessibility" },
+  { label: "Embed a post", path: "/developers" },
+  { label: "Privacy Center", path: "/privacy-and-safety" },
+  { label: "Transparency Center", path: "/legal-and-policies" },
+  { label: "Download the app", path: "/download" },
+  { label: "About the company", path: "/about" },
+  { label: "Company news", path: "/resources/blog" },
+  { label: "Brand toolkit", path: "/brand-toolkit" },
+  { label: "Jobs and internships", path: "/careers" },
+  { label: "Investors", path: "/investors" },
 ];
 
 /**
@@ -499,7 +350,18 @@ export const helpCenterSections: NavNode[] = [
   },
 ];
 
-export const allNav: NavNode[] = [...megaMenu, ...footerNav, ...helpCenterSections];
+/**
+ * Platform persona routes — kept in allNav so the catch-all page can resolve
+ * them, even though they're no longer in the mega menu or footer columns.
+ */
+export const platformRoutes: NavNode[] = [
+  { label: "For Fans", path: "/for-fans", blurb: "Stream, buy, collect and back the artists you love." },
+  { label: "For Creators", path: "/for-creators", blurb: "Studio, distribution, commerce and royalties in one spine." },
+  { label: "For Labels", path: "/for-labels", blurb: "Roster-scale ops: A&R, accounting, rights and reporting." },
+  { label: "For Business", path: "/for-business", blurb: "Adnote — targeting built on real listening behavior." },
+];
+
+export const allNav: NavNode[] = [...megaMenu, ...footerNav, ...helpCenterSections, ...platformRoutes];
 
 export function findNode(path: string, nodes: NavNode[] = allNav): NavNode | undefined {
   for (const node of nodes) {
