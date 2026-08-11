@@ -180,7 +180,7 @@ export const footerNav: NavNode[] = [
       { label: "Musicosy for marketers", path: "/for-business" },
       { label: "Marketing insights", path: "/for-business" },
       { label: "Brand inspiration", path: "/for-business" },
-      { label: "Ads Studio", path: "/advertising" },
+      { label: "adnote", path: "/advertise" },
     ],
   },
 ];

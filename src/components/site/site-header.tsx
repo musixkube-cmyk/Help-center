@@ -163,8 +163,16 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
       <div className="flex w-full items-center gap-8 px-6 py-3 lg:px-10">
-        <NavLink href="/" className="font-display text-3xl leading-none tracking-widest">
-          MUSI<span className="text-accent">COSY</span>
+        <NavLink href="/" className="flex items-center gap-3">
+          <span className="font-display text-3xl leading-none tracking-widest">
+            MUSI<span className="text-accent">COSY</span>
+          </span>
+          <img
+            src="/adnote-logo.png"
+            alt="Musicosy"
+            height={30}
+            className="h-[30px] w-auto"
+          />
         </NavLink>
 
         <nav className="hidden flex-1 items-center gap-7 lg:flex">

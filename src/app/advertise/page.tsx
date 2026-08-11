@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { NavLink } from "@/components/site/nav-link";
 
 export const metadata: Metadata = {
-  title: "Advertise on Musicosy — Self-serve ad portal",
+  title: "adnote — Self-serve advertising on Musicosy",
   description:
-    "Launch self-serve ad campaigns on Musicosy. Targeting built on real listening behavior. Open the Ad Studio to get started.",
+    "adnote is Musicosy's self-serve ad platform. Targeting built on real listening behavior. Open adnote to get started.",
   openGraph: {
-    title: "Advertise on Musicosy — Self-serve ad portal",
+    title: "adnote — Self-serve advertising on Musicosy",
     description:
-      "Launch self-serve ad campaigns on Musicosy. Targeting built on real listening behavior.",
+      "adnote is Musicosy's self-serve ad platform. Targeting built on real listening behavior.",
   },
 };
 
@@ -33,10 +33,10 @@ export default function AdvertisePage() {
       {/* Gate hero */}
       <section className="w-full px-6 lg:px-10 pt-24 pb-16">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-          Musicosy Ads
+          adnote
         </p>
         <h1 className="mt-5 max-w-3xl font-display text-5xl leading-[0.95] tracking-wide sm:text-7xl">
-          Advertise on Musicosy.
+          Advertising, built on listening.
         </h1>
         <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
           Self-serve ad campaigns built on real listening behavior. Set your
@@ -48,7 +48,7 @@ export default function AdvertisePage() {
             href="/advertising"
             className="inline-flex items-center bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-widest text-ink-foreground transition-opacity hover:opacity-90"
           >
-            Open Ad Studio
+            Open adnote
           </NavLink>
           <NavLink
             href="/advertising"
@@ -85,7 +85,7 @@ export default function AdvertisePage() {
             href="/advertising"
             className="inline-flex items-center bg-ink px-6 py-3 text-xs font-semibold uppercase tracking-widest text-ink-foreground transition-opacity hover:opacity-90"
           >
-            Open Ad Studio
+            Open adnote
           </NavLink>
         </div>
       </section>

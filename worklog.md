@@ -641,3 +641,22 @@ Stage Summary:
 - Footer "Advertise" routes to the gate page.
 - Catch-all section pages follow the same clean card pattern for consistency.
 - Content scaffold regenerated to include /advertise.
+
+---
+Task ID: adnote-branding-logo
+Agent: main (Z.ai Code)
+Task: The advertising product is called adnote (upcoming difficult build with actions/triggers/APIs for dashboards/wizards/cards/modals). In the interim, add the uploaded logo (logo full same row.png) to the header on the same row and at the same level as the text logo. Make transparent + reduce size if needed.
+
+Work Log:
+- Analyzed uploaded logo (upload/logo full same row.png): 745x221 RGBA PNG with solid white background. Content is "Musicosy" wordmark — stylized large M + sans-serif "usicosy", with an orange dot inside the "o". Predominantly black pixels with ~137 orange accent pixels.
+- Processed logo with Python/PIL: removed white background via luminance keying (alpha = 255-lum for transition zone, alpha=255 for dark/colored pixels, alpha=0 for white). Preserved the orange accent at full opacity via saturation threshold. Cropped to content bbox (696x194). Resized to 215x60 (2x retina, displays at 107x30 CSS px to match text-3xl height). Saved to public/adnote-logo.png.
+- Verified transparency: 8480 transparent, 1563 opaque, 2857 partial (anti-aliasing edges). Clean alpha channel.
+- site-header.tsx: wrapped the text logo + new image logo in a flex items-center gap-3 container inside the existing NavLink. Image: <img src="/adnote-logo.png" alt="Musicosy" height={30} className="h-[30px] w-auto" />. Both logos on the same row, same vertical level (30px height each), both link to /.
+- advertise/page.tsx: rebranded from "Musicosy Ads"/"Ad Studio" to "adnote". Metadata title → "adnote — Self-serve advertising on Musicosy". Eyebrow → "adnote". H1 → "Advertising, built on listening." Both CTAs → "Open adnote" (was "Open Ad Studio").
+- nav.ts: footer Business resources "Ads Studio" → "adnote" pointing to /advertise (was /advertising).
+- Lint: clean (removed unused eslint-disable directive). Agent Browser verified: header shows both logos (text "MUSICOSY" 30px + image 108x30px) on the same row, same level, transparent background. VLM confirmed transparent bg + same horizontal line. /advertise page shows adnote branding (title, eyebrow, CTA all say "adnote", no "Ad Studio"/"Musicosy Ads" remnants). Footer "adnote" link → /advertise.
+
+Stage Summary:
+- Logo added to header: processed image (white bg removed → transparent, resized to 30px display height) sits on the same row and same vertical level as the MUSICOSY text logo, both inside the home link.
+- Advertising product rebranded to "adnote" across the advertise gate page + footer link.
+- Ready for the upcoming adnote build (actions, triggers, APIs, dashboards, flows, wizards, cards, modals) — the /advertise gate page is the front door and /advertising is the portal destination.
