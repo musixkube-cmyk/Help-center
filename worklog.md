@@ -597,3 +597,25 @@ Stage Summary:
 - Mega menu houses documents + the single help center. Landing page (/) is a card-based support hub routing to help-center pages. Footer is the X-style 5-column structure (Using Musicosy / X Platform / Help Center / Developer resources / Business resources) + copyright row.
 - All footer links resolve (no 404s) via the flattened+deduped allNav.
 - Promo panel preserved as a design element but repurposed to a support CTA (did NOT delete the panel the user previously protected).
+
+---
+Task ID: content-scaffold
+Agent: main (Z.ai Code)
+Task: Rename footer column "X Platform" -> "Platform". Generate the full document tree and routing so the user can organize markdown files for upload to GitHub, then extraction and placement onto pages.
+
+Work Log:
+- Renamed footerNav column label "X Platform" -> "Platform" in src/data/nav.ts (also updated the JSDoc comment).
+- Fixed a pre-existing typo in helpCenterSections: "ContentInteraction" -> "Content Interaction" (slug now produces content-interaction instead of contentinteraction).
+- Wrote scripts/generate-content-scaffold.ts — a bun script that imports every nav tree (megaMenu, helpCenterSections, platformRoutes, footerNav, portalGroups), walks all nodes, dedupes by path with child-merging, and generates:
+  - content/MANIFEST.md — full hierarchical tree + flat alphabetical index + footer column mapping
+  - content/**/*.md — one stub file per route (222 files), each with YAML frontmatter (title, path, description) and a body placeholder
+- File convention: section pages (routes with children) -> content<path>/index.md; leaf documents -> content<path>.md; homepage / -> content/index.md.
+- Ran the script: 222 stub files created, 0 existed. Total routes: 222.
+- Verified: MANIFEST.md renders the full tree grouped by source (Help Center Documents, Policy Sections, Platform Personas, Developer Portal). Footer column mapping confirms "Platform" heading -> /about with all 11 links. Sample stubs have correct frontmatter + route annotations.
+- Lint: clean. Agent Browser confirmed footer shows "Platform" (not "X Platform").
+
+Stage Summary:
+- Footer column renamed: "X Platform" -> "Platform".
+- Complete content scaffold generated at content/ with 222 stub .md files mirroring every route in the site.
+- content/MANIFEST.md is the reference doc: convention, full tree, flat index, footer mapping.
+- Workflow established: user writes content in the matching .md file -> pushes to GitHub -> I extract and place onto pages (content loader wiring is the next step when user is ready).

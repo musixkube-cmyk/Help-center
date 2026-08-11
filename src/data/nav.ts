@@ -104,7 +104,7 @@ export const megaMenu: NavNode[] = [
 
 /**
  * Footer navigation — X-platform style, five columns.
- * Using Musicosy · X Platform · Help Center · Developer resources · Business resources.
+ * Using Musicosy · Platform · Help Center · Developer resources · Business resources.
  */
 export const footerNav: NavNode[] = [
   {
@@ -128,7 +128,7 @@ export const footerNav: NavNode[] = [
     ],
   },
   {
-    label: "X Platform",
+    label: "Platform",
     path: "/about",
     children: [
       { label: "Status", path: "/status" },
@@ -337,7 +337,7 @@ export const helpCenterSections: NavNode[] = [
         "Using Musicosy",
         [
           "Discover & Browse",
-          "ContentInteraction",
+          "Content Interaction",
           "Collections",
           "Media & Playback",
           "Direct Messages",
