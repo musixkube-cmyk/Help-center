@@ -660,3 +660,40 @@ Stage Summary:
 - Logo added to header: processed image (white bg removed → transparent, resized to 30px display height) sits on the same row and same vertical level as the MUSICOSY text logo, both inside the home link.
 - Advertising product rebranded to "adnote" across the advertise gate page + footer link.
 - Ready for the upcoming adnote build (actions, triggers, APIs, dashboards, flows, wizards, cards, modals) — the /advertise gate page is the front door and /advertising is the portal destination.
+
+---
+Task ID: center-sidebar-everywhere
+Agent: main (Z.ai Code)
+Task: Every front-page nav card must route to a center-style page with a persistent sidebar — NOT an isolated leaf page. Users must be able to jump between sibling concerns from the sidebar without clicking back to the homepage. Applies to Safety & Security, Legal Center, Support & Contact, Resources, Using Musicosy — the same pattern already used by /developers and /advertising.
+
+Work Log:
+- Root cause: the catch-all src/app/[...path]/page.tsx rendered an isolated page (hero + child grid, NO sidebar). Clicking "Safety & Security" / "Legal Center" / "Support & Contact" / "Resources" from the homepage landed on a dead-end page; reaching a sibling required clicking back to home. Only /developers, /advertising and /resources/help-center had the center+sidebar pattern.
+- Added to src/data/nav.ts:
+  - `rootSections` — the list of top-level "center" trees: [...helpCenterSections (full detailed trees), megaMenu Resources node]. helpCenterSections first because it carries the FULL document tree (every leaf) whereas the megaMenu copies are abbreviated (group labels only).
+  - `treeContains(node, path)` — recursive tree-walk membership check (NOT path prefix).
+  - `findRootSection(path)` — returns the root section whose tree contains the path, or undefined for standalone leaf pages. Tree-walk correctly maps /support/managing-your-account to the Using Musicosy center (not Support) even though its path starts with /support/, because it is a child of the Using Musicosy help-center section node in the tree.
+- Fixed a pre-existing dedup bug in `allNav`: reordered so helpCenterSections comes BEFORE megaMenu. Previously megaMenu's abbreviated Legal Center / Safety trees won the dedup, dropping the full leaf trees — so deep pages like /legal-and-policies/terms-of-use/subscription-terms-and-conditions returned 404. Now the full trees win and every leaf resolves (verified 200).
+- Rewrote src/app/[...path]/page.tsx with two render paths:
+  1. CENTER layout (when findRootSection returns a section): sticky left sidebar (lg:sticky lg:top-24, overflow-y-auto, border-r) showing the full root-section tree via the existing HelpCenterSidebar component (auto-expands active trail, collapses siblings) + main content (breadcrumb, H1, blurb, child-cards grid for section pages OR leaf-document layout with Contact us / Sign in buttons). Sidebar persists across navigation so users jump between siblings without going back.
+  2. STANDALONE layout (when no root section — e.g. /about, /careers, /download, /brand-toolkit, /investors): clean page, no sidebar, hero + optional child cards. These are leaf marketing pages, not centers.
+- Lint: clean. Dev server running, all routes 200, no console/runtime errors.
+- Agent Browser verified end-to-end:
+  - Homepage → click "Safety & Security" card → lands on /privacy-and-safety with a left sidebar (Privacy, Safety, Reporting, Content & Conduct, Security, Law Enforcement — each with expand chevron) + main content (H1 + child cards).
+  - Expanded "Safety" group in sidebar (chevron flips to Collapse, expanded=true) → revealed Platform Rules, Content Restrictions, Reporting content, etc.
+  - Clicked "Platform Rules" → navigated to /privacy-and-safety/safety/platform-rules; sidebar PERSISTED (Safety group stayed expanded, all siblings still visible) — proved sibling navigation without going back. Breadcrumb = HOME / SAFETY & SECURITY / SAFETY / Platform Rules.
+  - /legal-and-policies → sidebar with expandable Terms of Use + Copyright & IP groups. ✓
+  - /support → sidebar with Contact us, Sign in, Email Preference Center, New user FAQ, Account status (leaf links). ✓
+  - /resources → sidebar with Guides, Glossary, Help Center, New User FAQ, Accessibility, Blog (leaf links). ✓
+  - /resources/glossary (leaf) → Resources sidebar persists, "Glossary" H1. ✓
+  - /support/managing-your-account → correctly maps to USING MUSICOSY center (sidebar shows Discover & Browse, Content Interaction, Collections, Media & Playback, Getting Started, Account Management) — NOT the Support center. Tree-walk edge case works. ✓
+  - /about → standalone page, NO sidebar, clean hero. ✓
+  - Footer stuck at bottom (footer top + height >= docHeight). ✓
+  - Mobile 375px: sidebar stacks above content (single column), still usable. ✓
+  - VLM confirmed: left sidebar nav tree with expand chevrons + right main content with heading & child cards + footer at bottom + white background.
+
+Stage Summary:
+- EVERY front-page nav card now routes to a center-style page with a persistent sidebar — Safety & Security, Legal Center, Support & Contact, Resources, Using Musicosy all use the same sidebar+content pattern as /developers and /advertising.
+- Users land on the page they clicked AND see the full section tree in the sidebar, so they can jump to any sibling concern without clicking back to the homepage.
+- The sidebar auto-expands the active trail and highlights the current page; siblings stay one click away.
+- Standalone leaf pages (/about, /careers, /download, etc.) correctly render without a sidebar.
+- Pre-existing 404 on deep legal/policy leaf pages fixed (allNav dedup now keeps full trees).

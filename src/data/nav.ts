@@ -603,14 +603,21 @@ function flatten(nodes: NavNode[]): NavNode[] {
 }
 
 /**
- * allNav — every resolvable path. Includes the mega menu, help-center
- * sections, the ads help center, platform routes, and a flattened copy of
- * the footer so every footer link resolves to a page.
+ * allNav — every resolvable path. Includes the help-center sections (full
+ * trees), the mega menu, the ads help center, platform routes, and a flattened
+ * copy of the footer so every footer link resolves to a page.
+ *
+ * NOTE: helpCenterSections is listed BEFORE megaMenu on purpose. Both define a
+ * node at /privacy-and-safety, /legal-and-policies and /resources/help-center,
+ * but helpCenterSections carries the FULL document tree (every leaf) whereas
+ * the megaMenu copies are abbreviated (group labels only). Putting the full
+ * trees first means the dedup keeps them — so deep leaf pages like
+ * /legal-and-policies/terms-of-use/subscription-terms-and-conditions resolve.
  */
 export const allNav: NavNode[] = (() => {
   const merged = [
-    ...megaMenu,
     ...helpCenterSections,
+    ...megaMenu,
     adsHelpCenter,
     ...platformRoutes,
     ...flatten(footerNav),
@@ -646,4 +653,42 @@ export function findTrail(path: string, nodes: NavNode[] = allNav, trail: NavNod
     }
   }
   return [];
+}
+
+/**
+ * rootSections — the top-level "center" trees. When a user lands on any page
+ * inside one of these trees, the catch-all page renders a persistent sidebar
+ * showing the full tree so they can jump between siblings without going back
+ * to the homepage.
+ *
+ * Membership is decided by TREE-WALK (not path prefix) so that nodes whose
+ * path prefix differs from their parent — e.g. /support/managing-your-account
+ * (a child of the Using Musicosy help-center section) — still resolve to the
+ * correct center.
+ */
+export const rootSections: NavNode[] = [
+  // Help-center sections first (they carry the full detailed trees).
+  ...helpCenterSections,
+  // Resources — the mega-menu Resources node (Guides, Glossary, FAQ, …).
+  megaMenu.find((n) => n.path === "/resources")!,
+].filter(Boolean);
+
+function treeContains(node: NavNode, path: string): boolean {
+  if (node.path === path) return true;
+  if (node.children) {
+    return node.children.some((c) => treeContains(c, path));
+  }
+  return false;
+}
+
+/**
+ * Find the root section whose tree contains the given path.
+ * Returns undefined for standalone leaf pages (e.g. /about, /careers) that
+ * don't belong to any center — those render without a sidebar.
+ */
+export function findRootSection(path: string): NavNode | undefined {
+  for (const section of rootSections) {
+    if (treeContains(section, path)) return section;
+  }
+  return undefined;
 }
