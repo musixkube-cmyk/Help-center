@@ -162,25 +162,21 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
-      <div className="flex w-full items-center gap-8 px-6 py-3 lg:px-10">
-        <NavLink href="/" className="flex items-center gap-3">
-          <span className="font-display text-3xl leading-none tracking-widest">
-            MUSI<span className="text-accent">COSY</span>
-          </span>
+      <div className="flex w-full items-end gap-8 px-6 pb-3 pt-4 lg:px-10">
+        <NavLink href="/" className="flex shrink-0 items-end">
           <img
             src="/adnote-logo.png"
             alt="Musicosy"
-            height={30}
-            className="h-[30px] w-auto"
+            className="h-9 w-auto"
           />
         </NavLink>
 
-        <nav className="hidden flex-1 items-center gap-7 lg:flex">
+        <nav className="hidden flex-1 items-end gap-7 pb-1 lg:flex">
           {megaMenu.map((node) => (
             <div key={node.path} className="group static">
               <NavLink
                 href={node.path}
-                className="block py-4 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-foreground transition-colors hover:text-accent"
+                className="block text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-foreground transition-colors hover:text-accent"
                 activeProps={{ className: "text-accent" }}
               >
                 {node.label}
@@ -190,7 +186,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="ml-auto hidden items-center gap-2 lg:flex">
+        <div className="ml-auto hidden items-end gap-2 pb-1 lg:flex">
           <Button
             variant="ghost"
             size="sm"

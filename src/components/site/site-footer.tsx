@@ -32,15 +32,21 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Copyright row */}
+      {/* Logo above the dividing line, right-aligned */}
+      <div className="w-full px-6 lg:px-10 pb-6">
+        <div className="flex justify-end">
+          <img
+            src="/adnote-logo.png"
+            alt="Musicosy"
+            className="h-9 w-auto"
+          />
+        </div>
+      </div>
+
+      {/* Copyright row — bottom rail */}
       <div className="border-t border-ink-foreground/10 px-6 lg:px-10 py-5">
         <div className="flex flex-col gap-3 text-xs text-ink-foreground/50 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <span className="font-display text-lg tracking-widest text-ink-foreground">
-              MUSI<span className="text-accent">COSY</span>
-            </span>
-            <span>© 2026 Musicosy Corp.</span>
-          </div>
+          <span>© 2026 Musicosy Corp.</span>
           <div className="flex flex-wrap gap-x-5 gap-y-1">
             <NavLink href="/legal-and-policies" className="transition-colors hover:text-ink-foreground">
               Cookies
@@ -50,6 +56,9 @@ export function SiteFooter() {
             </NavLink>
             <NavLink href="/legal-and-policies" className="transition-colors hover:text-ink-foreground">
               Terms and conditions
+            </NavLink>
+            <NavLink href="/support/contact-us" className="transition-colors hover:text-ink-foreground">
+              Affiliate
             </NavLink>
             <span className="cursor-pointer transition-colors hover:text-ink-foreground">English</span>
           </div>
