@@ -133,7 +133,6 @@ export const footerNav: NavNode[] = [
     children: [
       { label: "Status", path: "/status" },
       { label: "Accessibility", path: "/resources/accessibility" },
-      { label: "Embed a post", path: "/developers/embed" },
       { label: "Privacy Center", path: "/privacy-and-safety" },
       { label: "Transparency Center", path: "/legal-and-policies/transparency-center" },
       { label: "Download the app", path: "/download" },
@@ -150,7 +149,9 @@ export const footerNav: NavNode[] = [
     children: [
       { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
       { label: "Musicosy for creators", path: "/for-creators" },
-      { label: "Ads Help Center", path: "/advertising" },
+      { label: "Musicosy for labels", path: "/for-labels" },
+      { label: "Musicosy for distributors", path: "/for-distributors" },
+      { label: "Musicosy for sync agents", path: "/for-sync-agents" },
       { label: "Managing your account", path: "/support/managing-your-account" },
       { label: "Email Preference Center", path: "/support/email-preferences" },
       { label: "Rules and policies", path: "/legal-and-policies" },
@@ -174,13 +175,13 @@ export const footerNav: NavNode[] = [
     label: "Business resources",
     path: "/for-business",
     children: [
-      { label: "Advertise", path: "/advertise" },
+      { label: "adnote", path: "/advertise" },
+      { label: "Ads Help Center", path: "/advertising" },
       { label: "Musicosy for business", path: "/for-business" },
-      { label: "Resources and guides", path: "/resources/guides" },
       { label: "Musicosy for marketers", path: "/for-business" },
+      { label: "Resources and guides", path: "/resources/guides" },
       { label: "Marketing insights", path: "/for-business" },
       { label: "Brand inspiration", path: "/for-business" },
-      { label: "adnote", path: "/advertise" },
     ],
   },
 ];
@@ -349,20 +350,212 @@ export const helpCenterSections: NavNode[] = [
           "Getting Started",
         ],
       ],
-      [
-        "Advertising Hub",
-        [
-          "Ad Campaign Creation",
-          "Ad Group Management",
-          "Audience Targeting",
-          "Creative Asset Management",
-          "Ad Campaign Analytics",
-          "Advertising Operations",
-        ],
-      ],
     ]),
   },
 ];
+
+/**
+ * Ads Help Center — the complete 18-section Adnote help tree at /advertising.
+ * Stands on its own; surfaced in the Business resources footer column.
+ */
+export const adsHelpCenter: NavNode = {
+  label: "Ads Help Center",
+  path: "/advertising",
+  blurb: "Everything you need to run ads on Musicosy with adnote — from first setup to advanced optimization.",
+  children: build("/advertising", [
+    [
+      "Getting Started",
+      [
+        ["What describes your intent?", ["Promote a product", "Grow an audience", "Drive installs", "Generate leads"]],
+        ["Advertiser or Agency?", ["Set up as an advertiser", "Set up as an agency", "Switch account type"]],
+        ["Business Information", ["Business name & details", "Business address", "Business category"]],
+        ["Advertiser Account Information", ["Account name", "Time zone", "Currency"]],
+        ["Business Verification", ["Submit documents", "Verification status", "Rejected verification"]],
+        ["Invite Members", ["Add a member", "Member roles", "Resend invitations"]],
+      ],
+    ],
+    [
+      "Advertising on Musicosy",
+      [
+        "About advertising on Musicosy",
+        "How ads are delivered",
+        "Adnote product overview",
+        "Ad quality standards",
+        "Supported markets",
+      ],
+    ],
+    [
+      "Musicosy Accounts",
+      [
+        "Link your Musicosy account",
+        "Account roles for advertising",
+        "Switch between accounts",
+        "Connected accounts",
+        "Account security for advertisers",
+      ],
+    ],
+    [
+      "Managing Your Ad Center",
+      [
+        "Ad Center overview",
+        "Navigate the Ad Center",
+        "Create from the Ad Center",
+        "Edit an active ad",
+        "Duplicate an ad",
+        "Archive and restore",
+        "Ad Center shortcuts",
+      ],
+    ],
+    [
+      "Ad Objectives",
+      [
+        ["Reach", ["Maximize reach", "Reach frequency"]],
+        ["Consideration Objectives", ["Traffic", "App installs", "Video views", "Engagement"]],
+        ["App Promotion", ["App install", "App re-engagement"]],
+        ["Lead Generation", ["Instant forms", "CRM sync"]],
+        ["Sales", ["Conversions", "Catalog sales"]],
+        ["Musicosy Shop Ads", ["Set up Shop Ads", "Product feeds"]],
+        ["Musicosy Growth Max", ["How Growth Max works", "Budget allocation", "Performance signals"]],
+      ],
+    ],
+    [
+      "Campaign Creation",
+      [
+        "Create a campaign",
+        "Select an objective",
+        "Campaign budget",
+        ["Budget and Scheduling", ["Daily vs lifetime budget", "Start and end dates", "Schedule rules"]],
+        ["Budget Strategy", ["Lowest cost", "Cost cap", "Bid cap", "Minimum ROAS"]],
+        "Campaign naming",
+      ],
+    ],
+    [
+      "Ad Group Management",
+      [
+        ["Placements Overview", ["Automatic placements", "Manual placements", "Placement reviews"]],
+        ["Ad Targeting", ["Demographics", "Interests", "Behaviors", "Custom targeting"]],
+        ["Audiences", ["Saved audiences", "Lookalike audiences", "Custom audiences"]],
+        ["Bidding and Optimization", ["Optimization events", "Bid strategy", "Cost controls"]],
+        ["Brand Safety", ["Block lists", "Allow lists", "Inventory filters"]],
+        ["Delivery Type", ["Standard delivery", "Accelerated delivery"]],
+      ],
+    ],
+    [
+      "Ad Placements & Formats",
+      [
+        ["In-Feed Video", ["Video specs", "Duration limits", "Captions & subtitles"]],
+        ["In-Feed Interactive", ["Carousel", "Collection", "Instant experience"]],
+        ["Non-Feed Placement", ["Banner", "Interstitial", "Audio ads"]],
+        ["Interactive Enhancements", ["Add a CTA", "Add a sticker", "Add a form"]],
+        ["Industry Ad Solutions", ["Entertainment", "Retail", "Auto", "Finance"]],
+      ],
+    ],
+    [
+      "Creative Management",
+      [
+        ["Create an Ad", ["Upload a video", "Upload an image", "Add ad text"]],
+        ["Ad Creation Best Practices", ["Creative guidelines", "Aspect ratios", "File sizes"]],
+        ["Creative Optimization", ["A/B testing", "Dynamic creative", "Creative reporting"]],
+        ["Creative Partnerships", ["Find a partner", "Manage partners", "Asset sharing"]],
+      ],
+    ],
+    [
+      "Ad Management",
+      [
+        "Ads Manager overview",
+        "Filter and search ads",
+        "Bulk editing",
+        "Ad status explained",
+        "Pause and resume",
+        ["Ads Manager", ["Columns and metrics", "Saved views", "Export reports"]],
+        "Ad versioning",
+      ],
+    ],
+    [
+      "Audience & Lead Management",
+      [
+        ["Audience Management", ["Create an audience", "Audience insights", "Audience sharing"]],
+        ["Lead Management", ["View leads", "Download leads", "Lead integrations", ["Leads Center", ["Manage lead forms", "Lead quality", "CRM connections"]]]],
+      ],
+    ],
+    [
+      "Measurement & Analytics",
+      [
+        ["App Measurement", ["SDK setup", "App events", "Attribution windows"]],
+        ["Offline Conversions", ["Upload offline data", "Match rates", "Offline event sets"]],
+        ["Web Measurement", ["Pixel setup", "Conversions API", "Event matching"]],
+        ["Insights and Reporting", ["Custom reports", "Report templates", "Scheduled reports"]],
+        ["Shop Ads Measurement", ["Purchase attribution", "ROAS tracking"]],
+        ["Musicosy Market Scope", ["Market Scope overview", "Cohort analysis", "Brand lift"]],
+      ],
+    ],
+    [
+      "Tools & Resources",
+      [
+        ["MCP Server", ["Connect MCP", "Available tools", "Authentication"]],
+        ["AI Skills", ["Enable AI Skills", "Creative AI", "Audience AI"]],
+        ["Events Manager", ["Track events", "Priority events", "Event debugging"]],
+        ["Catalog Manager", ["Create a catalog", "Upload a feed", "Catalog diagnostics"]],
+        ["Notification Center", ["Notification settings", "Alert types"]],
+        ["Ad Plans", ["Create a plan", "Plan templates", "Share a plan"]],
+        "Creative hub",
+        "Business suite",
+      ],
+    ],
+    [
+      "Ad Auction & Optimization",
+      [
+        "How the ad auction works",
+        "Auction signals",
+        "Learning phase",
+        "Optimization tips",
+      ],
+    ],
+    [
+      "Billing & Payment",
+      [
+        ["Billing Options", ["Prepay", "Postpay", "Invoice billing"]],
+        ["Payment", ["Add a payment method", "Supported methods", "Auto-recharge"]],
+        ["Billing Management", ["View invoices", "Billing thresholds", "Tax documents"]],
+        ["Promotions", ["Redeem a code", "Promotion terms"]],
+        ["Troubleshooting", ["Declined payment", "Billing errors", "Refund requests"]],
+      ],
+    ],
+    [
+      "Account Management",
+      [
+        "Account settings",
+        "Switch ad accounts",
+        "Close an ad account",
+        ["Audience Controls", ["Default audience", "Restrict audiences"]],
+        ["Billing Information", ["Business billing", "Tax information"]],
+        ["Business Verification", ["Verify your business", "Edit business info"]],
+        "Account limits",
+        "Ad account status",
+        "Reactivating an account",
+      ],
+    ],
+    [
+      "Team & Members",
+      [
+        "Add a team member",
+        "Remove a member",
+        "Member invitations",
+        "Manage access",
+        "Transfer ownership",
+        ["Role-Based Permissions", ["Admin", "Analyst", "Editor", "Advertiser"]],
+      ],
+    ],
+    [
+      "Policies & Security",
+      [
+        ["Advertising Policies", ["Ad content policy", "Prohibited content", "Restricted content"]],
+        ["Privacy Practices", ["Data use", "User consent", "Retargeting rules"]],
+        ["Account Security", ["Two-factor auth", "Suspicious activity", "Recover an account"]],
+      ],
+    ],
+  ]),
+};
 
 /**
  * Platform persona routes — kept in allNav so the catch-all page can resolve
@@ -372,6 +565,8 @@ export const platformRoutes: NavNode[] = [
   { label: "For Fans", path: "/for-fans", blurb: "Stream, buy, collect and back the artists you love." },
   { label: "For Creators", path: "/for-creators", blurb: "Studio, distribution, commerce and royalties in one spine." },
   { label: "For Labels", path: "/for-labels", blurb: "Roster-scale ops: A&R, accounting, rights and reporting." },
+  { label: "For Distributors", path: "/for-distributors", blurb: "Distribution pipeline, catalog management and royalty delivery." },
+  { label: "For Sync Agents", path: "/for-sync-agents", blurb: "Sync briefs, licensing and catalog discovery for sync." },
   { label: "For Business", path: "/for-business", blurb: "Adnote — targeting built on real listening behavior." },
 ];
 
@@ -390,13 +585,14 @@ function flatten(nodes: NavNode[]): NavNode[] {
 
 /**
  * allNav — every resolvable path. Includes the mega menu, help-center
- * sections, platform routes, and a flattened copy of the footer so every
- * footer link resolves to a page.
+ * sections, the ads help center, platform routes, and a flattened copy of
+ * the footer so every footer link resolves to a page.
  */
 export const allNav: NavNode[] = (() => {
   const merged = [
     ...megaMenu,
     ...helpCenterSections,
+    adsHelpCenter,
     ...platformRoutes,
     ...flatten(footerNav),
   ];

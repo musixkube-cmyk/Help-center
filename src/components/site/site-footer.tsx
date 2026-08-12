@@ -32,13 +32,24 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Logo above the dividing line, right-aligned */}
+      {/* Logo above the dividing line, right-aligned — orange via CSS mask */}
       <div className="w-full px-6 lg:px-10 pb-6">
         <div className="flex justify-end">
-          <img
-            src="/adnote-logo.png"
-            alt="Musicosy"
-            className="h-9 w-auto"
+          <div
+            role="img"
+            aria-label="Musicosy"
+            className="h-9 w-[150px]"
+            style={{
+              backgroundColor: "var(--accent)",
+              WebkitMaskImage: "url('/adnote-logo.png')",
+              maskImage: "url('/adnote-logo.png')",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "right center",
+              maskPosition: "right center",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+            }}
           />
         </div>
       </div>
