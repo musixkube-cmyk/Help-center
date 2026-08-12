@@ -67,7 +67,10 @@ export default async function SectionPage({
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Button className="rounded-none uppercase tracking-widest" asChild>
-          <NavLink href="/resources/help-center">Browse Help Center</NavLink>
+          <NavLink href="/support/sign-in">Sign in</NavLink>
+        </Button>
+        <Button variant="outline" className="rounded-none uppercase tracking-widest" asChild>
+          <NavLink href="/support/sign-up">Sign up</NavLink>
         </Button>
       </div>
 
