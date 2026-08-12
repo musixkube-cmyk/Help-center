@@ -40,30 +40,32 @@ export const megaMenu: NavNode[] = [
   {
     label: "Using Musicosy",
     path: "/resources/help-center",
-    blurb: "Guides on discovering, playing, collecting and managing your music.",
-    children: build("/resources/help-center/using-musicosy", [
-      ["Discover & Browse", ["Discover content", "Feed", "For You feed", "Friends Tab", "Search"]],
-      ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions"]],
-      ["Collections", ["Create collections", "Shared collections", "Playlists"]],
-      ["Media & Playback", ["Video playing", "Fullscreen", "On-demand playback", "Sound"]],
-      ["Account Management", ["Manage your account", "Account settings", "Notification settings"]],
-      ["Getting Started", ["Create an account", "Find friends", "Follow / unfollow"]],
-    ]),
-  },
-  {
-    label: "Managing Your Account",
-    path: "/support",
-    blurb: "Account settings, billing, subscriptions and account status.",
-    children: build("/support/managing-your-account", [
-      "Account settings & privacy",
-      "Notification settings",
-      "Push notifications",
-      "Account status",
-      "Account safety",
-      "Blocking someone",
-      "Muting",
-      "Remove followers",
-    ]),
+    blurb: "Guides on discovering, playing, collecting and managing your account.",
+    children: [
+      ...build("/resources/help-center/using-musicosy", [
+        ["Discover & Browse", ["Discover content", "Feed", "For You feed", "Friends Tab", "Search"]],
+        ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions"]],
+        ["Collections", ["Create collections", "Shared collections", "Playlists"]],
+        ["Media & Playback", ["Video playing", "Fullscreen", "On-demand playback", "Sound"]],
+        ["Getting Started", ["Create an account", "Find friends", "Follow / unfollow"]],
+      ]),
+      // Account Management — merged from the former standalone "Managing Your Account"
+      {
+        label: "Account Management",
+        path: "/support/managing-your-account",
+        blurb: "Account settings, billing, subscriptions and account status.",
+        children: build("/support/managing-your-account", [
+          "Account settings & privacy",
+          "Notification settings",
+          "Push notifications",
+          "Account status",
+          "Account safety",
+          "Blocking someone",
+          "Muting",
+          "Remove followers",
+        ]),
+      },
+    ],
   },
   {
     label: "Safety & Security",
@@ -79,9 +81,9 @@ export const megaMenu: NavNode[] = [
     ]),
   },
   {
-    label: "Rules & Policies",
+    label: "Legal Center",
     path: "/legal-and-policies",
-    blurb: "Terms of use, copyright, IP and distribution agreements.",
+    blurb: "Terms of use, copyright, IP, distribution agreements and policies.",
     children: build("/legal-and-policies", [
       ["Terms of Use", ["Subscription Terms", "User Guidelines", "Distribution Agreement", "AI Services Terms"]],
       ["Copyright & IP", ["Intellectual Property Policy", "DMCA Policy", "Copyright reporting", "Trademark & counterfeiting"]],
@@ -192,7 +194,36 @@ export const footerNav: NavNode[] = [
  */
 export const helpCenterSections: NavNode[] = [
   {
-    label: "Privacy & Safety",
+    label: "Using Musicosy",
+    path: "/resources/help-center",
+    blurb: "Guides on discovering, playing, collecting and managing your account.",
+    children: [
+      ...build("/resources/help-center/using-musicosy", [
+        ["Discover & Browse", ["Discover content", "Feed", "For You feed", "Friends Tab", "Search"]],
+        ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions"]],
+        ["Collections", ["Create collections", "Shared collections", "Playlists"]],
+        ["Media & Playback", ["Video playing", "Fullscreen", "On-demand playback", "Sound"]],
+        ["Getting Started", ["Create an account", "Find friends", "Follow / unfollow"]],
+      ]),
+      {
+        label: "Account Management",
+        path: "/support/managing-your-account",
+        blurb: "Account settings, billing, subscriptions and account status.",
+        children: build("/support/managing-your-account", [
+          "Account settings & privacy",
+          "Notification settings",
+          "Push notifications",
+          "Account status",
+          "Account safety",
+          "Blocking someone",
+          "Muting",
+          "Remove followers",
+        ]),
+      },
+    ],
+  },
+  {
+    label: "Safety & Security",
     path: "/privacy-and-safety",
     children: build("/privacy-and-safety", [
       [
@@ -290,7 +321,7 @@ export const helpCenterSections: NavNode[] = [
     ]),
   },
   {
-    label: "Legal & Policies",
+    label: "Legal Center",
     path: "/legal-and-policies",
     children: build("/legal-and-policies", [
       [
@@ -330,26 +361,14 @@ export const helpCenterSections: NavNode[] = [
     ]),
   },
   {
-    label: "Support Center",
+    label: "Support & Contact",
     path: "/support",
     children: build("/support", [
-      "Support & Account Management",
-      [
-        "Using Musicosy",
-        [
-          "Discover & Browse",
-          "Content Interaction",
-          "Collections",
-          "Media & Playback",
-          "Direct Messages",
-          "Live",
-          "Account Management",
-          "AI Music Generation",
-          "Monetization",
-          "Third-Party Integrations",
-          "Getting Started",
-        ],
-      ],
+      "Contact us",
+      "Sign in",
+      "Email Preference Center",
+      "New user FAQ",
+      "Account status",
     ]),
   },
 ];

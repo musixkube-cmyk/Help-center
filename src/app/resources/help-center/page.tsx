@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { LifeBuoy, ShieldCheck, Scale, Headphones, Megaphone } from "lucide-react";
 import { helpCenterSections } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
 import { HelpCenterSidebar } from "@/components/site/help-center-sidebar";
@@ -7,46 +6,13 @@ import { HelpCenterSidebar } from "@/components/site/help-center-sidebar";
 export const metadata: Metadata = {
   title: "Help Center — Musicosy",
   description:
-    "Support, privacy, safety, legal and advertising resources — all in one place.",
+    "Support, safety, legal and account guides — all in one place.",
   openGraph: {
     title: "Help Center — Musicosy",
     description:
-      "Support, privacy, safety, legal and advertising resources — all in one place.",
+      "Support, safety, legal and account guides — all in one place.",
   },
 };
-
-const OVERVIEW_CARDS = [
-  {
-    icon: Headphones,
-    label: "Support & Account Management",
-    blurb: "Get help with your account, billing and subscriptions.",
-    href: "/support/support-and-account-management",
-  },
-  {
-    icon: LifeBuoy,
-    label: "Using Musicosy",
-    blurb: "Discover, play, collect and manage your music.",
-    href: "/support/using-musicosy",
-  },
-  {
-    icon: ShieldCheck,
-    label: "Privacy & Safety",
-    blurb: "How we collect, protect and respect your data — plus safety controls.",
-    href: "/privacy-and-safety",
-  },
-  {
-    icon: Scale,
-    label: "Legal & Policies",
-    blurb: "Terms of use, copyright, IP and distribution agreements.",
-    href: "/legal-and-policies",
-  },
-  {
-    icon: Megaphone,
-    label: "Advertising Hub",
-    blurb: "Create and manage ad campaigns on Musicosy.",
-    href: "/support/advertising-hub",
-  },
-];
 
 export default function HelpCenterPage() {
   return (
@@ -68,15 +34,15 @@ export default function HelpCenterPage() {
       <div className="mt-6 max-w-3xl">
         <h1 className="text-5xl leading-[0.95] sm:text-6xl">Help Center</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Support, privacy, safety, legal and advertising resources — all in one
-          place. Use the sidebar to navigate, or start with one of the sections
-          below.
+          Everything you need to use Musicosy safely — account guides, safety
+          controls, legal policies and support. Use the sidebar to navigate the
+          full tree, or start with a section below.
         </p>
       </div>
 
       {/* Sidebar + content layout */}
-      <div className="mt-10 grid gap-10 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        {/* Sidebar */}
+      <div className="mt-10 grid gap-10 lg:grid-cols-[20rem_minmax(0,1fr)]">
+        {/* Sidebar — persistent, shows the full tree */}
         <aside className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:border-r lg:border-border lg:pr-6">
           <p className="mb-4 text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
             Browse all topics
@@ -89,30 +55,6 @@ export default function HelpCenterPage() {
           <h2 className="font-display text-3xl tracking-wide text-foreground">
             Start here
           </h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {OVERVIEW_CARDS.map((card) => (
-              <NavLink
-                key={card.href}
-                href={card.href}
-                className="group flex flex-col gap-3 border border-border bg-card p-6 transition-colors hover:border-accent/50 hover:bg-secondary"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-sm border border-border bg-background text-accent">
-                  <card.icon className="h-5 w-5" strokeWidth={1.6} />
-                </span>
-                <span className="font-display text-xl tracking-wide text-foreground">
-                  {card.label}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {card.blurb}
-                </span>
-              </NavLink>
-            ))}
-          </div>
-
-          {/* Quick links to each major section */}
-          <h2 className="mt-12 font-display text-3xl tracking-wide text-foreground">
-            All sections
-          </h2>
           <div className="mt-5 grid gap-px border border-border bg-border sm:grid-cols-2">
             {helpCenterSections.map((section) => (
               <NavLink
@@ -120,14 +62,46 @@ export default function HelpCenterPage() {
                 href={section.path}
                 className="group flex flex-col justify-between bg-card p-6 transition-colors hover:bg-secondary"
               >
-                <span className="font-display text-2xl tracking-wide text-foreground">
-                  {section.label}
-                </span>
-                <span className="mt-3 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-accent">
-                  {section.children?.length ?? 0} categories
+                <div>
+                  <span className="font-display text-2xl tracking-wide text-foreground group-hover:text-accent">
+                    {section.label}
+                  </span>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {section.blurb}
+                  </p>
+                </div>
+                <span className="mt-6 text-xs uppercase tracking-widest text-muted-foreground group-hover:text-accent">
+                  {section.children?.length ?? 0}{" "}
+                  {section.children?.length === 1 ? "category" : "categories"}
                 </span>
               </NavLink>
             ))}
+          </div>
+
+          {/* Ads Help Center — separate hub */}
+          <h2 className="mt-12 font-display text-3xl tracking-wide text-foreground">
+            Advertising
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Running ads on Musicosy? The Ads Help Center has its own dedicated
+            hub with 18 sections covering everything from setup to optimization.
+          </p>
+          <div className="mt-5 border border-border bg-card p-6 transition-colors hover:bg-secondary">
+            <NavLink
+              href="/advertising"
+              className="group flex flex-col"
+            >
+              <span className="font-display text-2xl tracking-wide text-foreground group-hover:text-accent">
+                Ads Help Center
+              </span>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Setup, targeting, formats, measurement, billing and policies for
+                adnote.
+              </p>
+              <span className="mt-4 text-xs uppercase tracking-widest text-accent">
+                Open Ads Help Center →
+              </span>
+            </NavLink>
           </div>
         </div>
       </div>
