@@ -33,6 +33,11 @@ export type DocBlock =
       headers: string[];
       /** Each row is an array of cell strings (one per column). */
       rows: string[][];
+    }
+  | {
+      type: "quote";
+      /** The quoted/example text (rendered in italics with a left border). */
+      text: string;
     };
 
 export type Doc = {

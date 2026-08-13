@@ -1027,3 +1027,50 @@ Stage Summary:
 - "Verify your email or phone number" is now fully written and rendered as the fourth real doc.
 - No new routes needed — all 8 related articles already had routes (4 in Getting Started, 4 cross-section in Support Center → Account & Access).
 - Four Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number. Next in sidebar order: Set up your profile.
+
+---
+Task ID: fifth-doc-set-up-your-profile
+Agent: main (Z.ai Code)
+Task: Write the "Set up your profile" doc as the fifth piece of real written content. Add a new "quote" block type for example bios. Create routes for 5 related articles that don't exist.
+
+Work Log:
+- Added "quote" block type to src/data/docs/types.ts — { type: "quote"; text: string } — for example/quoted content rendered as a styled blockquote.
+- Updated src/components/site/doc-content.tsx with QuoteBlock renderer: blockquote with left accent border, subtle accent background, italic text, smart quotes auto-added.
+- Added 5 new routes to nav.ts:
+  1. "Set up your creator profile and Artist Page" → Using Musicosy → Creator Studio & Workspaces (placed right after "Set up your creator profile")
+  2. "Build an EPK (Electronic Press Kit)" → Using Musicosy → Creator Studio & Workspaces (at end)
+  3. "Verification on MusicOSY" → Using Musicosy → Creator Studio & Workspaces (at end)
+  4. "Account privacy and visibility settings" → Support Center → Account & Access (after "Account settings & privacy")
+  5. "Report a profile" → Support Center → Reports & Appeals (after "Report a post / account / LIVE / comment / DM")
+- Wrote src/data/docs/set-up-your-profile.ts — full structured content with 13 sections:
+  1. 2 intro paragraphs + note callout (profile vs account distinction)
+  2. "Add the essentials": paragraph + 9-item bullet list with bold lead-ins (Profile photo:, Cover media:, Display name:, Handle:, Bio:, Pronouns:, Genres and moods:, Location:, Links:)
+  3. "Display name and handle": paragraph + 2-column table (Field/Purpose, 2 rows) + paragraph
+  4. "Make your profile yours": paragraph + paragraph + 5-item bullet list
+  5. "Example bios": 3 quote blocks (Independent singer-songwriter, Music lover concert chaser, Producer and beat maker)
+  6. "Tips for a strong profile": 5-item bullet list with bold lead-ins
+  7. "Profile tabs and creator expansion": paragraph + 2-column table (Tab/Appears when, 10 rows: About, Posts, Music, Videos, Podcasts, Live, Events, Shop, Setlists, Community) + 2 paragraphs
+  8. "Profile visibility and discoverability": paragraph + 2-item bullet list with bold lead-ins (Visibility, Discoverability) + paragraph + note callout (handle/display name may still appear in required contexts)
+  9. "Your personal profile and Workspaces": 4 paragraphs
+  10. "Build toward a creator profile": paragraph + paragraph + paragraph + 8-item bullet list + paragraph
+  11. "Artist Page": 2 paragraphs
+  12. "Verification": paragraph + 4-item bullet list
+  13. "Keep your profile safe": paragraph + 6-item bullet list + 2 paragraphs
+  - 10 related articles: Create an account, Choose or change your handle, Find friends, Follow / unfollow, Set up your creator profile and Artist Page (new cross-section), Build an EPK (new cross-section), Personal profiles vs. Team Workspaces, Account privacy and visibility settings (new cross-section), Verification on MusicOSY (new cross-section), Report a profile (new cross-section).
+- Registered setUpYourProfileDoc in src/data/docs/index.ts.
+- Lint: clean. No errors.
+- All routes verified 200: the doc page + all 5 new placeholder routes.
+- Agent Browser + VLM verified:
+  - TOP: sidebar with Getting Started expanded + Set up your profile highlighted, H1, 2 intro paragraphs, orange note callout (profile vs account), "Add the essentials" heading with 9-item bold-lead-in bullet list. All correct.
+  - EXAMPLE BIOS: "Example bios" heading + 3 quote blocks rendered as blockquotes with italic text, left accent border, and subtle background. Quotes read correctly: "Independent singer-songwriter...", "Music lover, concert chaser...", "Producer and beat maker...". NEW quote block type works perfectly.
+  - TABLE: "Profile tabs and creator expansion" heading + 2-column table (Tab/Appears when) with 10 data rows (About through Community). Well-formatted with clear headers and aligned text.
+  - NOTE CALLOUT: second note callout about handle/display name appearing in required contexts. Correct.
+  - BOTTOM: "Keep your profile safe" heading + 6-item bullet list, Related articles section with all 10 links, Back → "Verify your email or phone number", Next → "Set up your profile and Artist Page". Correct sidebar order.
+  - CROSS-SECTION: clicked "Build an EPK (Electronic Press Kit)" related link → navigated to /resources/help-center/using-musicosy/creator-studio-and-workspaces/build-an-epk-electronic-press-kit (Using Musicosy placeholder). Sidebar switched to Using Musicosy tree. Correct.
+
+Stage Summary:
+- "Set up your profile" is now fully written and rendered as the fifth real doc — the most comprehensive one yet (13 sections, 2 tables, 2 note callouts, 3 quote blocks, multiple bold-lead-in bullet lists).
+- New "quote" block type added to the doc system — renders as a styled blockquote with italic text, left accent border, and subtle background. Reusable for examples, testimonials, and quoted content in future docs.
+- 5 new routes created for related articles across 3 different sections (Using Musicosy → Creator Studio & Workspaces, Support Center → Account & Access, Support Center → Reports & Appeals).
+- 5 of the 10 related articles are cross-section links, all verified navigable.
+- Five Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile. Next in sidebar order: Set up your profile and Artist Page.

@@ -144,6 +144,16 @@ function TableBlock({ headers, rows }: { headers: string[]; rows: string[][] }) 
   );
 }
 
+function QuoteBlock({ text }: { text: string }) {
+  return (
+    <blockquote className="mt-4 border-l-2 border-accent/40 bg-accent/5 px-5 py-3">
+      <p className="text-base italic leading-relaxed text-foreground/80">
+        &ldquo;{text}&rdquo;
+      </p>
+    </blockquote>
+  );
+}
+
 function Block({ block }: { block: DocBlock }) {
   switch (block.type) {
     case "paragraph":
@@ -186,6 +196,8 @@ function Block({ block }: { block: DocBlock }) {
       );
     case "table":
       return <TableBlock headers={block.headers} rows={block.rows} />;
+    case "quote":
+      return <QuoteBlock text={block.text} />;
     default:
       return null;
   }
