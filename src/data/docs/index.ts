@@ -23,6 +23,7 @@ import { chooseOrChangeYourDisplayNameDoc } from "./choose-or-change-your-displa
 import { findFriendsDoc } from "./find-friends";
 import { followAndUnfollowDoc } from "./follow-and-unfollow";
 import { howToBuildASetlistDoc } from "./how-to-build-a-setlist";
+import { understandYourToolsAndToolkitsDoc } from "./understand-your-tools-and-toolkits";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -38,6 +39,7 @@ const docs: Record<string, Doc> = {
   [findFriendsDoc.path]: findFriendsDoc,
   [followAndUnfollowDoc.path]: followAndUnfollowDoc,
   [howToBuildASetlistDoc.path]: howToBuildASetlistDoc,
+  [understandYourToolsAndToolkitsDoc.path]: understandYourToolsAndToolkitsDoc,
 };
 
 /** Look up structured doc content for a given route path. */
