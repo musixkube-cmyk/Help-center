@@ -991,3 +991,39 @@ Stage Summary:
 - The doc exercises every block type in the system: paragraphs, H2 headings, ordered lists, unordered lists, nested sub-lists, note callout, warning callout, and a 6-row comparison table.
 - 4 of the 9 related articles are cross-section links (Help Center → Support Center), all verified navigable.
 - Three Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out. Next in sidebar order: Verify your email or phone number.
+
+---
+Task ID: fourth-doc-verify-email-or-phone
+Agent: main (Z.ai Code)
+Task: Write the "Verify your email or phone number" doc as the fourth piece of real written content. All 8 related-article routes already existed — no new routes needed.
+
+Work Log:
+- Verified all 8 related-article routes return 200 before writing (Create an account, Sign in and sign out, Set up your profile, Account safety, Recover your account, Reset your password, Manage your active sessions, Set up two-factor authentication or a passkey). No new routes needed.
+- Wrote src/data/docs/verify-your-email-or-phone-number.ts — full structured content with 12 sections:
+  1. 2 intro paragraphs
+  2. "Why verification matters": paragraph + 6-item bullet list + paragraph (Workspace context note)
+  3. "When you may be asked to verify": paragraph + 6-item bullet list with bold lead-ins (Account creation., Signing in from a new device., Changing account details., Account recovery., Sensitive actions., Feature eligibility.)
+  4. "Verify your email address": 4-step ordered list + paragraph + NOTE callout (verification links are single-use)
+  5. "Verify your phone number": 4-step ordered list + paragraph + NOTE callout (text codes are single-use)
+  6. "If you did not receive a code or email": paragraph + 7-item bullet list + paragraph
+  7. "Keep your contact information current": paragraph + 4-item bullet list
+  8. "Changing your email or phone number": paragraph + 4-item bullet list + paragraph
+  9. "Protect your verification code": paragraph + 3-item bullet list
+  10. "If you receive a verification message you did not request": paragraph + 6-item bullet list
+  11. "Email or phone verification is not identity verification": 2 paragraphs + 5-item bullet list with bold lead-ins (Identity verification, Business or organisation verification, Creator or artist verification, Payout or financial verification, Voice or likeness verification) + paragraph
+  12. "Verification and your account": 4-item bullet list
+  - 8 related articles (all pre-existing routes).
+- Registered verifyYourEmailOrPhoneNumberDoc in src/data/docs/index.ts.
+- Lint: clean. No errors.
+- Route verified 200. All 12 sections + 2 note callouts + related articles confirmed in HTML.
+- Agent Browser + VLM verified:
+  - TOP: sidebar with Getting Started expanded + Verify your email or phone number highlighted, H1, 2 intro paragraphs, "Why verification matters" heading with 6-item bullet list, "When you may be asked to verify" heading with bold-lead-in bullets. All correct.
+  - STEPS: "Verify your email address" heading with 4-step numbered list, orange note callout ("Verification links and codes are single-use..."), "Verify your phone number" heading. Sidebar fixed. All correct.
+  - BOTTOM: "Email or phone verification is not identity verification" heading with 5 bold-lead-in bullets (Identity verification, Business or organisation verification, Creator or artist verification, Payout or financial verification, Voice or likeness verification), "Verification and your account" heading with bullet list. All correct.
+  - NAV: Back → "Sign in and sign out", Next → "Set up your profile". Correct sidebar order. Clicked Next → navigated to /resources/help-center/getting-started/set-up-your-profile (placeholder, next doc to write).
+  - RELATED: all 8 related article links present in snapshot.
+
+Stage Summary:
+- "Verify your email or phone number" is now fully written and rendered as the fourth real doc.
+- No new routes needed — all 8 related articles already had routes (4 in Getting Started, 4 cross-section in Support Center → Account & Access).
+- Four Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number. Next in sidebar order: Set up your profile.

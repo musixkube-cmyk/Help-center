@@ -15,6 +15,7 @@ import type { Doc } from "./types";
 import { whatIsMusicosyDoc } from "./what-is-musicosy";
 import { createAnAccountDoc } from "./create-an-account";
 import { signInAndSignOutDoc } from "./sign-in-and-sign-out";
+import { verifyYourEmailOrPhoneNumberDoc } from "./verify-your-email-or-phone-number";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -22,6 +23,7 @@ const docs: Record<string, Doc> = {
   [whatIsMusicosyDoc.path]: whatIsMusicosyDoc,
   [createAnAccountDoc.path]: createAnAccountDoc,
   [signInAndSignOutDoc.path]: signInAndSignOutDoc,
+  [verifyYourEmailOrPhoneNumberDoc.path]: verifyYourEmailOrPhoneNumberDoc,
 };
 
 /** Look up structured doc content for a given route path. */
