@@ -33,6 +33,7 @@ import { whatIsTheStageDoc } from "./what-is-the-stage";
 import { discoverContentDoc } from "./discover-content";
 import { feedDoc } from "./feed";
 import { manageYourHomeFeedAndRecommendationsDoc } from "./manage-your-home-feed-and-recommendations";
+import { searchMusicosyDoc } from "./search-musicosy";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -58,6 +59,7 @@ const docs: Record<string, Doc> = {
   [discoverContentDoc.path]: discoverContentDoc,
   [feedDoc.path]: feedDoc,
   [manageYourHomeFeedAndRecommendationsDoc.path]: manageYourHomeFeedAndRecommendationsDoc,
+  [searchMusicosyDoc.path]: searchMusicosyDoc,
 };
 
 /** Look up structured doc content for a given route path. */
