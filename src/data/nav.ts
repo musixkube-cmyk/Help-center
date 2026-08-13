@@ -184,17 +184,13 @@ export const footerNav: NavNode[] = [
 
 /**
  * Footer Utility Bar — the dense quick-access strip that sits in a row below
- * the logo, above the copyright/cookies bottom rail. Rendered as a horizontal
- * flex-wrap (not a column).
+ * the logo, above the copyright/cookies bottom rail. Holds the navigation /
+ * destination links (16). The legal/policy links live in footerBottomRail.
  */
 export const footerUtilityBar: NavNode[] = [
   { label: "About", path: "/about" },
   { label: "Get App", path: "/download" },
   { label: "Help", path: "/resources/help-center" },
-  { label: "Terms", path: "/legal-and-policies" },
-  { label: "Privacy", path: "/privacy-and-safety" },
-  { label: "Cookies", path: "/legal-and-policies" },
-  { label: "DMCA", path: "/legal-and-policies/copyright-and-ip/dmca-policy" },
   { label: "Careers", path: "/careers" },
   { label: "Ads & Business", path: "/for-business" },
   { label: "Podcast", path: "/podcast" },
@@ -206,12 +202,24 @@ export const footerUtilityBar: NavNode[] = [
   { label: "Developers", path: "/developers" },
   { label: "News", path: "/resources/blog" },
   { label: "US TIDA", path: "/us-tida" },
+  { label: "Sign In", path: "/support/sign-in" },
+  { label: "Contact Us", path: "/support/contact-us" },
+];
+
+/**
+ * Footer Bottom Rail — the legal/policy links that sit in the very bottom
+ * row alongside the copyright. Kept separate from the utility bar so they
+ * render in their own row beneath the separating line.
+ */
+export const footerBottomRail: NavNode[] = [
+  { label: "Terms", path: "/legal-and-policies" },
+  { label: "Privacy", path: "/privacy-and-safety" },
+  { label: "Cookies", path: "/legal-and-policies" },
+  { label: "DMCA", path: "/legal-and-policies/copyright-and-ip/dmca-policy" },
   { label: "Accessibility", path: "/resources/accessibility" },
   { label: "Privacy Center", path: "/privacy-and-safety" },
   { label: "Legal Center", path: "/legal-and-policies" },
   { label: "Support Center", path: "/support" },
-  { label: "Sign In", path: "/support/sign-in" },
-  { label: "Contact Us", path: "/support/contact-us" },
 ];
 
 /**

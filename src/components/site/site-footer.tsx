@@ -1,4 +1,4 @@
-import { footerNav, footerUtilityBar } from "@/data/nav";
+import { footerNav, footerUtilityBar, footerBottomRail } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
 
 export function SiteFooter() {
@@ -72,12 +72,22 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      {/* Copyright bottom rail — just the copyright + language, no link duplicates
-          (Cookies/Privacy/Terms already live in the utility bar above) */}
+      {/* Bottom rail — copyright + 8 legal/policy links + language, beneath the separating line */}
       <div className="border-t border-ink-foreground/10 px-6 lg:px-10 py-5">
         <div className="flex flex-col gap-3 text-xs text-ink-foreground/50 sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 Musicosy Corp.</span>
-          <span className="cursor-pointer transition-colors hover:text-ink-foreground">English</span>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            {footerBottomRail.map((item) => (
+              <NavLink
+                key={item.label + item.path}
+                href={item.path}
+                className="transition-colors hover:text-ink-foreground"
+              >
+                {item.label}
+              </NavLink>
+            ))}
+            <span className="cursor-pointer transition-colors hover:text-ink-foreground">English</span>
+          </div>
         </div>
       </div>
     </footer>
