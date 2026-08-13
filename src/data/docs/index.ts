@@ -28,6 +28,7 @@ import { createOrJoinAWorkspaceDoc } from "./create-or-join-a-workspace";
 import { personalProfilesVsTeamWorkspacesDoc } from "./personal-profiles-vs-team-workspaces";
 import { personalContextVersusWorkspaceContextDoc } from "./personal-context-versus-workspace-context";
 import { workspaceRolesAndPermissionsDoc } from "./workspace-roles-and-permissions";
+import { inviteAndManageWorkspaceMembersDoc } from "./invite-and-manage-workspace-members";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -48,6 +49,7 @@ const docs: Record<string, Doc> = {
   [personalProfilesVsTeamWorkspacesDoc.path]: personalProfilesVsTeamWorkspacesDoc,
   [personalContextVersusWorkspaceContextDoc.path]: personalContextVersusWorkspaceContextDoc,
   [workspaceRolesAndPermissionsDoc.path]: workspaceRolesAndPermissionsDoc,
+  [inviteAndManageWorkspaceMembersDoc.path]: inviteAndManageWorkspaceMembersDoc,
 };
 
 /** Look up structured doc content for a given route path. */
