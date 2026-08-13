@@ -31,6 +31,8 @@ import { workspaceRolesAndPermissionsDoc } from "./workspace-roles-and-permissio
 import { inviteAndManageWorkspaceMembersDoc } from "./invite-and-manage-workspace-members";
 import { whatIsTheStageDoc } from "./what-is-the-stage";
 import { discoverContentDoc } from "./discover-content";
+import { feedDoc } from "./feed";
+import { manageYourHomeFeedAndRecommendationsDoc } from "./manage-your-home-feed-and-recommendations";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -54,6 +56,8 @@ const docs: Record<string, Doc> = {
   [inviteAndManageWorkspaceMembersDoc.path]: inviteAndManageWorkspaceMembersDoc,
   [whatIsTheStageDoc.path]: whatIsTheStageDoc,
   [discoverContentDoc.path]: discoverContentDoc,
+  [feedDoc.path]: feedDoc,
+  [manageYourHomeFeedAndRecommendationsDoc.path]: manageYourHomeFeedAndRecommendationsDoc,
 };
 
 /** Look up structured doc content for a given route path. */
