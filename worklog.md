@@ -747,3 +747,28 @@ Stage Summary:
 - The old static metadata.icons config (pointing at cache-prone /favicon.ico) was removed in favor of the file convention.
 - public/favicon.ico + favicon.png kept as fallbacks (also refreshed to the new design).
 - User may still need to close and reopen the browser tab (or clear cache once) to fully purge the old cached favicon.ico, but new visits will always get the current icon.
+
+---
+Task ID: favicon-real-ico
+Agent: main (Z.ai Code)
+Task: User reported the favicon still shows Z.ai's, not their custom one. Re-uploaded favicon.ico (this time a real .ico file).
+
+Work Log:
+- Diagnosis: the previous upload was a PNG mislabeled as .ico (179x133). The new upload/favicon.ico is a REAL Windows ICO (15086 bytes, 3 icons: 48x48 + 32x32 + 16x16, 32 bits/pixel, BMP-encoded entries). Pillow reads it correctly.
+- Server verification: /favicon.ico serves 200 image/x-icon, 15086 bytes, MD5 2e4f2d7f0d68457195b08ac2661f68fd — byte-for-byte identical to the upload. Caddyfile is a pure reverse proxy (no favicon injection). The <head> only contains the two correct icon <link> tags (no competing declarations, no manifest.json). So the SERVER was correct all along.
+- Root cause of "Z.ai favicon showing": browser cached the Z.ai favicon from the sandbox's initial load (before any custom favicon existed) at /favicon.ico. Browsers cache favicons extremely aggressively and don't re-fetch even on hard refresh when the URL doesn't change.
+- Fix part 1 — regenerate icons from the real ICO using Pillow:
+  - src/app/icon.png (48x48 RGBA, 2348b) — extracted from the 48x48 ICO entry, used by Next.js file convention at /icon.png?<hash> (cache-busted).
+  - src/app/apple-icon.png (180x180 RGB on white, 13841b) — for iOS.
+  - public/favicon.ico — copied the original real ICO directly (perfect multi-size 48/32/16).
+  - public/favicon.png (32x32, 1349b).
+  - VLM confirmed: the favicon is the stylized black "m" with a hook/tail at the end.
+- Fix part 2 — cache-control headers in next.config.ts: added async headers() returning Cache-Control: no-cache, no-store, must-revalidate for /favicon.ico and /favicon.png. Verified the headers are live (curl -sI shows Cache-Control: no-cache, no-store, must-revalidate on both). This forces browsers to revalidate the favicon on every visit, so a stale cached Z.ai favicon can no longer persist.
+- Dev server restarted after next.config.ts change. DOM link tags now point to /icon.png?icon.eb4bc0aa.png (hash changed from previous f6ba5b9d → eb4bc0aa, forcing fresh fetch).
+- Lint: clean. Committed 7780235 + cleanup f7d323d, pushed to origin/main (in sync).
+
+Stage Summary:
+- Favicon files regenerated from the user's REAL uploaded .ico (was previously generated from a mislabeled PNG).
+- Cache-Control: no-cache headers added to /favicon.ico + /favicon.png so browsers can no longer serve a stale cached favicon.
+- The server is verified correct (byte-for-byte match with upload, correct <head>, no proxy injection).
+- User must do ONE hard-refresh (Ctrl+Shift+R / Cmd+Shift+R) or close+reopen the preview tab to purge the already-cached Z.ai favicon. After that, the custom "m" favicon will show and stay updated.
