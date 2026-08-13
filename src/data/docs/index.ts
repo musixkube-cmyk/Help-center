@@ -38,6 +38,7 @@ import { forYouFeedDoc } from "./for-you-feed";
 import { friendsTabDoc } from "./friends-tab";
 import { trendingContentDoc } from "./trending-content";
 import { recommendedCreatorsAndMusicDoc } from "./recommended-creators-and-music";
+import { manageTopicsAndInterestsDoc } from "./manage-topics-and-interests";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -68,6 +69,7 @@ const docs: Record<string, Doc> = {
   [friendsTabDoc.path]: friendsTabDoc,
   [trendingContentDoc.path]: trendingContentDoc,
   [recommendedCreatorsAndMusicDoc.path]: recommendedCreatorsAndMusicDoc,
+  [manageTopicsAndInterestsDoc.path]: manageTopicsAndInterestsDoc,
 };
 
 /** Look up structured doc content for a given route path. */
