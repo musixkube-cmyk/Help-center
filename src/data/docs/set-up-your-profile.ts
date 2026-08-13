@@ -319,7 +319,7 @@ export const setUpYourProfileDoc: Doc = {
     "/resources/help-center/getting-started/create-an-account",
     "/resources/help-center/getting-started/choose-or-change-your-handle",
     "/resources/help-center/getting-started/find-friends",
-    "/resources/help-center/getting-started/follow-unfollow",
+    "/resources/help-center/getting-started/follow-and-unfollow",
     "/resources/help-center/using-musicosy/creator-studio-and-workspaces/set-up-your-creator-profile-and-artist-page",
     "/resources/help-center/using-musicosy/creator-studio-and-workspaces/build-an-epk-electronic-press-kit",
     "/resources/help-center/getting-started/personal-profiles-vs-team-workspaces",

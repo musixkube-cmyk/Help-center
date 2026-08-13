@@ -232,7 +232,6 @@ export const helpCenterSections: NavNode[] = [
           "Choose or change your display name",
           "Find friends",
           "Find people to follow",
-          "Follow / unfollow",
           "Follow and unfollow",
           "How to build a Setlist",
           "Understanding your Toolkits and upgrades",
