@@ -805,3 +805,37 @@ Stage Summary:
 - Layout: nav grid → logo → utility bar (row below logo) → copyright/cookies (bottom rail).
 - Two new routes added (/podcast, /us-tida) so the utility bar has no dead links.
 - Responsive: 2 cols mobile → 3 cols tablet → 6 cols desktop.
+
+---
+Task ID: help-center-finalized-tree
+Agent: main (Z.ai Code)
+Task: Update the help center sidebar to the user's finalized 6-section document tree (Help Center, Support Center, Trust & Policies, Legal Center, For the Music Industry, Business & Advertising). Then update the routing from the footer to match.
+
+Work Log:
+- Rewrote helpCenterSections in src/data/nav.ts to the new 6-section tree:
+  1. HELP CENTER (/resources/help-center): Getting Started (9 docs), New User FAQ, Resources & Guides, Glossary, Company News / Blog, Using Musicosy (8 sub-groups: Discover & Browse, Content Interaction, Collections & Library, Media & Playback, Backstage & Community, Create & Publish, Live & Events, Creator Studio & Workspaces — ~70 leaf docs total)
+  2. SUPPORT CENTER (/support): Account & Access (11 docs), Reports & Appeals (13 docs), Payments & Purchases (9 docs), Technical Support (7 docs)
+  3. Trust & Policies (/privacy-and-safety): Trust & Policies Home, Safety & Security (3 sub-groups: Safety 15 docs, Content & Conduct 17 docs, Security 3 docs), Privacy Center (14 docs), Transparency Center (5 docs)
+  4. Legal Center (/legal-and-policies): Rules & Policies Home, Terms of Use (18 docs), Copyright & IP (6 docs), Law Enforcement (1 doc)
+  5. For the Music Industry (/for-creators): For Creators, For Labels, For Distributors, For Sync Agents + 4 resource sub-pages
+  6. Business & Advertising (/for-business): Musicosy for Business, Advertise / Adnote, Ads Help Center
+- Updated megaMenu to 4 main support sections (Help Center, Support Center, Trust & Policies, Legal Center) with abbreviated child lists pointing to the new sub-section paths. Removed old "Using Musicosy" and "Resources" mega menu items.
+- Updated footerNav column children to route to the new sub-sections: Help & Support column now includes "Support Center" → /support and "Account & Access" → /support/account-and-access; Trust & Policies column now routes to /privacy-and-safety/safety-and-security, /privacy-and-safety/privacy, /support/reports-and-appeals etc.
+- Updated homepage HELP_CARDS to the new 6 cards: Help Center, Support Center, Trust & Policies, Legal Center, Resources, For the Music Industry.
+- Updated rootSections: replaced the broken `megaMenu.find(n => n.path === "/resources")` (the Resources mega menu node was removed) with an explicit Resources center NavNode (Resources Home, Guides, Glossary, FAQ, Accessibility, Blog) so /resources/* pages keep their sidebar.
+- All routes verified 200 (spot-checked 40+ paths including deep leaves like /resources/help-center/using-musicosy/backstage-and-community, /support/reports-and-appeals, /privacy-and-safety/safety/platform-rules, /legal-and-policies/law-enforcement/law-enforcement-data-request-guidelines).
+- Lint: clean. No console errors.
+- Agent Browser verified:
+  - Help center sidebar shows all 6 section headers (Help Center, Support Center, Trust & Policies, Legal Center, For the Music Industry, Business & Advertising) with expandable sub-groups.
+  - Homepage shows 6 updated cards (Help Center, Support Center, Trust & Policies, Legal Center, Resources, For the Music Industry).
+  - Click "Support Center" card → /support renders with sidebar; expand "Account & Access" → reveals Sign-in help, Recover your account, Delete your account.
+  - Footer Trust & Policies column links verified: Safety & Security → /privacy-and-safety/safety-and-security, Privacy Center → /privacy-and-safety/privacy, Transparency Center → /legal-and-policies/transparency-center, Legal Center → /legal-and-policies, Report a Safety Issue → /support/reports-and-appeals. All 200.
+  - VLM confirmed: 6 sidebar sections with expandable groups, clean white layout.
+
+Stage Summary:
+- Help center sidebar finalized to the user's 6-section document tree with all sub-groups and leaf documents.
+- Mega menu updated to 4 main support sections (Help Center, Support Center, Trust & Policies, Legal Center).
+- Footer routing updated: column children now point to the new sub-section paths (e.g., /support/account-and-access, /privacy-and-safety/safety-and-security, /support/reports-and-appeals).
+- Homepage cards updated to match.
+- rootSections fixed: Resources is now a standalone center (was broken when the mega menu Resources node was removed).
+- All routes resolve (zero 404s). Lint clean. No console errors.
