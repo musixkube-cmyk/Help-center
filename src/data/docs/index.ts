@@ -39,6 +39,7 @@ import { friendsTabDoc } from "./friends-tab";
 import { trendingContentDoc } from "./trending-content";
 import { recommendedCreatorsAndMusicDoc } from "./recommended-creators-and-music";
 import { manageTopicsAndInterestsDoc } from "./manage-topics-and-interests";
+import { trendingContentAndFreshDropsDoc } from "./trending-content-and-fresh-drops";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -70,6 +71,7 @@ const docs: Record<string, Doc> = {
   [trendingContentDoc.path]: trendingContentDoc,
   [recommendedCreatorsAndMusicDoc.path]: recommendedCreatorsAndMusicDoc,
   [manageTopicsAndInterestsDoc.path]: manageTopicsAndInterestsDoc,
+  [trendingContentAndFreshDropsDoc.path]: trendingContentAndFreshDropsDoc,
 };
 
 /** Look up structured doc content for a given route path. */
