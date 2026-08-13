@@ -1198,3 +1198,55 @@ Stage Summary:
 - Eight Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile, Set up your Artist Page, Choose or change your handle, Choose or change your display name.
 - GitHub credential store restored; commits 84afeeb (Artist Page) and the new display-name commit will push together.
 - Next to write per user: Find friends.
+
+---
+Task ID: 9
+Agent: main (Z.ai Code)
+Task: Write the "Find friends" doc (Getting Started). Large doc covering discovery of people, artists, creators, collaborators, and communities across Search, The Stage, credits, Setlists, recommendations, events, communities/Workspaces, and profile sharing.
+
+Work Log:
+- Route /resources/help-center/getting-started/find-friends already existed as a NavNode. No nav change needed for the doc itself.
+- Added 4 new placeholder NavNode routes for related articles that did not exist:
+  1. "Block and mute" → /resources/help-center/using-musicosy/content-interaction/block-and-mute (added to Content Interaction group)
+  2. "Join a community or fan club" → /resources/help-center/using-musicosy/backstage-and-community/join-a-community-or-fan-club (added to Backstage & Community group)
+  3. "Subscribe to a creator" → /resources/help-center/using-musicosy/backstage-and-community/subscribe-to-a-creator (added to Backstage & Community group)
+  4. "Manage your privacy and discoverability settings" → /support/account-and-access/manage-your-privacy-and-discoverability-settings (added to Support → Account & Access group)
+- Mapped remaining related articles to existing routes: Follow and unfollow (getting-started), Choose or change your handle, Set up your profile, Discover content (Discover & Browse), Search (Discover & Browse), Manage topics and interests (Discover & Browse), What is Backstage? (Backstage & Community), Attend an event (Live & Events).
+- Wrote src/data/docs/find-friends.ts (9th real doc). Structure (19 sections):
+  1. 2 intro paragraphs
+  2. "Find someone you already know": paragraph + 6-step numbered list + @handle paragraph
+  3. "Tips for finding someone" (H3): 6-item bullet list
+  4. "Find people through The Stage": 2 paragraphs + 3-step numbered list + paragraph + 9-item bullet list
+  5. "Discover through credits and collaborations": paragraph
+  6. "Discover through Setlists": paragraph
+  7. "Explore recommendations": paragraph + paragraph + 9-item bullet list
+  8. "Where to find recommendations": paragraph
+  9. "How to improve your recommendations": 2 paragraphs + 6-item bullet list
+  10. "Find artists and creators": paragraph + 7-item bullet list
+  11. "What you can explore from a creator profile" (H3): paragraph + 11-item bullet list + paragraph
+  12. "Find people through events and live sessions": paragraph + 4-item bullet list + paragraph
+  13. "Find people through communities and Workspaces": paragraph + 3-item bullet list + paragraph
+  14. "Find collaborators": paragraph + 6-item bullet list + paragraph
+  15. "Share your profile": paragraph + 4-step numbered list + 2 paragraphs
+  16. "Follow, subscribe, and connect": paragraph + 6-row table (Action/What it does: Follow, Subscribe/Join the Circle, Keep/save, Follow a Setlist, Join a Community, Message in Backstage) + paragraph
+  17. "Why you may not find someone": paragraph + 7-item bullet list
+  18. "Visibility and discoverability": 4 paragraphs (incl. visibility-vs-discoverability distinction)
+  19. "Blocking and discovery": 3 paragraphs
+  20. "Manage your discovery preferences": paragraph + 6-item bullet list + paragraph
+  - 12 related articles.
+- Registered findFriendsDoc in src/data/docs/index.ts.
+- Lint: clean. No errors.
+- All routes verified 200: doc page + all 4 new placeholder routes.
+- Agent Browser verified (desktop 1440px + mobile 375px):
+  - H1 "Find friends", sidebar highlights correct node.
+  - All 19+ sections render with their lists, the 6-row action table, and H3 sub-headings.
+  - RELATED ARTICLES section shows all 12 links (Follow and unfollow, Choose or change your handle, Set up your profile, Discover content, Search, Block and mute, Manage topics and interests, Manage your privacy and discoverability settings, What is Backstage?, Join a community or fan club, Attend an event, Subscribe to a creator).
+  - Clicked "Block and mute" → navigated to /resources/help-center/using-musicosy/content-interaction/block-and-mute (placeholder). Correct.
+  - Back/Next: BACK → "Choose or change your display name", NEXT → "Find people to follow". Correct DFS order.
+  - No console errors. Mobile layout holds at 375px.
+
+Stage Summary:
+- "Find friends" is now fully written and rendered as the ninth real doc.
+- 4 new placeholder routes created across Using Musicosy (Content Interaction, Backstage & Community) and Support (Account & Access) for related articles.
+- Nine Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile, Set up your Artist Page, Choose or change your handle, Choose or change your display name, Find friends.
+- Next to write per user: Follow and unfollow.
