@@ -725,3 +725,25 @@ Stage Summary:
 - Copyright row preserved.
 - Favicon replaced with the uploaded design — converted from mislabeled PNG to a real multi-size ICO + PNG, wired into metadata.
 - All footer links resolve (zero 404s). Responsive: 2 cols mobile → 4 cols tablet → 8 cols desktop.
+
+---
+Task ID: favicon-cache-bust
+Agent: main (Z.ai Code)
+Task: User reported the favicon was not updating despite the new one being installed last task. Diagnose and fix.
+
+Work Log:
+- Root cause: the new favicon (stylized "M") WAS correctly installed at public/favicon.ico (4965b, 16/32/64 multi-size ICO) and public/favicon.png (32x32), and serving 200 with correct MIME types. BUT browsers cache favicons extremely aggressively — the old 256x256 /favicon.ico (20373b) was stuck in the browser cache (and the preview-panel iframe cache). Normal reloads and even hard refreshes often don't bust favicon cache because the URL (/favicon.ico) didn't change.
+- Verified via VLM: uploaded source = stylized black "M"; new public/favicon.png = same "M" at 32x32; the server was serving the correct file all along. The problem was purely client-side caching.
+- Fix: switched to Next.js App Router file-based icon convention, which auto-generates cache-busted URLs:
+  - Created src/app/icon.png (48x48 RGBA PNG, 2132b) — Next.js serves this at /icon.png?<hash> and injects <link rel="icon" href="/icon.png?icon.f6ba5b9d.png" sizes="48x48" type="image/png"> into the DOM. The hash in the query string changes whenever the file changes, so the browser is forced to fetch fresh.
+  - Created src/app/apple-icon.png (180x180 PNG on white, 10648b) — for iOS, served at /apple-icon.png?<hash> as <link rel="apple-touch-icon">.
+  - Removed the manual metadata.icons config from layout.tsx (it was pointing at the cached /favicon.ico and /favicon.png paths — the file convention supersedes it and auto-generates the cache-busted links).
+  - Refreshed public/favicon.ico (16/32/64 multi-size, 4965b) and public/favicon.png (32x32) as fallbacks for browsers that request /favicon.ico directly.
+- DOM verified: link tags now point to hashed URLs — /icon.png?icon.f6ba5b9d.png (200, image/png, 2132b) and /apple-icon.png?apple-icon.e3c93116.png (200, image/png, 10648b). VLM confirmed the served icon is the stylized "M".
+- Lint: clean. Committed 762083e, pushed to origin/main (in sync).
+
+Stage Summary:
+- Favicon now updates reliably. The Next.js file-convention icons (src/app/icon.png + apple-icon.png) generate hashed URLs that bust browser/iframe cache automatically — whenever the source image changes, the hash changes, and the browser fetches the new version.
+- The old static metadata.icons config (pointing at cache-prone /favicon.ico) was removed in favor of the file convention.
+- public/favicon.ico + favicon.png kept as fallbacks (also refreshed to the new design).
+- User may still need to close and reopen the browser tab (or clear cache once) to fully purge the old cached favicon.ico, but new visits will always get the current icon.
