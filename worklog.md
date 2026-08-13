@@ -839,3 +839,36 @@ Stage Summary:
 - Homepage cards updated to match.
 - rootSections fixed: Resources is now a standalone center (was broken when the mega menu Resources node was removed).
 - All routes resolve (zero 404s). Lint clean. No console errors.
+
+---
+Task ID: first-doc-content
+Agent: main (Z.ai Code)
+Task: Write the first Help Center doc ("What is MusicOSY?") as real rendered content. When related articles are referenced that don't exist, create their page/route (placeholder) so they're navigable.
+
+Work Log:
+- Added 4 new Getting Started article routes to helpCenterSections in src/data/nav.ts: "Set up your profile and Artist Page", "How to build a Setlist", "Understanding your Toolkits and upgrades", "Personal profiles vs. Team Workspaces". These are the related articles referenced in the doc that previously had no route.
+- Created a doc content system under src/data/docs/:
+  - types.ts: DocBlock union (paragraph | heading | list), DocListItem (lead + text), Doc type (path + blocks + related)
+  - what-is-musicosy.ts: full structured content for the "What is MusicOSY?" doc — 6 sections (One account for everything you do, What you can do, Tools that grow with your music, Find your way around, Get started) with paragraphs, bullet lists (bold lead-ins), and an ordered list. Related articles point to 6 paths.
+  - index.ts: registry + getDoc(path) lookup. Scalable — adding a new doc = create file + add to registry record.
+- Created src/components/site/doc-content.tsx renderer:
+  - Renders blocks in order: paragraphs (relaxed leading), H2/H3 (font-display), unordered lists (orange bullet dots), ordered lists (numbered circles), list items with bold lead-in support.
+  - Related articles section at bottom: bordered list of links with arrow icons, labels resolved via findNode() from nav.
+- Updated src/app/[...path]/page.tsx catch-all page:
+  - Imported getDoc + DocContent.
+  - Added `const doc = getDoc(path)` lookup.
+  - Leaf-document render path now: children grid → DocContent (if doc exists) → placeholder fallback. So pages with written content show the article; pages without keep the existing placeholder.
+- Lint: clean. No errors.
+- All routes verified 200: the doc page + all 6 related article paths (including cross-section "What is The Stage?" under Using Musicosy → Discover & Browse).
+- Agent Browser + VLM verified:
+  - "What is MusicOSY?" page: sidebar visible (Help Center tree, Getting Started expanded, active item highlighted), H1 title prominent, all 5 section headings rendered, bullet lists with bold lead-ins ("Discover culture:", "The Stage:", etc.), ordered numbered list in Get started, Related articles section with 6 links + arrow icons. Layout clean, no visual issues.
+  - Clicked "How to build a Setlist" related link → navigated to /resources/help-center/getting-started/how-to-build-a-setlist (placeholder, same section). Correct.
+  - Clicked "What is The Stage?" related link → navigated to /resources/help-center/using-musicosy/discover-and-browse/what-is-the-stage (placeholder, cross-section). Sidebar correctly switched to Using Musicosy tree. Correct.
+  - Placeholder page verified: sidebar shows correct section, title, placeholder message, Contact us + Sign in buttons. No issues.
+
+Stage Summary:
+- First Help Center doc ("What is MusicOSY?") is now fully written and rendered as real article content — not a placeholder.
+- Doc content system is in place (src/data/docs/) — adding the next doc is a 3-step process: write content file, add to registry, ensure nav route exists.
+- 4 new article routes created in Getting Started so all related-article links resolve.
+- Catch-all page intelligently renders DocContent when available, falls back to placeholder otherwise — so partially-built help centers work gracefully.
+- Related articles support cross-section linking (e.g., Getting Started doc links to a Using Musicosy article) via path-based lookup.

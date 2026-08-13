@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { findNode, findTrail, findRootSection } from "@/data/nav";
+import { getDoc } from "@/data/docs";
 import { NavLink } from "@/components/site/nav-link";
 import { HelpCenterSidebar } from "@/components/site/help-center-sidebar";
+import { DocContent } from "@/components/site/doc-content";
 import { Button } from "@/components/ui/button";
 
 type Params = { path: string[] };
@@ -44,6 +46,7 @@ export default async function SectionPage({
   if (!node) notFound();
   const trail = findTrail(path);
   const rootSection = findRootSection(path);
+  const doc = getDoc(path);
 
   // ── Center layout ────────────────────────────────────────────────────────
   // Every page that belongs to a root section (Safety & Security, Legal Center,
@@ -109,6 +112,9 @@ export default async function SectionPage({
                   </NavLink>
                 ))}
               </div>
+            ) : doc ? (
+              /* Leaf document with written content */
+              <DocContent doc={doc} />
             ) : (
               /* Leaf document — content placeholder + related actions */
               <div className="mt-10 border-t border-border pt-8">
