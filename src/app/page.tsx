@@ -14,13 +14,18 @@ export const metadata: Metadata = {
 
 const HELP_CARDS = [
   {
-    label: "Using Musicosy",
-    blurb: "Guides on discovering, playing, collecting and managing your account.",
+    label: "Help Center",
+    blurb: "Getting started, using Musicosy, and finding resources.",
     href: "/resources/help-center",
   },
   {
-    label: "Safety & Security",
-    blurb: "Privacy controls, reporting, account safety and community rules.",
+    label: "Support Center",
+    blurb: "Account help, reporting, payments, and technical support.",
+    href: "/support",
+  },
+  {
+    label: "Trust & Policies",
+    blurb: "Safety controls, privacy rights, and transparency reports.",
     href: "/privacy-and-safety",
   },
   {
@@ -29,19 +34,14 @@ const HELP_CARDS = [
     href: "/legal-and-policies",
   },
   {
-    label: "Support & Contact",
-    blurb: "How to get help, contact us, sign in and manage your account status.",
-    href: "/support",
-  },
-  {
     label: "Resources",
-    blurb: "Guides, glossary, new-user FAQ and accessibility.",
+    blurb: "Guides, glossary, new-user FAQ, accessibility and company news.",
     href: "/resources",
   },
   {
-    label: "Ads Help Center",
-    blurb: "Setup, targeting, formats, measurement, billing and policies for adnote.",
-    href: "/advertising",
+    label: "For the Music Industry",
+    blurb: "Portals for creators, labels, distributors, and sync agents.",
+    href: "/for-creators",
   },
 ];
 

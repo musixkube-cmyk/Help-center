@@ -38,69 +38,52 @@ function build(
  */
 export const megaMenu: NavNode[] = [
   {
-    label: "Using Musicosy",
+    label: "Help Center",
     path: "/resources/help-center",
-    blurb: "Guides on discovering, playing, collecting and managing your account.",
+    blurb: "Getting started, using Musicosy, and finding resources.",
     children: [
-      ...build("/resources/help-center/using-musicosy", [
-        ["Discover & Browse", ["Discover content", "Feed", "For You feed", "Friends Tab", "Search"]],
-        ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions"]],
-        ["Collections", ["Create collections", "Shared collections", "Playlists"]],
-        ["Media & Playback", ["Video playing", "Fullscreen", "On-demand playback", "Sound"]],
-        ["Getting Started", ["Create an account", "Find friends", "Follow / unfollow"]],
-      ]),
-      // Account Management — merged from the former standalone "Managing Your Account"
-      {
-        label: "Account Management",
-        path: "/support/managing-your-account",
-        blurb: "Account settings, billing, subscriptions and account status.",
-        children: build("/support/managing-your-account", [
-          "Account settings & privacy",
-          "Notification settings",
-          "Push notifications",
-          "Account status",
-          "Account safety",
-          "Blocking someone",
-          "Muting",
-          "Remove followers",
-        ]),
-      },
+      { label: "Getting Started", path: "/resources/help-center/getting-started" },
+      { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
+      { label: "New User FAQ", path: "/resources/new-user-faq" },
+      { label: "Resources & Guides", path: "/resources/guides" },
+      { label: "Glossary", path: "/resources/glossary" },
+      { label: "Company News / Blog", path: "/resources/blog" },
     ],
   },
   {
-    label: "Safety & Security",
+    label: "Support Center",
+    path: "/support",
+    blurb: "Account help, reporting, payments, and technical support.",
+    children: [
+      { label: "Account & Access", path: "/support/account-and-access" },
+      { label: "Reports & Appeals", path: "/support/reports-and-appeals" },
+      { label: "Payments & Purchases", path: "/support/payments-and-purchases" },
+      { label: "Technical Support", path: "/support/technical-support" },
+      { label: "Sign In", path: "/support/sign-in" },
+      { label: "Contact Us", path: "/support/contact-us" },
+    ],
+  },
+  {
+    label: "Trust & Policies",
     path: "/privacy-and-safety",
-    blurb: "How we collect, protect and respect your data — plus safety controls.",
-    children: build("/privacy-and-safety", [
-      ["Privacy", ["Account privacy", "Your data rights", "Cookies policy", "Location detection"]],
-      ["Safety", ["Platform Rules", "Content Restrictions", "Reporting content", "Age verification"]],
-      ["Reporting", ["Report a post", "Report bullying", "Report impersonation", "Share feedback"]],
-      ["Security", ["Account safety", "Avoid phishing", "Content violations & bans", "Reporting vulnerabilities"]],
-      ["Content & Conduct", ["Community Guidelines", "Creator Code of Conduct", "Restricted Mode", "Content levels"]],
-      ["Law Enforcement", ["Law Enforcement Data Request Guidelines"]],
-    ]),
+    blurb: "Safety controls, privacy rights, and transparency reports.",
+    children: [
+      { label: "Safety & Security", path: "/privacy-and-safety/safety-and-security" },
+      { label: "Privacy Center", path: "/privacy-and-safety/privacy" },
+      { label: "Transparency Center", path: "/legal-and-policies/transparency-center" },
+      { label: "Report a Safety Issue", path: "/support/reports-and-appeals" },
+    ],
   },
   {
     label: "Legal Center",
     path: "/legal-and-policies",
     blurb: "Terms of use, copyright, IP, distribution agreements and policies.",
-    children: build("/legal-and-policies", [
-      ["Terms of Use", ["Subscription Terms", "User Guidelines", "Distribution Agreement", "AI Services Terms"]],
-      ["Copyright & IP", ["Intellectual Property Policy", "DMCA Policy", "Copyright reporting", "Trademark & counterfeiting"]],
-    ]),
-  },
-  {
-    label: "Resources",
-    path: "/resources",
-    blurb: "Guides, glossary, FAQ, accessibility and the Help Center.",
-    children: build("/resources", [
-      "Guides",
-      "Glossary",
-      "Help Center",
-      "New User FAQ",
-      "Accessibility",
-      "Blog",
-    ]),
+    children: [
+      { label: "Terms of Use", path: "/legal-and-policies/terms-of-use" },
+      { label: "Copyright & IP", path: "/legal-and-policies/copyright-and-ip" },
+      { label: "Law Enforcement", path: "/legal-and-policies/law-enforcement" },
+      { label: "Our Rules", path: "/legal-and-policies/our-rules" },
+    ],
   },
 ];
 
@@ -120,7 +103,8 @@ export const footerNav: NavNode[] = [
     children: [
       { label: "Help Center", path: "/resources/help-center" },
       { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
-      { label: "Managing Your Account", path: "/support/managing-your-account" },
+      { label: "Support Center", path: "/support" },
+      { label: "Account & Access", path: "/support/account-and-access" },
       { label: "New User FAQ", path: "/resources/new-user-faq" },
       { label: "Sign In", path: "/support/sign-in" },
       { label: "Email Preference Center", path: "/support/email-preferences" },
@@ -142,11 +126,11 @@ export const footerNav: NavNode[] = [
     label: "Trust & Policies",
     path: "/privacy-and-safety",
     children: [
-      { label: "Safety & Security", path: "/privacy-and-safety" },
-      { label: "Privacy Center", path: "/privacy-and-safety" },
+      { label: "Safety & Security", path: "/privacy-and-safety/safety-and-security" },
+      { label: "Privacy Center", path: "/privacy-and-safety/privacy" },
       { label: "Transparency Center", path: "/legal-and-policies/transparency-center" },
-      { label: "Rules & Policies", path: "/legal-and-policies" },
-      { label: "Report a Safety Issue", path: "/privacy-and-safety/reporting" },
+      { label: "Legal Center", path: "/legal-and-policies" },
+      { label: "Report a Safety Issue", path: "/support/reports-and-appeals" },
     ],
   },
   {
@@ -227,48 +211,140 @@ export const footerBottomRail: NavNode[] = [
  * in the Help Center sidebar (NOT in the footer).
  */
 export const helpCenterSections: NavNode[] = [
+  // ── 1. HELP CENTER ───────────────────────────────────────────────────────
   {
-    label: "Using Musicosy",
+    label: "Help Center",
     path: "/resources/help-center",
-    blurb: "Guides on discovering, playing, collecting and managing your account.",
+    blurb: "Guides on getting started, using Musicosy, and finding resources.",
     children: [
-      ...build("/resources/help-center/using-musicosy", [
-        ["Discover & Browse", ["Discover content", "Feed", "For You feed", "Friends Tab", "Search"]],
-        ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions"]],
-        ["Collections", ["Create collections", "Shared collections", "Playlists"]],
-        ["Media & Playback", ["Video playing", "Fullscreen", "On-demand playback", "Sound"]],
-        ["Getting Started", ["Create an account", "Find friends", "Follow / unfollow"]],
-      ]),
       {
-        label: "Account Management",
-        path: "/support/managing-your-account",
-        blurb: "Account settings, billing, subscriptions and account status.",
-        children: build("/support/managing-your-account", [
-          "Account settings & privacy",
-          "Notification settings",
-          "Push notifications",
-          "Account status",
-          "Account safety",
-          "Blocking someone",
-          "Muting",
-          "Remove followers",
+        label: "Getting Started",
+        path: "/resources/help-center/getting-started",
+        blurb: "Set up your account and find your way around Musicosy.",
+        children: build("/resources/help-center/getting-started", [
+          "What is Musicosy?",
+          "Create an account",
+          "Sign in and sign out",
+          "Verify your email or phone number",
+          "Set up your profile",
+          "Choose or change your handle",
+          "Find friends",
+          "Follow / unfollow",
+          "New member FAQ",
+        ]),
+      },
+      { label: "New User FAQ", path: "/resources/new-user-faq" },
+      { label: "Resources & Guides", path: "/resources/guides" },
+      { label: "Glossary", path: "/resources/glossary" },
+      { label: "Company News / Blog", path: "/resources/blog" },
+      {
+        label: "Using Musicosy",
+        path: "/resources/help-center/using-musicosy",
+        blurb: "Discover, interact, collect, play, create, and go live.",
+        children: build("/resources/help-center/using-musicosy", [
+          ["Discover & Browse", ["What is The Stage?", "Discover content", "Feed", "For You feed", "Friends Tab", "Search", "Trending content", "Recommended creators and music", "Manage topics and interests"]],
+          ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions", "Save content", "Edit or delete your comment", "Take your post off The Stage"]],
+          ["Collections & Library", ["Collections", "Create collections", "Shared collections", "Playlists", "Your Library", "Save music to your Library", "Edit or delete a collection", "Add, remove, and reorder playlist items"]],
+          ["Media & Playback", ["Listen on Musicosy", "Video playing", "Fullscreen", "On-demand playback", "Sound", "Manage your playback queue", "Continue listening", "Music playback troubleshooting", "Video playback troubleshooting"]],
+          ["Backstage & Community", ["What is Backstage?", "Send a message", "Manage message requests", "Start a group conversation", "Share content in Backstage", "Mute a conversation"]],
+          ["Create & Publish", ["Create on Musicosy", "What is Studio?", "Start a Studio project", "Save and manage drafts", "Upload music, video, and artwork", "Add titles, descriptions, and tags", "Add credits and collaborators", "Publish a post", "Publish music", "Choose content visibility", "Edit or delete published content", "Understand processing and review status", "Fix upload or publishing problems"]],
+          ["Live & Events", ["Watch a live session", "Take the Stage", "Schedule a live session", "Invite live guests", "Live chat", "Watch a live replay", "Find events", "Attend an event", "Tickets and event access", "Event cancellations and refunds"]],
+          ["Creator Studio & Workspaces", ["Set up your creator profile", "Create or join a workspace", "Switch workspaces", "Workspace roles and permissions", "Invite and manage workspace members", "Collaborate in Studio", "View creator analytics", "Manage your catalog", "Credits, rights, and splits", "Distribution", "Creator tools and eligibility"]],
         ]),
       },
     ],
   },
+
+  // ── 2. SUPPORT CENTER ────────────────────────────────────────────────────
   {
-    label: "Safety & Security",
+    label: "Support Center",
+    path: "/support",
+    blurb: "Account help, reporting, payments, and technical support.",
+    children: build("/support", [
+      ["Account & Access", ["Account settings & privacy", "Notification settings", "Push notifications", "Account status", "Account safety", "Sign-in help", "Recover your account", "Reset your password", "Verify your identity", "Deactivate your account", "Delete your account"]],
+      ["Reports & Appeals", ["Reporting content", "Report a post / account / LIVE / comment / DM", "Report underage account", "Report sexual abuse", "Report impersonation", "Report bullying", "Report suggested search / hashtag / sound / Series", "Report another issue", "Share feedback", "Check report status", "Appeal an account or content decision", "Content violations & bans", "Transaction policy violations"]],
+      ["Payments & Purchases", ["Payment methods", "Billing and receipts", "Subscription help", "Cancel a subscription", "Refunds", "Music and digital purchase help", "Event ticket help", "Merchandise order help", "Payout and earnings support"]],
+      ["Technical Support", ["Playback problems", "Upload and publishing problems", "App crashes or errors", "Notification problems", "Report a bug", "Supported devices and browsers", "Service status"]],
+    ]),
+  },
+
+  // ── 3. Trust & Policies ─────────────────────────────────────────────────
+  {
+    label: "Trust & Policies",
     path: "/privacy-and-safety",
-    children: build("/privacy-and-safety", [
-      [
-        "Privacy",
-        [
+    blurb: "Safety controls, privacy rights, and transparency reports.",
+    children: [
+      { label: "Trust & Policies Home", path: "/privacy-and-safety" },
+      {
+        label: "Safety & Security",
+        path: "/privacy-and-safety/safety-and-security",
+        blurb: "Platform rules, content conduct, and account security.",
+        children: [
+          {
+            label: "Safety",
+            path: "/privacy-and-safety/safety",
+            children: build("/privacy-and-safety/safety", [
+              "Platform Rules",
+              "Content Restrictions",
+              "Guidance for parents/caregivers",
+              "Age verification",
+              "Underage appeals",
+              "Under 13 Experience",
+              "Youth Portal",
+              "Teen privacy & safety settings",
+              "Post privacy settings",
+              "Stitch privacy settings",
+              "Manage video downloads",
+              "Activity status",
+              "Suggested accounts",
+              "Manage topics",
+              "Audience controls",
+            ]),
+          },
+          {
+            label: "Content & Conduct",
+            path: "/privacy-and-safety/content-and-conduct",
+            children: build("/privacy-and-safety/content-and-conduct", [
+              "Community Guidelines",
+              "Community Principles",
+              "Youth Safety & Well-Being",
+              "Safety & Civility",
+              "Mental & Behavioral Health",
+              "Sensitive & Mature Themes",
+              "Integrity & Authenticity",
+              "Regulated Goods & Services",
+              "For You feed Eligibility Standards",
+              "Creator Code of Conduct",
+              "Restricted Mode",
+              "Content levels on posts",
+              "Age-restricted LIVE content",
+              "Dangerous & deceptive content",
+              "Violent extremism",
+              "Content Algorithm",
+              "Political Ads",
+            ]),
+          },
+          {
+            label: "Security",
+            path: "/privacy-and-safety/security",
+            children: build("/privacy-and-safety/security", [
+              "Content violations & bans",
+              "Transaction policy violations",
+              "Avoid phishing",
+            ]),
+          },
+        ],
+      },
+      {
+        label: "Privacy Center",
+        path: "/privacy-and-safety/privacy",
+        blurb: "How we collect, protect, and respect your data.",
+        children: build("/privacy-and-safety/privacy", [
           "Collecting your personal data",
           "Protecting your personal data",
           "Your data rights",
           "California Notice of Collection",
           "Account privacy",
-          "Notification settings",
           "Cookies policy",
           "Location detection",
           "Information we collect",
@@ -276,91 +352,36 @@ export const helpCenterSections: NavNode[] = [
           "Privacy Policies",
           "Privacy Policy",
           "Kids Privacy Policy",
-          "Additional Terms of Service",
           "Google Privacy Policy",
           "SheerID Privacy Policy",
-        ],
-      ],
-      [
-        "Safety",
-        [
-          "Platform Rules",
-          "Content Restrictions",
-          "Reporting content",
-          "Guidance for parents/caregivers",
-          "Age verification",
-          "Underage appeals",
-          "Under 13 Experience",
-          "Youth Portal",
-          "Teen privacy & safety settings",
-          "Post privacy settings",
-          "Stitch privacy settings",
-          "Manage video downloads",
-          "Activity status",
-          "Suggested accounts",
-          "Manage topics",
-          "Audience controls",
-        ],
-      ],
-      [
-        "Reporting",
-        [
-          "Report a post / account / LIVE / comment / DM",
-          "Report underage account",
-          "Report sexual abuse",
-          "Report impersonation",
-          "Report bullying",
-          "Report suggested search / hashtag / sound / Series",
-          "Report another issue",
-          "Share feedback",
-        ],
-      ],
-      [
-        "Content & Conduct",
-        [
-          "Community Guidelines",
-          "Community Principles",
-          "Youth Safety & Well-Being",
-          "Safety & Civility",
-          "Mental & Behavioral Health",
-          "Sensitive & Mature Themes",
-          "Integrity & Authenticity",
-          "Regulated Goods & Services",
-          "For You feed Eligibility Standards",
-          "Creator Code of Conduct",
-          "Restricted Mode",
-          "Content levels on posts",
-          "Age-restricted LIVE content",
-          "Dangerous & deceptive content",
-          "Violent extremism",
-          "Content Algorithm",
-          "Political Ads",
-        ],
-      ],
-      [
-        "Security",
-        [
-          "Account safety",
-          "Account status",
-          "Content violations & bans",
-          "Transaction policy violations",
-          "Reporting security vulnerabilities",
-          "Avoid phishing",
-        ],
-      ],
-      [
-        "Law Enforcement",
-        ["Law Enforcement Data Request Guidelines"],
-      ],
-    ]),
+        ]),
+      },
+      {
+        label: "Transparency Center",
+        path: "/legal-and-policies/transparency-center",
+        blurb: "Reports on enforcement, moderation, and government requests.",
+        children: build("/legal-and-policies/transparency-center", [
+          "Community enforcement transparency",
+          "Content moderation transparency",
+          "Government and legal requests",
+          "Copyright transparency",
+          "Advertising transparency",
+        ]),
+      },
+    ],
   },
+
+  // ── 4. Legal Center ──────────────────────────────────────────────────────
   {
     label: "Legal Center",
     path: "/legal-and-policies",
-    children: build("/legal-and-policies", [
-      [
-        "Terms of Use",
-        [
+    blurb: "Terms of use, copyright, IP, distribution agreements and policies.",
+    children: [
+      { label: "Rules & Policies Home", path: "/legal-and-policies" },
+      {
+        label: "Terms of Use",
+        path: "/legal-and-policies/terms-of-use",
+        children: build("/legal-and-policies/terms-of-use", [
           "Subscription Terms & Conditions",
           "Gift Card Terms",
           "User Guidelines",
@@ -379,31 +400,57 @@ export const helpCenterSections: NavNode[] = [
           "Arbitration (NAMA DR)",
           "Open Source Software Notices",
           "AI Services Terms",
-        ],
-      ],
-      [
-        "Copyright & IP",
-        [
+        ]),
+      },
+      {
+        label: "Copyright & IP",
+        path: "/legal-and-policies/copyright-and-ip",
+        children: build("/legal-and-policies/copyright-and-ip", [
           "Intellectual Property Policy",
           "Trademark & counterfeiting",
           "DMCA Policy",
           "Copyright reporting",
           "Commercial use",
           "Ownership & copyright",
-        ],
-      ],
-    ]),
+        ]),
+      },
+      {
+        label: "Law Enforcement",
+        path: "/legal-and-policies/law-enforcement",
+        children: build("/legal-and-policies/law-enforcement", [
+          "Law Enforcement Data Request Guidelines",
+        ]),
+      },
+    ],
   },
+
+  // ── 5. For the Music Industry ────────────────────────────────────────────
   {
-    label: "Support & Contact",
-    path: "/support",
-    children: build("/support", [
-      "Contact us",
-      "Sign in",
-      "Email Preference Center",
-      "New user FAQ",
-      "Account status",
-    ]),
+    label: "For the Music Industry",
+    path: "/for-creators",
+    blurb: "Portals for creators, labels, distributors, and sync agents.",
+    children: [
+      { label: "For Creators", path: "/for-creators" },
+      { label: "For Labels", path: "/for-labels" },
+      { label: "For Distributors", path: "/for-distributors" },
+      { label: "For Sync Agents", path: "/for-sync-agents" },
+      { label: "Creator resources", path: "/for-creators/creator-resources" },
+      { label: "Label resources", path: "/for-labels/label-resources" },
+      { label: "Distribution resources", path: "/for-distributors/distribution-resources" },
+      { label: "Sync and licensing resources", path: "/for-sync-agents/sync-and-licensing-resources" },
+    ],
+  },
+
+  // ── 6. Business & Advertising ────────────────────────────────────────────
+  {
+    label: "Business & Advertising",
+    path: "/for-business",
+    blurb: "Adnote, business tools, and the Ads Help Center.",
+    children: [
+      { label: "Musicosy for Business", path: "/for-business" },
+      { label: "Advertise / Adnote", path: "/advertise" },
+      { label: "Ads Help Center", path: "/advertising" },
+    ],
   },
 ];
 
@@ -703,10 +750,23 @@ export function findTrail(path: string, nodes: NavNode[] = allNav, trail: NavNod
  * correct center.
  */
 export const rootSections: NavNode[] = [
-  // Help-center sections first (they carry the full detailed trees).
+  // Help-center sections (they carry the full detailed trees).
   ...helpCenterSections,
-  // Resources — the mega-menu Resources node (Guides, Glossary, FAQ, …).
-  megaMenu.find((n) => n.path === "/resources")!,
+  // Resources — standalone center for Guides, Glossary, FAQ, Accessibility, Blog.
+  // (Not in the mega menu anymore, but still a center with a sidebar.)
+  {
+    label: "Resources",
+    path: "/resources",
+    blurb: "Guides, glossary, FAQ, accessibility and company news.",
+    children: [
+      { label: "Resources Home", path: "/resources" },
+      { label: "Resources & Guides", path: "/resources/guides" },
+      { label: "Glossary", path: "/resources/glossary" },
+      { label: "New User FAQ", path: "/resources/new-user-faq" },
+      { label: "Accessibility", path: "/resources/accessibility" },
+      { label: "Company News / Blog", path: "/resources/blog" },
+    ],
+  },
 ].filter(Boolean);
 
 function treeContains(node: NavNode, path: string): boolean {
