@@ -1,18 +1,34 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Info, AlertTriangle } from "lucide-react";
 import type { Doc, DocBlock, DocListItem } from "@/data/docs";
 import { findNode } from "@/data/nav";
 import { NavLink } from "@/components/site/nav-link";
+import { cn } from "@/lib/utils";
 
 function ListItem({ item }: { item: DocListItem }) {
   return (
-    <li className="flex gap-3 text-base leading-relaxed text-foreground/90">
-      <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-      <span>
-        {item.lead && (
-          <span className="font-semibold text-foreground">{item.lead} </span>
-        )}
-        {item.text}
-      </span>
+    <li className="flex flex-col gap-1">
+      <div className="flex gap-3 text-base leading-relaxed text-foreground/90">
+        <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+        <span>
+          {item.lead && (
+            <span className="font-semibold text-foreground">{item.lead} </span>
+          )}
+          {item.text}
+        </span>
+      </div>
+      {item.children && item.children.length > 0 && (
+        <ul className="ml-7 space-y-1.5 border-l border-border pl-4">
+          {item.children.map((child, i) => (
+            <li
+              key={i}
+              className="flex gap-2.5 text-sm leading-relaxed text-muted-foreground"
+            >
+              <span className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
+              <span>{child.text}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </li>
   );
 }
@@ -25,17 +41,106 @@ function OrderedListItem({
   index: number;
 }) {
   return (
-    <li className="flex gap-3 text-base leading-relaxed text-foreground/90">
-      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-foreground text-xs font-semibold text-background">
-        {index + 1}
-      </span>
-      <span className="pt-0.5">
-        {item.lead && (
-          <span className="font-semibold text-foreground">{item.lead} </span>
-        )}
-        {item.text}
-      </span>
+    <li className="flex flex-col gap-1">
+      <div className="flex gap-3 text-base leading-relaxed text-foreground/90">
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-foreground text-xs font-semibold text-background">
+          {index + 1}
+        </span>
+        <span className="pt-0.5">
+          {item.lead && (
+            <span className="font-semibold text-foreground">{item.lead} </span>
+          )}
+          {item.text}
+        </span>
+      </div>
+      {item.children && item.children.length > 0 && (
+        <ul className="ml-9 space-y-1.5 border-l border-border pl-4">
+          {item.children.map((child, i) => (
+            <li
+              key={i}
+              className="flex gap-2.5 text-sm leading-relaxed text-muted-foreground"
+            >
+              <span className="mt-[0.6em] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
+              <span>{child.text}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </li>
+  );
+}
+
+function CalloutBlock({
+  variant = "note",
+  title,
+  text,
+}: {
+  variant?: "note" | "warning";
+  title?: string;
+  text: string;
+}) {
+  const isWarning = variant === "warning";
+  return (
+    <div
+      className={cn(
+        "mt-5 flex gap-3 border-l-2 p-4",
+        isWarning
+          ? "border-destructive bg-destructive/5"
+          : "border-accent bg-accent/5",
+      )}
+    >
+      {isWarning ? (
+        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+      ) : (
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+      )}
+      <div className="min-w-0">
+        {title && (
+          <p className="text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-foreground">
+            {title}
+          </p>
+        )}
+        <p className="text-sm leading-relaxed text-foreground/90">{text}</p>
+      </div>
+    </div>
+  );
+}
+
+function TableBlock({ headers, rows }: { headers: string[]; rows: string[][] }) {
+  return (
+    <div className="mt-5 overflow-x-auto">
+      <table className="w-full border-collapse text-sm">
+        <thead>
+          <tr className="border-b border-border bg-secondary">
+            {headers.map((h, i) => (
+              <th
+                key={i}
+                className="px-4 py-3 text-left font-semibold text-foreground"
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr key={ri} className="border-b border-border last:border-0">
+              {row.map((cell, ci) => (
+                <td
+                  key={ci}
+                  className={cn(
+                    "px-4 py-3 align-top text-foreground/90",
+                    ci === 0 && "font-medium text-foreground",
+                  )}
+                >
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -71,6 +176,16 @@ function Block({ block }: { block: DocBlock }) {
           )}
         </ul>
       );
+    case "callout":
+      return (
+        <CalloutBlock
+          variant={block.variant}
+          title={block.title}
+          text={block.text}
+        />
+      );
+    case "table":
+      return <TableBlock headers={block.headers} rows={block.rows} />;
     default:
       return null;
   }

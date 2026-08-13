@@ -234,6 +234,8 @@ export const helpCenterSections: NavNode[] = [
           "How to build a Setlist",
           "Understanding your Toolkits and upgrades",
           "Personal profiles vs. Team Workspaces",
+          "Personal Context versus Workspace Context",
+          "Delete or deactivate your account",
           "New member FAQ",
         ]),
       },

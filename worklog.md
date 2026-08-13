@@ -903,3 +903,48 @@ Stage Summary:
 - Sidebar is now truly fixed: stays in place while the main content scrolls, on both the catch-all pages and the Help Center landing. The root cause was `overflow-x: hidden` creating a scroll container; switched to `overflow-x: clip`.
 - Back/Next buttons added to the bottom of every center page (except root landings). They follow the sidebar's DFS reading order — including across section boundaries (e.g., last doc in Getting Started → Next goes to the next section's first doc).
 - Both features verified end-to-end on desktop (1440px) and mobile (375px).
+
+---
+Task ID: second-doc-create-account
+Agent: main (Z.ai Code)
+Task: Write the "Create an account" doc as the second piece of real written content. Add new block types (callout, table, nested list) as needed. Create routes for any related articles that don't exist.
+
+Work Log:
+- Extended src/data/docs/types.ts with 2 new block kinds + nested list support:
+  - `callout` block: { variant?: "note" | "warning", title?, text } — for the duplicate-account Note box.
+  - `table` block: { headers: string[], rows: string[][] } — for the display name vs handle comparison table.
+  - Added `children?: DocListItem[]` to DocListItem — for nested sub-lists (the optional goals list under "Choose optional goals").
+- Updated src/components/site/doc-content.tsx renderer:
+  - CalloutBlock: left-border accent (orange for note, red for warning) + Info/AlertTriangle icon + optional title + text. Padded, tinted background.
+  - TableBlock: bordered table, header row with secondary background, first column bold. Horizontal scroll on overflow.
+  - ListItem/OrderedListItem: now render `children` as an indented sub-list with a left border and smaller muted bullets.
+- Added 2 new Getting Started routes to nav.ts:
+  - "Personal Context versus Workspace Context" (referenced as a related article, distinct from the existing "Personal profiles vs. Team Workspaces")
+  - "Delete or deactivate your account" (combined concept not covered by the separate Support Center deactivate/delete items)
+- Wrote src/data/docs/create-an-account.ts — full structured content:
+  - 2 intro paragraphs
+  - "Before you begin": paragraph + 3-item bullet list + paragraph + note callout
+  - "Create your account": 8-step ordered list + closing paragraph
+  - "Set up your experience": intro paragraph + 5-item ordered list (item 4 "Choose optional goals" has a 10-item nested sub-list)
+  - "One account for everything": paragraph + 8-item bullet list + paragraph
+  - "Display name and handle": paragraph + 2-column table (Field/Purpose, 2 rows) + paragraph
+  - "What you can do from day one": paragraph + 6-item bullet list + paragraph
+  - "Need help?": 3 paragraphs
+  - 9 related articles: What is Musicosy?, Sign in and sign out, Verify your email or phone number, Set up your profile, Choose or change your handle, Understanding your Toolkits and upgrades, Personal Context versus Workspace Context, Account safety (cross-section → /support/account-and-access/account-safety), Delete or deactivate your account.
+- Registered createAnAccountDoc in src/data/docs/index.ts.
+- Lint: clean. No errors.
+- All routes verified 200: the doc page + both new placeholder routes + the cross-section Account safety route.
+- Agent Browser + VLM verified:
+  - TOP: sidebar with Getting Started expanded + Create an account highlighted, H1 title, first paragraph, Before you begin heading, 3-item bullet list, orange-bordered note callout. All correct.
+  - MIDDLE: 8-step ordered list (numbered circles), Set up your experience heading, 5-item ordered list, item 4 "Choose optional goals" with nested 10-item sub-list (indented, smaller muted bullets). Sidebar fixed. All correct.
+  - TABLE: Display name and handle heading, 2-column table with Field/Purpose headers, Display name + Handle rows, clear borders and alignment. Sidebar visible. All correct.
+  - BOTTOM: Back → "What is Musicosy?", Next → "Sign in and sign out". Correct sidebar order.
+  - RELATED ARTICLES: all 9 links present in snapshot, including cross-section Account safety link → /support/account-and-access/account-safety. Clicked it → navigated correctly to Support Center page (sidebar switched to Support Center tree). Cross-section linking works.
+  - MOBILE: 375px — layout responsive, sidebar stacks above content. Readable.
+
+Stage Summary:
+- "Create an account" is now fully written and rendered as the second real doc.
+- Doc content system extended with 3 new capabilities: callouts (note/warning), tables, and nested lists — all usable by future docs.
+- 2 new Getting Started routes created for related articles that didn't exist.
+- Cross-section related-article linking verified (Help Center → Support Center).
+- The doc system now handles every content pattern the user's docs use: paragraphs, headings, ordered/unordered lists, nested sub-lists, note callouts, and comparison tables.
