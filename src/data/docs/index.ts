@@ -25,6 +25,7 @@ import { followAndUnfollowDoc } from "./follow-and-unfollow";
 import { howToBuildASetlistDoc } from "./how-to-build-a-setlist";
 import { understandYourToolsAndToolkitsDoc } from "./understand-your-tools-and-toolkits";
 import { createOrJoinAWorkspaceDoc } from "./create-or-join-a-workspace";
+import { personalProfilesVsTeamWorkspacesDoc } from "./personal-profiles-vs-team-workspaces";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -42,6 +43,7 @@ const docs: Record<string, Doc> = {
   [howToBuildASetlistDoc.path]: howToBuildASetlistDoc,
   [understandYourToolsAndToolkitsDoc.path]: understandYourToolsAndToolkitsDoc,
   [createOrJoinAWorkspaceDoc.path]: createOrJoinAWorkspaceDoc,
+  [personalProfilesVsTeamWorkspacesDoc.path]: personalProfilesVsTeamWorkspacesDoc,
 };
 
 /** Look up structured doc content for a given route path. */
