@@ -484,6 +484,6 @@ export const howToBuildASetlistDoc: Doc = {
     "/resources/help-center/using-musicosy/media-and-playback/manage-your-playback-queue",
     "/resources/help-center/using-musicosy/content-interaction/share",
     "/resources/help-center/using-musicosy/discover-and-browse/discover-content",
-    "/resources/help-center/using-musicosy/discover-and-browse/search",
+    "/resources/help-center/using-musicosy/discover-and-browse/search-musicosy",
   ],
 };

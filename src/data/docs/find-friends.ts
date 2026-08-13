@@ -380,7 +380,7 @@ export const findFriendsDoc: Doc = {
     "/resources/help-center/getting-started/choose-or-change-your-handle",
     "/resources/help-center/getting-started/set-up-your-profile",
     "/resources/help-center/using-musicosy/discover-and-browse/discover-content",
-    "/resources/help-center/using-musicosy/discover-and-browse/search",
+    "/resources/help-center/using-musicosy/discover-and-browse/search-musicosy",
     "/resources/help-center/using-musicosy/content-interaction/block-and-mute",
     "/resources/help-center/using-musicosy/discover-and-browse/manage-topics-and-interests",
     "/support/account-and-access/manage-your-privacy-and-discoverability-settings",

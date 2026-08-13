@@ -245,7 +245,7 @@ export const helpCenterSections: NavNode[] = [
         path: "/resources/help-center/using-musicosy",
         blurb: "Discover, interact, collect, play, create, and go live.",
         children: build("/resources/help-center/using-musicosy", [
-          ["Discover & Browse", ["What is The Stage?", "Discover content", "Manage your Home feed and recommendations", "Search MusicOSY", "Feed", "For You feed", "Friends Tab", "Search", "Trending content", "Trending content and Fresh Drops", "Recommended creators and music", "Manage topics and interests"]],
+          ["Discover & Browse", ["What is The Stage?", "Discover content", "Manage your Home feed and recommendations", "Search MusicOSY", "Feed", "For You feed", "Friends Tab", "Trending content", "Trending content and Fresh Drops", "Recommended creators and music", "Manage topics and interests"]],
           ["Content Interaction", ["Like", "Love and Keep content", "Comment", "Leave a Note and join the conversation", "Share", "Repost", "Resing and Pass the Mic", "Mentions", "Save content", "Block and mute", "Edit or delete your comment", "Take your post off The Stage"]],
           ["Collections & Library", ["Collections", "Create collections", "Shared collections", "Playlists", "Your Library", "Keep and organize your Library", "Save music to your Library", "Edit or delete a collection", "Add, remove, and reorder playlist items"]],
           ["Media & Playback", ["Listen on Musicosy", "Video playing", "Fullscreen", "On-demand playback", "Sound", "Manage your playback queue", "Manage your Up Next queue", "Continue listening", "Music playback troubleshooting", "Video playback troubleshooting"]],
