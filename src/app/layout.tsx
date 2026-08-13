@@ -24,7 +24,10 @@ export const metadata: Metadata = {
   description: "Musicosy Help Center — support, safety, rules, developer and business resources.",
   authors: [{ name: "Musicosy" }],
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+    ],
   },
   openGraph: {
     title: "Musicosy Help Center",

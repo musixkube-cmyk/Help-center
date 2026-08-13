@@ -697,3 +697,31 @@ Stage Summary:
 - The sidebar auto-expands the active trail and highlights the current page; siblings stay one click away.
 - Standalone leaf pages (/about, /careers, /download, etc.) correctly render without a sidebar.
 - Pre-existing 404 on deep legal/policy leaf pages fixed (allNav dedup now keeps full trees).
+
+---
+Task ID: footer-8col-utility-favicon
+Agent: main (Z.ai Code)
+Task: Rebuild the public website footer to the specified 8-column structure (Help & Support, Resources, Trust/Privacy & Policies, Platform & Company, For Music Industry, Business & Advertising, Developers, Company) with nested sub-links + a bottom Footer Utility Bar (Privacy Center, Rules & Policies, Accessibility, Status, Download the App, Sign In, Contact Us). Also replace the favicon with the user-uploaded favicon.ico.
+
+Work Log:
+- Favicon: uploaded file upload/favicon.ico was actually PNG data (179x133 RGBA, mislabeled as .ico). Converted with sharp into a real multi-size Windows ICO (16/32/48px, PNG-encoded entries, 3926 bytes) at public/favicon.ico + a 32x32 PNG at public/favicon.png. Verified: `file` reports "MS Windows icon resource - 3 icons". Updated src/app/layout.tsx metadata.icons to `icon: [{url:"/favicon.ico", sizes:"any"}, {url:"/favicon.png", type:"image/png", sizes:"32x32"}]`. Both serve 200 with correct MIME types (image/x-icon, image/png). DOM `<link rel="icon" href="/favicon.png" type="image/png">` confirmed. VLM confirmed the favicon is a lowercase "m" (the uploaded design).
+- Rewrote footerNav in src/data/nav.ts: replaced the old 5-column structure with the exact 8-column tree the user specified. Columns: (1) Help & Support [Help Center→Using Musicosy, Managing Your Account, New User FAQ, Sign In, Email Preference Center, Contact Us], (2) Resources [Resources Home, Resources & Guides, Glossary, Accessibility], (3) Trust, Privacy & Policies [Safety & Security→{A Safer Musicosy, How We Address Misinformation, Recommender Systems}, Privacy Center→{My Privacy}, Transparency Center, Rules & Policies→{Our Rules}], (4) Platform & Company [About Musicosy→{Platform}, Download the App, Status, Company News, Brand Toolkit, Jobs & Internships, Investors], (5) For Music Industry [Creators, Labels, Distributors, Sync Agents], (6) Business & Advertising [Business Resources, Musicosy for Business→{Marketers, Marketing Insights, Brand Inspiration}, Resources & Guides, Advertise/Adnote, Ads Help Center], (7) Developers [Developer Resources→{Developer Home}, Documentation, Developer Community→{Forums, Communities}, Developer & Engineering Blog→{Developer Blog, Engineering Blog}, Developer Terms], (8) Company [About the Company, Company News, Brand Toolkit, Jobs & Internships, Investors, Status, Contact Us]. Nested children render as indented sub-links with a left border.
+- Added footerUtilityBar export: 7 quick links (Privacy Center, Rules & Policies, Accessibility, Status, Download the App, Sign In, Contact Us) rendered as a horizontal strip below the 8-column grid, above the copyright row.
+- Rewrote src/components/site-footer.tsx: new FooterLink component renders a link + optional indented sub-links (border-l + pl-3, smaller text-[0.8rem]). 8-column responsive grid: grid-cols-2 → sm:grid-cols-4 → xl:grid-cols-8. Kept the orange logo (CSS mask) above the divider. Added utility bar nav (flex-wrap, uppercase tracking-widest) as a bordered strip. Kept the copyright row (© 2026 Musicosy Corp. + Cookies/Privacy/Terms/Affiliate/English).
+- All footer link paths resolve (verified 200): /about, /download, /status, /brand-toolkit, /careers, /investors, /resources/blog, /resources/guides, /support/email-preferences, /legal-and-policies/transparency-center, /legal-and-policies/our-rules, /privacy-and-safety/a-safer-musicosy, /privacy-and-safety/my-privacy, /privacy-and-safety/how-we-address-misinformation, /privacy-and-safety/recommender-systems, /developers/developers/ecosystem. No 404s.
+- Lint: clean. No console errors. Dev server stable.
+- Agent Browser verified:
+  - All 8 column headers present in order: HELP & SUPPORT, RESOURCES, TRUST PRIVACY & POLICIES, PLATFORM & COMPANY, FOR MUSIC INDUSTRY, BUSINESS & ADVERTISING, DEVELOPERS, COMPANY.
+  - Nested sub-links render: Using Musicosy (under Help Center), A Safer Musicosy (under Safety & Security), My Privacy (under Privacy Center), Our Rules (under Rules & Policies), Platform (under About Musicosy), Developer Home (under Developer Resources), Forums + Communities (under Developer Community), Developer Blog + Engineering Blog (under Developer & Engineering Blog), Musicosy for Marketers + Marketing Insights + Brand Inspiration (under Musicosy for Business).
+  - Utility bar: all 7 links present (PRIVACY CENTER, RULES & POLICIES, ACCESSIBILITY, STATUS, DOWNLOAD THE APP, SIGN IN, CONTACT US).
+  - Click test: nested "My Privacy" link under "Privacy Center" → navigated to /privacy-and-safety/my-privacy. ✓
+  - Mobile 375px: grid collapses to 2 columns. ✓ Desktop 1440px: 8 columns. ✓
+  - VLM confirmed: 8 columns in correct order + horizontal utility bar + copyright row at bottom.
+  - Favicon: /favicon.ico (200, image/x-icon, real ICO), /favicon.png (200, image/png). DOM link tag points to favicon.png. VLM confirmed the "m" design.
+
+Stage Summary:
+- Footer rebuilt to the exact 8-column structure specified, with nested sub-links (Help Center→Using Musicosy, Safety & Security→{A Safer Musicosy, How We Address Misinformation, Recommender Systems}, Privacy Center→My Privacy, Rules & Policies→Our Rules, About Musicosy→Platform, Developer Resources→Developer Home, Developer Community→{Forums, Communities}, Developer & Engineering Blog→{Developer Blog, Engineering Blog}, Musicosy for Business→{Marketers, Marketing Insights, Brand Inspiration}).
+- Footer Utility Bar added as a horizontal strip below the columns (7 quick links).
+- Copyright row preserved.
+- Favicon replaced with the uploaded design — converted from mislabeled PNG to a real multi-size ICO + PNG, wired into metadata.
+- All footer links resolve (zero 404s). Responsive: 2 cols mobile → 4 cols tablet → 8 cols desktop.

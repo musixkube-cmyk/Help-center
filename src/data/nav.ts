@@ -105,87 +105,189 @@ export const megaMenu: NavNode[] = [
 ];
 
 /**
- * Footer navigation — X-platform style, five columns.
- * Using Musicosy · Platform · Help Center · Developer resources · Business resources.
+ * Footer navigation — eight columns + a bottom utility bar.
+ *
+ *   Help & Support · Resources · Trust, Privacy & Policies · Platform & Company
+ *   · For Music Industry · Business & Advertising · Developers · Company
+ *
+ * Each column is a NavNode; children may themselves have children (rendered
+ * as indented sub-links). Every path here is folded into `allNav` (via
+ * flatten) so the catch-all page resolves every footer link.
  */
 export const footerNav: NavNode[] = [
+  // 1. Help & Support
   {
-    label: "Using Musicosy",
-    path: "/resources/help-center/using-musicosy",
+    label: "Help & Support",
+    path: "/resources/help-center",
     children: [
-      { label: "Managing your account", path: "/support/managing-your-account" },
-      { label: "Safety and security", path: "/privacy-and-safety" },
-      { label: "Rules and policies", path: "/legal-and-policies" },
-      { label: "Resources", path: "/resources" },
-      { label: "New user FAQ", path: "/resources/new-user-faq" },
-      { label: "Glossary", path: "/resources/glossary" },
-      { label: "A safer Musicosy", path: "/privacy-and-safety/a-safer-musicosy" },
-      { label: "Accessibility", path: "/resources/accessibility" },
-      { label: "Our rules", path: "/legal-and-policies/our-rules" },
-      { label: "My privacy", path: "/privacy-and-safety/my-privacy" },
-      { label: "How we address misinformation", path: "/privacy-and-safety/how-we-address-misinformation" },
-      { label: "Recommender Systems", path: "/privacy-and-safety/recommender-systems" },
-      { label: "Sign in", path: "/support/sign-in" },
+      {
+        label: "Help Center",
+        path: "/resources/help-center",
+        children: [
+          { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
+        ],
+      },
+      { label: "Managing Your Account", path: "/support/managing-your-account" },
+      { label: "New User FAQ", path: "/resources/new-user-faq" },
+      { label: "Sign In", path: "/support/sign-in" },
+      { label: "Email Preference Center", path: "/support/email-preferences" },
       { label: "Contact Us", path: "/support/contact-us" },
     ],
   },
+  // 2. Resources
   {
-    label: "Platform",
+    label: "Resources",
+    path: "/resources",
+    children: [
+      { label: "Resources Home", path: "/resources" },
+      { label: "Resources & Guides", path: "/resources/guides" },
+      { label: "Glossary", path: "/resources/glossary" },
+      { label: "Accessibility", path: "/resources/accessibility" },
+    ],
+  },
+  // 3. Trust, Privacy & Policies
+  {
+    label: "Trust, Privacy & Policies",
+    path: "/privacy-and-safety",
+    children: [
+      {
+        label: "Safety & Security",
+        path: "/privacy-and-safety",
+        children: [
+          { label: "A Safer Musicosy", path: "/privacy-and-safety/a-safer-musicosy" },
+          { label: "How We Address Misinformation", path: "/privacy-and-safety/how-we-address-misinformation" },
+          { label: "Recommender Systems", path: "/privacy-and-safety/recommender-systems" },
+        ],
+      },
+      {
+        label: "Privacy Center",
+        path: "/privacy-and-safety",
+        children: [
+          { label: "My Privacy", path: "/privacy-and-safety/my-privacy" },
+        ],
+      },
+      { label: "Transparency Center", path: "/legal-and-policies/transparency-center" },
+      {
+        label: "Rules & Policies",
+        path: "/legal-and-policies",
+        children: [
+          { label: "Our Rules", path: "/legal-and-policies/our-rules" },
+        ],
+      },
+    ],
+  },
+  // 4. Platform & Company
+  {
+    label: "Platform & Company",
     path: "/about",
     children: [
+      {
+        label: "About Musicosy",
+        path: "/about",
+        children: [
+          { label: "Platform", path: "/about" },
+        ],
+      },
+      { label: "Download the App", path: "/download" },
       { label: "Status", path: "/status" },
-      { label: "Accessibility", path: "/resources/accessibility" },
-      { label: "Privacy Center", path: "/privacy-and-safety" },
-      { label: "Transparency Center", path: "/legal-and-policies/transparency-center" },
-      { label: "Download the app", path: "/download" },
-      { label: "About the company", path: "/about" },
-      { label: "Company news", path: "/resources/blog" },
-      { label: "Brand toolkit", path: "/brand-toolkit" },
-      { label: "Jobs and internships", path: "/careers" },
+      { label: "Company News", path: "/resources/blog" },
+      { label: "Brand Toolkit", path: "/brand-toolkit" },
+      { label: "Jobs & Internships", path: "/careers" },
       { label: "Investors", path: "/investors" },
     ],
   },
+  // 5. For Music Industry
   {
-    label: "Help Center",
-    path: "/resources/help-center",
+    label: "For Music Industry",
+    path: "/for-creators",
     children: [
-      { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
-      { label: "Musicosy for creators", path: "/for-creators" },
-      { label: "Musicosy for labels", path: "/for-labels" },
-      { label: "Musicosy for distributors", path: "/for-distributors" },
-      { label: "Musicosy for sync agents", path: "/for-sync-agents" },
-      { label: "Managing your account", path: "/support/managing-your-account" },
-      { label: "Email Preference Center", path: "/support/email-preferences" },
-      { label: "Rules and policies", path: "/legal-and-policies" },
-      { label: "Contact us", path: "/support/contact-us" },
+      { label: "Musicosy for Creators", path: "/for-creators" },
+      { label: "Musicosy for Labels", path: "/for-labels" },
+      { label: "Musicosy for Distributors", path: "/for-distributors" },
+      { label: "Musicosy for Sync Agents", path: "/for-sync-agents" },
     ],
   },
+  // 6. Business & Advertising
   {
-    label: "Developer resources",
-    path: "/developers",
-    children: [
-      { label: "Developer home", path: "/developers" },
-      { label: "Documentation", path: "/developers/developers/docs" },
-      { label: "Forums", path: "/developers/developers/ecosystem" },
-      { label: "Communities", path: "/developers/developers/ecosystem" },
-      { label: "Developer blog", path: "/resources/blog" },
-      { label: "Engineering blog", path: "/resources/blog" },
-      { label: "Developer terms", path: "/legal-and-policies" },
-    ],
-  },
-  {
-    label: "Business resources",
+    label: "Business & Advertising",
     path: "/for-business",
     children: [
-      { label: "adnote", path: "/advertise" },
+      { label: "Business Resources", path: "/for-business" },
+      {
+        label: "Musicosy for Business",
+        path: "/for-business",
+        children: [
+          { label: "Musicosy for Marketers", path: "/for-business" },
+          { label: "Marketing Insights", path: "/for-business" },
+          { label: "Brand Inspiration", path: "/for-business" },
+        ],
+      },
+      { label: "Resources & Guides", path: "/resources/guides" },
+      { label: "Advertise / Adnote", path: "/advertise" },
       { label: "Ads Help Center", path: "/advertising" },
-      { label: "Musicosy for business", path: "/for-business" },
-      { label: "Musicosy for marketers", path: "/for-business" },
-      { label: "Resources and guides", path: "/resources/guides" },
-      { label: "Marketing insights", path: "/for-business" },
-      { label: "Brand inspiration", path: "/for-business" },
     ],
   },
+  // 7. Developers
+  {
+    label: "Developers",
+    path: "/developers",
+    children: [
+      {
+        label: "Developer Resources",
+        path: "/developers",
+        children: [
+          { label: "Developer Home", path: "/developers" },
+        ],
+      },
+      { label: "Documentation", path: "/developers/developers/docs" },
+      {
+        label: "Developer Community",
+        path: "/developers/developers/ecosystem",
+        children: [
+          { label: "Forums", path: "/developers/developers/ecosystem" },
+          { label: "Communities", path: "/developers/developers/ecosystem" },
+        ],
+      },
+      {
+        label: "Developer & Engineering Blog",
+        path: "/resources/blog",
+        children: [
+          { label: "Developer Blog", path: "/resources/blog" },
+          { label: "Engineering Blog", path: "/resources/blog" },
+        ],
+      },
+      { label: "Developer Terms", path: "/legal-and-policies" },
+    ],
+  },
+  // 8. Company
+  {
+    label: "Company",
+    path: "/about",
+    children: [
+      { label: "About the Company", path: "/about" },
+      { label: "Company News", path: "/resources/blog" },
+      { label: "Brand Toolkit", path: "/brand-toolkit" },
+      { label: "Jobs & Internships", path: "/careers" },
+      { label: "Investors", path: "/investors" },
+      { label: "Status", path: "/status" },
+      { label: "Contact Us", path: "/support/contact-us" },
+    ],
+  },
+];
+
+/**
+ * Footer Utility Bar — the bottom rail of quick links that sits below the
+ * eight-column nav grid. Kept separate from footerNav so it renders as a
+ * horizontal strip, not a column.
+ */
+export const footerUtilityBar: NavNode[] = [
+  { label: "Privacy Center", path: "/privacy-and-safety" },
+  { label: "Rules & Policies", path: "/legal-and-policies" },
+  { label: "Accessibility", path: "/resources/accessibility" },
+  { label: "Status", path: "/status" },
+  { label: "Download the App", path: "/download" },
+  { label: "Sign In", path: "/support/sign-in" },
+  { label: "Contact Us", path: "/support/contact-us" },
 ];
 
 /**
