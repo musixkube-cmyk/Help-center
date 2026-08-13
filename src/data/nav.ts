@@ -227,7 +227,7 @@ export const helpCenterSections: NavNode[] = [
           "Sign in and sign out",
           "Verify your email or phone number",
           "Set up your profile",
-          "Set up your profile and Artist Page",
+          "Set up your Artist Page",
           "Choose or change your handle",
           "Choose or change your display name",
           "Find friends",

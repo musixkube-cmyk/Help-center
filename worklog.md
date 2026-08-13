@@ -1117,3 +1117,41 @@ Stage Summary:
 - 3 new Getting Started routes created for related articles with titles distinct from existing sidebar items (Choose or change your display name, Find people to follow, Follow and unfollow).
 - The doc uses 2 quote blocks (display name/handle example + handle variations), 1 comparison table, 1 note callout, multiple bold-lead-in bullet lists, and H3 sub-headings — all rendering correctly.
 - Six Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile, Choose or change your handle. Next to write per user: Find friends.
+
+---
+Task ID: 7
+Agent: main (Z.ai Code)
+Task: Write the "Set up your Artist Page" doc (Getting Started). User noted they had skipped this section (it sits before "Choose or change your handle") and clarified that the handle page's Next button should point to "Choose or change your display name" (already satisfied by existing sidebar DFS order). The prior placeholder nav node "Set up your profile and Artist Page" is replaced by "Set up your Artist Page".
+
+Work Log:
+- Renamed nav node "Set up your profile and Artist Page" → "Set up your Artist Page" in src/data/nav.ts (Getting Started children). New path: /resources/help-center/getting-started/set-up-your-artist-page.
+- Updated related-article reference in src/data/docs/what-is-musicosy.ts from the old combined slug to set-up-your-artist-page.
+- Verified the existing sidebar DFS order already places "Choose or change your display name" immediately after "Choose or change your handle", so the handle page's Next button automatically points to "Choose or change your display name" as the user requested. No nav reorder needed.
+- Wrote src/data/docs/set-up-your-artist-page.ts (7th real doc). Structure:
+  1. 2 intro paragraphs + note callout ("You do not need an Artist Page to create, upload, or publish music...")
+  2. "Artist Page and personal profile": 2-column table (Surface/Purpose, Personal profile + Artist Page rows) + 2 paragraphs
+  3. "Before you begin": paragraph + 3-item bullet list + paragraph
+  4. "Create your Artist Page": 2 paragraphs + 7-step ordered list with bold lead-ins (Choose what the page represents / Add the public artist name / Upload artist imagery / Write your artist bio / Add official links / Connect eligible content / Review and publish) + draft paragraph
+  5. "Choose what appears on your Artist Page": 2 paragraphs + 9-item bullet list + 2 paragraphs
+  6. "Artist Page tabs": paragraph + 9-row table (Tab/Appears when: About, Music, Videos, Events, Shop, Posts, Setlists, Community, EPK) + paragraph
+  7. "Work with a band or team": 2 paragraphs + 5-item bullet list (Workspace roles) + 2 paragraphs
+  8. "Verification": 5 paragraphs
+  9. "Your Artist Page is not proof of ownership": paragraph + 5-item bullet list + paragraph + paragraph + 4-item bullet list + paragraph
+  10. "Keep your Artist Page current": paragraph + 8-item bullet list + paragraph
+  - 11 related articles: Set up your profile, Choose or change your handle, Build an EPK, Create or join a workspace, Workspace roles and permissions, Publish music, Manage your catalog, Credits rights and splits, Distribution, Verification on MusicOSY, Report impersonation (cross-center).
+- Registered setUpYourArtistPageDoc in src/data/docs/index.ts.
+- Lint: clean. No errors.
+- Agent Browser verified (desktop 1440px + mobile 375px):
+  - Sidebar shows "Set up your Artist Page" highlighted, in correct position between "Set up your profile" and "Choose or change your handle". Breadcrumb renders "SET UP YOUR ARTIST PAGE".
+  - H1, 2 intro paragraphs, note callout, "Artist Page and personal profile" table all render.
+  - "Artist Page tabs" 9-row table renders. "Verification" + "Your Artist Page is not proof of ownership" sections with bullet lists render.
+  - RELATED ARTICLES section shows all 11 links including "Report impersonation".
+  - Back/Next on Artist Page: BACK → "Set up your profile", NEXT → "Choose or change your handle". Correct.
+  - Back/Next on Choose or change your handle: BACK → "Set up your Artist Page" (updated from old label), NEXT → "Choose or change your display name". Exactly as user requested.
+  - No console errors. Mobile layout holds at 375px.
+
+Stage Summary:
+- "Set up your Artist Page" is now fully written and rendered as the seventh real doc.
+- The old combined placeholder "Set up your profile and Artist Page" is replaced by a focused Artist Page doc; the advanced "Set up your creator profile and Artist Page" doc under Using Musicosy → Creator Studio & Workspaces remains a separate, distinct route.
+- The Getting Started DFS flow now reads: ...Set up your profile → Set up your Artist Page → Choose or change your handle → Choose or change your display name → Find friends...
+- Seven Getting Started docs now have real content. Next to write per user: Choose or change your handle was already done; awaiting next doc.

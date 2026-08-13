@@ -173,7 +173,7 @@ export const whatIsMusicosyDoc: Doc = {
   ],
   related: [
     "/resources/help-center/getting-started/create-an-account",
-    "/resources/help-center/getting-started/set-up-your-profile-and-artist-page",
+    "/resources/help-center/getting-started/set-up-your-artist-page",
     "/resources/help-center/getting-started/how-to-build-a-setlist",
     "/resources/help-center/getting-started/understanding-your-toolkits-and-upgrades",
     "/resources/help-center/getting-started/personal-profiles-vs-team-workspaces",
