@@ -72,25 +72,12 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      {/* Copyright / cookies bottom rail */}
+      {/* Copyright bottom rail — just the copyright + language, no link duplicates
+          (Cookies/Privacy/Terms already live in the utility bar above) */}
       <div className="border-t border-ink-foreground/10 px-6 lg:px-10 py-5">
         <div className="flex flex-col gap-3 text-xs text-ink-foreground/50 sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 Musicosy Corp.</span>
-          <div className="flex flex-wrap gap-x-5 gap-y-1">
-            <NavLink href="/legal-and-policies" className="transition-colors hover:text-ink-foreground">
-              Cookies
-            </NavLink>
-            <NavLink href="/privacy-and-safety" className="transition-colors hover:text-ink-foreground">
-              Privacy
-            </NavLink>
-            <NavLink href="/legal-and-policies" className="transition-colors hover:text-ink-foreground">
-              Terms and conditions
-            </NavLink>
-            <NavLink href="/support/contact-us" className="transition-colors hover:text-ink-foreground">
-              Affiliate
-            </NavLink>
-            <span className="cursor-pointer transition-colors hover:text-ink-foreground">English</span>
-          </div>
+          <span className="cursor-pointer transition-colors hover:text-ink-foreground">English</span>
         </div>
       </div>
     </footer>
