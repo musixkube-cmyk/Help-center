@@ -245,8 +245,8 @@ export const helpCenterSections: NavNode[] = [
         path: "/resources/help-center/using-musicosy",
         blurb: "Discover, interact, collect, play, create, and go live.",
         children: build("/resources/help-center/using-musicosy", [
-          ["Discover & Browse", ["What is The Stage?", "Discover content", "Feed", "For You feed", "Friends Tab", "Search", "Trending content", "Recommended creators and music", "Manage topics and interests"]],
-          ["Content Interaction", ["Like", "Comment", "Share", "Repost", "Mentions", "Save content", "Block and mute", "Edit or delete your comment", "Take your post off The Stage"]],
+          ["Discover & Browse", ["What is The Stage?", "Discover content", "Manage your Home feed and recommendations", "Search MusicOSY", "Feed", "For You feed", "Friends Tab", "Search", "Trending content", "Recommended creators and music", "Manage topics and interests"]],
+          ["Content Interaction", ["Like", "Love and Keep content", "Comment", "Leave a Note and join the conversation", "Share", "Repost", "Resing and Pass the Mic", "Mentions", "Save content", "Block and mute", "Edit or delete your comment", "Take your post off The Stage"]],
           ["Collections & Library", ["Collections", "Create collections", "Shared collections", "Playlists", "Your Library", "Save music to your Library", "Edit or delete a collection", "Add, remove, and reorder playlist items"]],
           ["Media & Playback", ["Listen on Musicosy", "Video playing", "Fullscreen", "On-demand playback", "Sound", "Manage your playback queue", "Continue listening", "Music playback troubleshooting", "Video playback troubleshooting"]],
           ["Backstage & Community", ["What is Backstage?", "Send a message", "Manage message requests", "Start a group conversation", "Group Conversations & Live Chat", "Share content in Backstage", "Pass the Mic (Sharing)", "Mute a conversation"]],
