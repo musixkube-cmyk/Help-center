@@ -21,6 +21,7 @@ import { setUpYourArtistPageDoc } from "./set-up-your-artist-page";
 import { chooseOrChangeYourHandleDoc } from "./choose-or-change-your-handle";
 import { chooseOrChangeYourDisplayNameDoc } from "./choose-or-change-your-display-name";
 import { findFriendsDoc } from "./find-friends";
+import { followAndUnfollowDoc } from "./follow-and-unfollow";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -34,6 +35,7 @@ const docs: Record<string, Doc> = {
   [chooseOrChangeYourHandleDoc.path]: chooseOrChangeYourHandleDoc,
   [chooseOrChangeYourDisplayNameDoc.path]: chooseOrChangeYourDisplayNameDoc,
   [findFriendsDoc.path]: findFriendsDoc,
+  [followAndUnfollowDoc.path]: followAndUnfollowDoc,
 };
 
 /** Look up structured doc content for a given route path. */
