@@ -792,3 +792,36 @@ export function findRootSection(path: string): NavNode | undefined {
   }
   return undefined;
 }
+
+/**
+ * Flatten a single root section tree depth-first (pre-order). The resulting
+ * order matches exactly what the sidebar renders top-to-bottom, so prev/next
+ * neighbors derived from this list follow the sidebar's reading order.
+ */
+export function flattenTree(node: NavNode): NavNode[] {
+  const out: NavNode[] = [];
+  const walk = (n: NavNode) => {
+    out.push(n);
+    if (n.children) n.children.forEach(walk);
+  };
+  walk(node);
+  return out;
+}
+
+/**
+ * Get the prev/next neighbors of a path within its root section's tree.
+ * Used by the Back/Next buttons at the bottom of every center page so readers
+ * can page through the help center in sidebar order without scrolling back up.
+ */
+export function getNeighbors(
+  path: string,
+  rootSection: NavNode,
+): { prev?: NavNode; next?: NavNode } {
+  const list = flattenTree(rootSection);
+  const idx = list.findIndex((n) => n.path === path);
+  if (idx === -1) return {};
+  return {
+    prev: idx > 0 ? list[idx - 1] : undefined,
+    next: idx < list.length - 1 ? list[idx + 1] : undefined,
+  };
+}

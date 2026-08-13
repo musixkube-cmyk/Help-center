@@ -872,3 +872,34 @@ Stage Summary:
 - 4 new article routes created in Getting Started so all related-article links resolve.
 - Catch-all page intelligently renders DocContent when available, falls back to placeholder otherwise — so partially-built help centers work gracefully.
 - Related articles support cross-section linking (e.g., Getting Started doc links to a Using Musicosy article) via path-based lookup.
+
+---
+Task ID: fixed-sidebar-and-docnav
+Agent: main (Z.ai Code)
+Task: Make the sidebar fixed while the page scrolls (so users don't lose context). Add Back/Next buttons at the bottom of every center page that follow the sidebar's reading order.
+
+Work Log:
+- ROOT CAUSE of sticky failure: globals.css had `html, body { overflow-x: hidden; }`. Per CSS spec, `overflow-x: hidden` with default `overflow-y: visible` computes `overflow-y` to `auto`, turning body/html into a scroll container — which breaks `position: sticky` on descendants. Fixed by changing to `overflow-x: clip` (prevents horizontal scroll WITHOUT creating a scroll container, so sticky keeps working).
+- Added two helpers to src/data/nav.ts:
+  - `flattenTree(node)`: DFS pre-order traversal — output order matches the sidebar's top-to-bottom render order exactly.
+  - `getNeighbors(path, rootSection)`: returns {prev, next} by finding the path's index in the flattened tree. Used by the Back/Next buttons.
+- Created src/components/site/doc-nav.tsx: two-card layout (Back left, Next right) with arrow icons + prev/next doc labels. Grid `sm:grid-cols-2` so it stacks on mobile. Hidden entirely if neither prev nor next exists.
+- Updated src/app/[...path]/page.tsx:
+  - Sidebar: changed from `lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)]` to `lg:sticky lg:top-[57px] lg:h-[calc(100vh-57px)] lg:overflow-y-auto lg:py-10` — now sticks right below the 57px header and fills the full viewport height with internal scroll for long trees.
+  - Moved `py-10` from the grid container to the content div (so the sidebar can be full-height without padding interference).
+  - Added `const { prev, next } = getNeighbors(path, rootSection)` and `<DocNav prev={prev} next={next} />` after the content (children grid / doc / placeholder). Skipped on root landings (isRootLanding) since the children grid + CTA already serve navigation there.
+- Updated src/app/resources/help-center/page.tsx sidebar to the same sticky pattern for consistency.
+- Lint: clean. No errors.
+- Agent Browser + VLM verified:
+  - SIDEBAR FIXED: scrolled 600px on "What is Musicosy?" — VLM confirmed sidebar "still fixed in place showing the full HELP CENTER navigation tree with Getting Started expanded and What is Musicosy? highlighted in orange." (Previously it scrolled away.)
+  - BACK/NEXT LABELS: On "What is Musicosy?" → Back: "Getting Started", Next: "Create an account". Correct sidebar order.
+  - On "Create an account" → Back: "What is Musicosy?", Next: "Sign in and sign out". Correct.
+  - CROSS-SECTION: On "New member FAQ" (last Getting Started doc) → Next: "New User FAQ" (next section in sidebar). DFS order works across sections.
+  - SECTION LANDING: On "Getting Started" → Back: "Help Center" (parent), Next: "What is Musicosy?" (first child). Correct.
+  - HELP CENTER LANDING: scrolled 800px — sidebar still fixed. Confirmed.
+  - MOBILE: 375px viewport — sidebar stacks above content (not fixed, as intended). Back/Next buttons stack vertically (single column). Responsive.
+
+Stage Summary:
+- Sidebar is now truly fixed: stays in place while the main content scrolls, on both the catch-all pages and the Help Center landing. The root cause was `overflow-x: hidden` creating a scroll container; switched to `overflow-x: clip`.
+- Back/Next buttons added to the bottom of every center page (except root landings). They follow the sidebar's DFS reading order — including across section boundaries (e.g., last doc in Getting Started → Next goes to the next section's first doc).
+- Both features verified end-to-end on desktop (1440px) and mobile (375px).

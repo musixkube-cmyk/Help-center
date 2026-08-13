@@ -42,8 +42,9 @@ export default function HelpCenterPage() {
 
       {/* Sidebar + content layout */}
       <div className="mt-10 grid gap-10 lg:grid-cols-[20rem_minmax(0,1fr)]">
-        {/* Sidebar — persistent, shows the full tree */}
-        <aside className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:border-r lg:border-border lg:pr-6">
+        {/* Sidebar — fixed to the viewport on large screens while the
+            content scrolls. Internal scroll handles long trees. */}
+        <aside className="lg:sticky lg:top-[57px] lg:h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-r lg:border-border lg:py-6 lg:pr-6">
           <p className="mb-4 text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
             Browse all topics
           </p>

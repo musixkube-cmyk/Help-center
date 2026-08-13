@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { findNode, findTrail, findRootSection } from "@/data/nav";
+import { findNode, findTrail, findRootSection, getNeighbors } from "@/data/nav";
 import { getDoc } from "@/data/docs";
 import { NavLink } from "@/components/site/nav-link";
 import { HelpCenterSidebar } from "@/components/site/help-center-sidebar";
 import { DocContent } from "@/components/site/doc-content";
+import { DocNav } from "@/components/site/doc-nav";
 import { Button } from "@/components/ui/button";
 
 type Params = { path: string[] };
@@ -55,11 +56,14 @@ export default async function SectionPage({
   // without clicking back to the homepage.
   if (rootSection) {
     const isRootLanding = node.path === rootSection.path;
+    const { prev, next } = getNeighbors(path, rootSection);
     return (
       <main className="w-full min-h-[calc(100vh-57px)] bg-white">
-        <div className="mx-auto grid gap-0 px-6 lg:px-10 py-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-10">
-          {/* Sidebar — persistent, shows the full root-section tree */}
-          <aside className="mb-8 lg:mb-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto lg:border-r lg:border-border lg:pr-6">
+        <div className="mx-auto grid gap-0 px-6 lg:px-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-10">
+          {/* Sidebar — fixed to the viewport on large screens so it stays in
+              place while the main content scrolls. Internal scroll handles
+              trees taller than the viewport. */}
+          <aside className="mb-8 lg:mb-0 lg:sticky lg:top-[57px] lg:h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-r lg:border-border lg:py-10 lg:pr-6">
             <p className="mb-4 text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
               {rootSection.label}
             </p>
@@ -67,7 +71,7 @@ export default async function SectionPage({
           </aside>
 
           {/* Main content */}
-          <div className="min-w-0">
+          <div className="min-w-0 py-10">
             {/* Breadcrumb */}
             <nav className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
               <NavLink href="/" className="hover:text-accent">
@@ -144,6 +148,9 @@ export default async function SectionPage({
                 </div>
               </div>
             )}
+
+            {/* Back / Next — page through the section in sidebar order */}
+            {!isRootLanding && <DocNav prev={prev} next={next} />}
 
             {/* Root-landing CTA — only on the section's home page */}
             {isRootLanding && (

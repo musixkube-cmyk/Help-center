@@ -138,7 +138,11 @@
 @layer base {
   html,
   body {
-    overflow-x: hidden;
+    /* Use `clip` instead of `hidden`: `hidden` would compute overflow-y to
+       `auto`, turning body/html into a scroll container and breaking
+       `position: sticky` on descendants (e.g. the help-center sidebar).
+       `clip` prevents horizontal scroll without creating a scroll container. */
+    overflow-x: clip;
   }
 
   * {
