@@ -23,12 +23,11 @@ export const metadata: Metadata = {
   title: "Musicosy Help Center",
   description: "Musicosy Help Center — support, safety, rules, developer and business resources.",
   authors: [{ name: "Musicosy" }],
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
-    ],
-  },
+  // Icons are provided via the Next.js file convention:
+  //   src/app/icon.png       → <link rel="icon" href="/icon?<hash>"> (cache-busted)
+  //   src/app/apple-icon.png → <link rel="apple-touch-icon" href="/apple-icon?<hash>">
+  // public/favicon.ico is kept as the fallback for browsers that request
+  // /favicon.ico directly (the file convention supersedes the metadata below).
   openGraph: {
     title: "Musicosy Help Center",
     description: "Support, safety, rules, developer and business resources — all in one place.",
