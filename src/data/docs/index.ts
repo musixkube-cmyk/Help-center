@@ -30,6 +30,7 @@ import { personalContextVersusWorkspaceContextDoc } from "./personal-context-ver
 import { workspaceRolesAndPermissionsDoc } from "./workspace-roles-and-permissions";
 import { inviteAndManageWorkspaceMembersDoc } from "./invite-and-manage-workspace-members";
 import { whatIsTheStageDoc } from "./what-is-the-stage";
+import { discoverContentDoc } from "./discover-content";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -52,6 +53,7 @@ const docs: Record<string, Doc> = {
   [workspaceRolesAndPermissionsDoc.path]: workspaceRolesAndPermissionsDoc,
   [inviteAndManageWorkspaceMembersDoc.path]: inviteAndManageWorkspaceMembersDoc,
   [whatIsTheStageDoc.path]: whatIsTheStageDoc,
+  [discoverContentDoc.path]: discoverContentDoc,
 };
 
 /** Look up structured doc content for a given route path. */
