@@ -1250,3 +1250,35 @@ Stage Summary:
 - 4 new placeholder routes created across Using Musicosy (Content Interaction, Backstage & Community) and Support (Account & Access) for related articles.
 - Nine Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile, Set up your Artist Page, Choose or change your handle, Choose or change your display name, Find friends.
 - Next to write per user: Follow and unfollow.
+
+---
+Task ID: 10
+Agent: main (Z.ai Code)
+Task: Comprehensive sitemap expansion — add all missing toolkit articles identified in the gap analysis (Volumes 6, 12-20). Adds 39 new placeholder routes across 6 areas, creates 3 new sub-groups under Using Musicosy, moves 2 articles to proper homes, and adds 3 articles to the AdNote tree.
+
+Work Log:
+- EXPANDED "Create & Publish" (8 new articles): Studio Collaboration & Session Roles, AI Tools, Rendering, Stems, Mastering, AI Voice/Likeness & Provenance, Music Recognition & Audio Matching, Lyrics/Transcripts & Chapters.
+- EXPANDED "Live & Events" (7 new articles): Live Moderation & Crowd Chat Safety, Replays & Clipping Live Sessions, Event Check-in & Ticket Scanning, Venue Management & Settlement, Tour Routing, Roadbook, Tour Merch Inventory.
+- EXPANDED "Creator Studio & Workspaces" (6 new articles): Artist Pages vs. Personal Profiles, Representation & Booking Routes, Handling Takedowns & Rights Claims, Payouts/Tax Profiles & Invoices, Reserves/Holds & Financial Disputes, Store Mapping & Metadata (ISRC/UPC).
+- EXPANDED "Backstage & Community" (2 new articles): Group Conversations & Live Chat, Pass the Mic (Sharing).
+- CREATED new sub-group "Creator Commerce & Services" (8 articles): Creator Shops, Merch Table, Subscriptions, Ticketing, Subscribe to a creator (MOVED from Backstage & Community), Selling Services & Bookings, Fulfillment/Shipping & Returns, Global Shop Search.
+- CREATED new sub-group "Podcasts & RSS" (3 articles): RSS Feeds & External Directories, Dynamic Ad Insertion (DAI) & Sponsorships, Private Feeds & Subscriber Episodes.
+- CREATED new sub-group "Communities & Fan Clubs" (4 articles): Creating a Fan Club / Membership Space, Community Channels & Roles, Community Moderation & Governance, Join a community or fan club (MOVED from Backstage & Community).
+- EXPANDED AdNote tree (3 new articles): Creator Promotions (Boosting) and Brand Safety & Ad Review under "Advertising on Musicosy"; Supply-Side Platform (SSP) under "Tools & Resources".
+- MOVED "Subscribe to a creator" from backstage-and-community → creator-commerce-and-services (new path).
+- MOVED "Join a community or fan club" from backstage-and-community → communities-and-fan-clubs (new path).
+- Updated find-friends.ts related links to point to the 2 new paths.
+- Lint: clean. No errors.
+- All 39 new routes verified 200. Old paths for the 2 moved articles correctly return 404.
+- Agent Browser verified:
+  - Creator Commerce & Services group landing renders with all 8 child articles.
+  - Supply-Side Platform (SSP) page renders with breadcrumb and H1.
+  - Find friends doc: all 12 related articles still render; click-tested "Join a community or fan club" → /communities-and-fan-clubs/join-a-community-or-fan-club (correct new path); click-tested "Subscribe to a creator" → /creator-commerce-and-services/subscribe-to-a-creator (correct new path).
+  - No console errors.
+
+Stage Summary:
+- 39 new placeholder routes added across the Help Center and Ads Help Center, covering Production Toolkit, Podcast & Live, Creator Business, Catalog/Rights, Label & Team, Touring, and Advertiser gaps.
+- 3 new sub-groups created under Using Musicosy: Creator Commerce & Services, Podcasts & RSS, Communities & Fan Clubs.
+- 2 articles relocated from Backstage & Community to their proper new sub-group homes; find-friends.ts updated to match.
+- Using Musicosy now has 11 sub-groups (was 8): Discover & Browse, Content Interaction, Collections & Library, Media & Playback, Backstage & Community, Create & Publish, Live & Events, Creator Studio & Workspaces, Creator Commerce & Services, Podcasts & RSS, Communities & Fan Clubs.
+- All routes are placeholders ready for doc content.

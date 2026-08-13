@@ -385,8 +385,8 @@ export const findFriendsDoc: Doc = {
     "/resources/help-center/using-musicosy/discover-and-browse/manage-topics-and-interests",
     "/support/account-and-access/manage-your-privacy-and-discoverability-settings",
     "/resources/help-center/using-musicosy/backstage-and-community/what-is-backstage",
-    "/resources/help-center/using-musicosy/backstage-and-community/join-a-community-or-fan-club",
+    "/resources/help-center/using-musicosy/communities-and-fan-clubs/join-a-community-or-fan-club",
     "/resources/help-center/using-musicosy/live-and-events/attend-an-event",
-    "/resources/help-center/using-musicosy/backstage-and-community/subscribe-to-a-creator",
+    "/resources/help-center/using-musicosy/creator-commerce-and-services/subscribe-to-a-creator",
   ],
 };
