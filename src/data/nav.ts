@@ -238,13 +238,8 @@ export const helpCenterSections: NavNode[] = [
           "Personal profiles vs. Team Workspaces",
           "Personal Context versus Workspace Context",
           "Delete or deactivate your account",
-          "New member FAQ",
         ]),
       },
-      { label: "New User FAQ", path: "/resources/new-user-faq" },
-      { label: "Resources & Guides", path: "/resources/guides" },
-      { label: "Glossary", path: "/resources/glossary" },
-      { label: "Company News / Blog", path: "/resources/blog" },
       {
         label: "Using Musicosy",
         path: "/resources/help-center/using-musicosy",
