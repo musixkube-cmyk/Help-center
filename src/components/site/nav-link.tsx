@@ -26,7 +26,13 @@ type Props = Omit<ComponentProps<typeof Link>, "href"> & {
  * descendant of it (so a top-level mega-menu item stays highlighted while
  * browsing its children).
  */
-export function NavLink({ href, className, activeProps, ...rest }: Props) {
+export function NavLink({
+  href,
+  className,
+  activeProps,
+  ref,
+  ...rest
+}: Props) {
   const pathname = usePathname();
   const isActive =
     href === "/"
@@ -38,5 +44,5 @@ export function NavLink({ href, className, activeProps, ...rest }: Props) {
       ? `${className ?? ""} ${activeProps.className}`.trim()
       : className;
 
-  return <Link href={href} className={merged} {...rest} />;
+  return <Link href={href} className={merged} ref={ref} {...rest} />;
 }
