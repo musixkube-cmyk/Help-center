@@ -267,7 +267,7 @@ export const helpCenterSections: NavNode[] = [
     path: "/support",
     blurb: "Account help, reporting, payments, and technical support.",
     children: build("/support", [
-      ["Account & Access", ["Account settings & privacy", "Notification settings", "Push notifications", "Account status", "Account safety", "Sign-in help", "Recover your account", "Reset your password", "Verify your identity", "Deactivate your account", "Delete your account"]],
+      ["Account & Access", ["Account settings & privacy", "Notification settings", "Push notifications", "Account status", "Account safety", "Manage your active sessions", "Set up two-factor authentication or a passkey", "Sign-in help", "Recover your account", "Reset your password", "Verify your identity", "Deactivate your account", "Delete your account"]],
       ["Reports & Appeals", ["Reporting content", "Report a post / account / LIVE / comment / DM", "Report underage account", "Report sexual abuse", "Report impersonation", "Report bullying", "Report suggested search / hashtag / sound / Series", "Report another issue", "Share feedback", "Check report status", "Appeal an account or content decision", "Content violations & bans", "Transaction policy violations"]],
       ["Payments & Purchases", ["Payment methods", "Billing and receipts", "Subscription help", "Cancel a subscription", "Refunds", "Music and digital purchase help", "Event ticket help", "Merchandise order help", "Payout and earnings support"]],
       ["Technical Support", ["Playback problems", "Upload and publishing problems", "App crashes or errors", "Notification problems", "Report a bug", "Supported devices and browsers", "Service status"]],

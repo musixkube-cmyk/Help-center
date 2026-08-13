@@ -948,3 +948,46 @@ Stage Summary:
 - 2 new Getting Started routes created for related articles that didn't exist.
 - Cross-section related-article linking verified (Help Center → Support Center).
 - The doc system now handles every content pattern the user's docs use: paragraphs, headings, ordered/unordered lists, nested sub-lists, note callouts, and comparison tables.
+
+---
+Task ID: third-doc-sign-in-and-sign-out
+Agent: main (Z.ai Code)
+Task: Write the "Sign in and sign out" doc as the third piece of real written content. Create routes for any related articles that don't exist.
+
+Work Log:
+- Added 2 new Support Center → Account & Access routes to nav.ts (placed logically after "Account safety"):
+  - "Manage your active sessions" → /support/account-and-access/manage-your-active-sessions
+  - "Set up two-factor authentication or a passkey" → /support/account-and-access/set-up-two-factor-authentication-or-a-passkey
+  These are security/session-management topics that belong alongside the existing Account safety, Recover your account, and Reset your password items in that section.
+- Wrote src/data/docs/sign-in-and-sign-out.ts — full structured content with 13 sections:
+  1. 2 intro paragraphs
+  2. "Sign in to MusicOSY": 5-step ordered list (step 3 "Choose your sign-in method:" has 5-item nested sub-list) + 2 closing paragraphs
+  3. "Signing in on a new device": paragraph + 2-item bullet list (item 2 "If you do not recognise the sign-in:" has 4-item nested sub-list) + WARNING callout ("Never share your password...")
+  4. "Manage your active sessions": paragraph + 3-step ordered list + 2 paragraphs
+  5. "Sign in to a Workspace": 4 paragraphs
+  6. "Sign out of MusicOSY": paragraph + 3-step ordered list
+  7. "What happens when you sign out": 4-item bullet list + paragraph
+  8. "Sign-in methods": paragraph + 6-row table (Method | Description: Email/password, Phone number, Passkey, Identity provider, Enterprise SSO, Recovery code) + paragraph
+  9. "Step-up authentication": 2 paragraphs + 8-item bullet list + paragraph
+  10. "If you cannot sign in": paragraph + 6-item bullet list
+  11. "If you have lost access to your sign-in method": paragraph + 3-step ordered list + NOTE callout ("Account recovery may require identity verification...")
+  12. "If your account is locked or restricted": paragraph
+  13. "Staying safe": 6-item bullet list
+  - 9 related articles: Create an account, Verify your email or phone number, Set up your profile, Account safety (cross-section), Recover your account (cross-section), Reset your password (cross-section), Manage your active sessions (new, cross-section), Set up two-factor authentication or a passkey (new, cross-section), Personal Context versus Workspace Context.
+- Registered signInAndSignOutDoc in src/data/docs/index.ts.
+- Lint: clean. No errors.
+- All routes verified 200: the doc page + both new placeholder routes + existing Recover your account / Reset your password routes.
+- Agent Browser + VLM verified:
+  - TOP: sidebar with Getting Started expanded + Sign in and sign out highlighted, H1, 2 intro paragraphs, "Sign in to MusicOSY" heading, 5-step numbered list with step 3 nested sub-list (5 sign-in methods). All correct.
+  - WARNING CALLOUT: red-bordered warning callout with "Never share your password..." text (variant=warning renders with destructive red accent + AlertTriangle icon). Nested bullet list under "If you do not recognise the sign-in:" with 4 sub-items. All correct.
+  - TABLE: 2-column "Sign-in methods" table with Method/Description headers, 6 rows (Email/password, Phone, Passkey, Identity provider, Enterprise SSO, Recovery code). Well-formatted with clear borders. Correct.
+  - NOTE CALLOUT: orange-bordered note callout with "Account recovery may require identity verification..." text. Correct.
+  - BOTTOM: "Staying safe" heading + 6-item bullet list, Related articles section with all 9 links, Back → "Create an account", Next → "Verify your email or phone number". Correct sidebar order.
+  - CROSS-SECTION: clicked "Manage your active sessions" related link → navigated to /support/account-and-access/manage-your-active-sessions (Support Center placeholder). Sidebar correctly switched to Support Center tree.
+
+Stage Summary:
+- "Sign in and sign out" is now fully written and rendered as the third real doc — the longest one yet (13 sections, 2 callouts, 1 table, multiple nested lists).
+- 2 new Support Center → Account & Access routes created for related articles (Manage your active sessions, Set up two-factor authentication or a passkey).
+- The doc exercises every block type in the system: paragraphs, H2 headings, ordered lists, unordered lists, nested sub-lists, note callout, warning callout, and a 6-row comparison table.
+- 4 of the 9 related articles are cross-section links (Help Center → Support Center), all verified navigable.
+- Three Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out. Next in sidebar order: Verify your email or phone number.
