@@ -19,6 +19,7 @@ import { verifyYourEmailOrPhoneNumberDoc } from "./verify-your-email-or-phone-nu
 import { setUpYourProfileDoc } from "./set-up-your-profile";
 import { setUpYourArtistPageDoc } from "./set-up-your-artist-page";
 import { chooseOrChangeYourHandleDoc } from "./choose-or-change-your-handle";
+import { chooseOrChangeYourDisplayNameDoc } from "./choose-or-change-your-display-name";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -30,6 +31,7 @@ const docs: Record<string, Doc> = {
   [setUpYourProfileDoc.path]: setUpYourProfileDoc,
   [setUpYourArtistPageDoc.path]: setUpYourArtistPageDoc,
   [chooseOrChangeYourHandleDoc.path]: chooseOrChangeYourHandleDoc,
+  [chooseOrChangeYourDisplayNameDoc.path]: chooseOrChangeYourDisplayNameDoc,
 };
 
 /** Look up structured doc content for a given route path. */

@@ -1155,3 +1155,46 @@ Stage Summary:
 - The old combined placeholder "Set up your profile and Artist Page" is replaced by a focused Artist Page doc; the advanced "Set up your creator profile and Artist Page" doc under Using Musicosy → Creator Studio & Workspaces remains a separate, distinct route.
 - The Getting Started DFS flow now reads: ...Set up your profile → Set up your Artist Page → Choose or change your handle → Choose or change your display name → Find friends...
 - Seven Getting Started docs now have real content. Next to write per user: Choose or change your handle was already done; awaiting next doc.
+
+---
+Task ID: 8
+Agent: main (Z.ai Code)
+Task: Write the "Choose or change your display name" doc (Getting Started). Also: restore GitHub push capability — user provided a Personal Access Token and explicitly directed its use in this sandboxed environment. Token stored in ~/.git-credentials (git credential store, NOT in the repo, never committed).
+
+Work Log:
+- Route /resources/help-center/getting-started/choose-or-change-your-display-name already existed as a placeholder NavNode in src/data/nav.ts (between "Choose or change your handle" and "Find friends"). No nav change needed.
+- Wrote src/data/docs/choose-or-change-your-display-name.ts (8th real doc). Structure:
+  1. 2 intro paragraphs (display name = what people see everywhere; can be real/artist/project/nickname, changeable)
+  2. "Your display name and handle": paragraph + 2-column table (Field/Purpose, Display name + Handle rows) + quote block ("Display name: Maya Rivers / Handle: @mayariversmusic") + 2 paragraphs (cross-link to handle doc)
+  3. "Choose your display name": paragraph
+  4. "Tips for choosing a display name" (H3): paragraph + 4-item bold-lead-in bullet list (Recognisable., Honest., Flexible., Appropriate.) + paragraph + 5-item bullet list (personal name / artist or stage name / project or band name / nickname or alias / combination) + paragraph
+  5. "Change your display name": paragraph
+  6. "How to change your display name" (H3): 7-step numbered list
+  7. "What happens after you change your display name" (H3): 5-item bullet list + note callout (cooldown)
+  8. "Display name rules": paragraph + paragraph + 7-item bullet list (cannot use names that...)
+  9. "Display name requirements": 4-item bullet list
+  10. "Display names and verification": 2 paragraphs
+  11. "Why your display name change may be delayed or unavailable": paragraph + 7-item bullet list + paragraph
+  12. "Display name changes and your content": paragraph + 6-item bullet list + paragraph
+  13. "Display names in Workspaces": 3 paragraphs
+  14. "Keep your display name current": paragraph + 5-item bullet list + paragraph
+  - 9 related articles: Set up your profile, Choose or change your handle, Find people to follow, Follow and unfollow, Account safety, Report impersonation, Set up your creator profile and Artist Page, Personal Context versus Workspace Context, Verification on MusicOSY.
+- Registered chooseOrChangeYourDisplayNameDoc in src/data/docs/index.ts.
+- Lint: clean. No errors. Route returns 200.
+- Restored GitHub push: stored user-provided PAT in ~/.git-credentials (chmod 600, git credential.helper=store). Token is NOT in the repo working tree and will not be committed.
+- Agent Browser verified (desktop 1440px + mobile 375px):
+  - H1 "Choose or change your display name", sidebar highlights correct node.
+  - "Your display name and handle" table + quote block render correctly.
+  - "Tips for choosing a display name" H3 with 4 bold-lead-in bullets + 5-item "You can use" list render.
+  - "How to change your display name" H3 numbered list (7 steps) renders.
+  - Note callout (cooldown) renders after "What happens after you change your display name".
+  - All later sections (rules, requirements, verification, delays, content, workspaces, keep current) render with their bullet lists.
+  - Back/Next: BACK → "Choose or change your handle", NEXT → "Find friends". Correct DFS order.
+  - RELATED ARTICLES section present.
+  - No console errors. Mobile layout holds at 375px.
+
+Stage Summary:
+- "Choose or change your display name" is now fully written and rendered as the eighth real doc.
+- Eight Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile, Set up your Artist Page, Choose or change your handle, Choose or change your display name.
+- GitHub credential store restored; commits 84afeeb (Artist Page) and the new display-name commit will push together.
+- Next to write per user: Find friends.
