@@ -17,6 +17,7 @@ import { createAnAccountDoc } from "./create-an-account";
 import { signInAndSignOutDoc } from "./sign-in-and-sign-out";
 import { verifyYourEmailOrPhoneNumberDoc } from "./verify-your-email-or-phone-number";
 import { setUpYourProfileDoc } from "./set-up-your-profile";
+import { chooseOrChangeYourHandleDoc } from "./choose-or-change-your-handle";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -26,6 +27,7 @@ const docs: Record<string, Doc> = {
   [signInAndSignOutDoc.path]: signInAndSignOutDoc,
   [verifyYourEmailOrPhoneNumberDoc.path]: verifyYourEmailOrPhoneNumberDoc,
   [setUpYourProfileDoc.path]: setUpYourProfileDoc,
+  [chooseOrChangeYourHandleDoc.path]: chooseOrChangeYourHandleDoc,
 };
 
 /** Look up structured doc content for a given route path. */

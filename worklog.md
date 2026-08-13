@@ -1074,3 +1074,46 @@ Stage Summary:
 - 5 new routes created for related articles across 3 different sections (Using Musicosy → Creator Studio & Workspaces, Support Center → Account & Access, Support Center → Reports & Appeals).
 - 5 of the 10 related articles are cross-section links, all verified navigable.
 - Five Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile. Next in sidebar order: Set up your profile and Artist Page.
+
+---
+Task ID: sixth-doc-choose-or-change-your-handle
+Agent: main (Z.ai Code)
+Task: Write the "Choose or change your handle" doc as the sixth piece of real written content. Create routes for 3 related articles with titles that differ from existing sidebar items.
+
+Work Log:
+- Checked all 9 related-article routes. Found 3 that return 404 (don't exist yet):
+  1. "Choose or change your display name" — different from existing "Choose or change your handle"
+  2. "Find people to follow" — different from existing "Find friends"
+  3. "Follow and unfollow" — different from existing "Follow / unfollow"
+  All 3 added to Getting Started in nav.ts as separate items (the user used precise titles that differ from existing sidebar labels).
+- Wrote src/data/docs/choose-or-change-your-handle.ts — full structured content with 13 sections:
+  1. 3 intro paragraphs (handle = unique @identifier, example @midnightmelodies, choose carefully)
+  2. "Your handle and display name": paragraph + 2-column table (Field/Purpose, Handle + Display name rows) + quote block ("Display name: Maya Rivers / Handle: @mayariversmusic") + paragraph
+  3. "Choose your handle": paragraph
+  4. "Tips for choosing a good handle" (H3): paragraph + 5-item bullet list with bold lead-ins (Memorable., Connected to your identity., Consistent., Appropriate., Flexible.) + paragraph + quote block (5 handle variations: @jordanlee through @jordanleeofficial)
+  5. "Handle format requirements": paragraph + 6-item bullet list + paragraph
+  6. "Change your handle": paragraph
+  7. "How to change your handle" (H3): 7-step numbered list
+  8. "What happens after you change your handle" (H3): 5-item bullet list + note callout (handle changes recorded as account-security events)
+  9. "Before you change your handle": paragraph + 9-item bullet list (external links to update) + paragraph
+  10. "Handle rules": paragraph + paragraph + 8-item bullet list (cannot use handles that...)
+  11. "Handle availability and reassignment": 4-item bullet list
+  12. "Handle disputes": paragraph
+  13. "Why your handle change may be delayed or unavailable": paragraph + 7-item bullet list + paragraph
+  14. "Handle changes and your content": paragraph + 5-item bullet list + paragraph
+  - 9 related articles: Set up your profile, Choose or change your display name (new), Find people to follow (new), Follow and unfollow (new), Account safety (cross-section), Report impersonation (cross-section), Set up your creator profile and Artist Page (cross-section), Build an EPK (cross-section), Personal Context versus Workspace Context.
+- Registered chooseOrChangeYourHandleDoc in src/data/docs/index.ts.
+- Lint: clean. No errors.
+- All routes verified 200: the doc page + all 3 new placeholder routes.
+- Agent Browser + VLM verified:
+  - TOP: sidebar with Getting Started expanded + Choose or change your handle highlighted, H1, 3 intro paragraphs, "Your handle and display name" heading with 2-column table, quote block ("Display name: Maya Rivers / Handle: @mayariversmusic"). All correct.
+  - TIPS: "Tips for choosing a good handle" H3 with 5-item bold-lead-in bullet list (Memorable., Connected to your identity., Consistent., Appropriate., Flexible.), quote block with 5 handle variations (@jordanlee through @jordanleeofficial), "Handle format requirements" heading with 6-item bullet list. Sidebar fixed. All correct.
+  - CALLOUT: "What happens after you change your handle" H3 with 5-item bullet list, orange note callout ("Handle changes are recorded as account-security events..."). Correct.
+  - NAV: Back → "Set up your profile and Artist Page", Next → "Choose or change your display name". Correct sidebar order (follows DFS traversal of the updated Getting Started tree).
+  - RELATED: all 9 related article links present. Clicked "Find people to follow" → navigated to /resources/help-center/getting-started/find-people-to-follow (placeholder). Correct.
+
+Stage Summary:
+- "Choose or change your handle" is now fully written and rendered as the sixth real doc.
+- 3 new Getting Started routes created for related articles with titles distinct from existing sidebar items (Choose or change your display name, Find people to follow, Follow and unfollow).
+- The doc uses 2 quote blocks (display name/handle example + handle variations), 1 comparison table, 1 note callout, multiple bold-lead-in bullet lists, and H3 sub-headings — all rendering correctly.
+- Six Getting Started docs now have real content: What is MusicOSY?, Create an account, Sign in and sign out, Verify your email or phone number, Set up your profile, Choose or change your handle. Next to write per user: Find friends.
