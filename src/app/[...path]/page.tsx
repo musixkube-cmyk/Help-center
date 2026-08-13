@@ -89,10 +89,13 @@ export default async function SectionPage({
             <h1 className="mt-6 max-w-3xl text-4xl leading-[0.95] sm:text-5xl">
               {node.label}
             </h1>
-            <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              {node.blurb ??
-                `Browse ${node.label} in the Musicosy Help Center. Use the sidebar to jump between topics.`}
-            </p>
+            {/* Blurb — hidden when a doc has its own intro paragraph */}
+            {!doc && (
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                {node.blurb ??
+                  `Browse ${node.label} in the Musicosy Help Center. Use the sidebar to jump between topics.`}
+              </p>
+            )}
 
             {/* Children grid (section + sub-section pages) */}
             {node.children && node.children.length > 0 ? (
