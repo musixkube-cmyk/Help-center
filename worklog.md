@@ -772,3 +772,36 @@ Stage Summary:
 - Cache-Control: no-cache headers added to /favicon.ico + /favicon.png so browsers can no longer serve a stale cached favicon.
 - The server is verified correct (byte-for-byte match with upload, correct <head>, no proxy injection).
 - User must do ONE hard-refresh (Ctrl+Shift+R / Cmd+Shift+R) or close+reopen the preview tab to purge the already-cached Z.ai favicon. After that, the custom "m" favicon will show and stay updated.
+
+---
+Task ID: footer-6col-flat-utility
+Agent: main (Z.ai Code)
+Task: Simplify the footer per user feedback that the 8-col + nested version was "too much and distracting". New structure: 6 flat columns (no nesting), utility bar moved to sit in a row below the logo, cookies/copyright stays as the bottom rail. User provided exact column + utility link lists.
+
+Work Log:
+- Rewrote footerNav in src/data/nav.ts: replaced the 8-column nested structure with 6 flat columns (no children-of-children, no duplicates):
+  1. Help & Support (7): Help Center, Using Musicosy, Managing Your Account, New User FAQ, Sign In, Email Preference Center, Contact Us
+  2. Resources (5): Resources Home, Resources & Guides, Glossary, Accessibility, Company News
+  3. Trust & Policies (5): Safety & Security, Privacy Center, Transparency Center, Rules & Policies, Report a Safety Issue
+  4. For the Music Industry (4): For Creators, For Labels, For Distributors, For Sync Agents
+  5. Business (3): Musicosy for Business, Advertise / Adnote, Ads Help Center
+  6. Company (6): About Musicosy, Brand Toolkit, Jobs & Internships, Investors, Status, Download the App
+  Total column links: 30 (down from ~54 in the 8-col version). Every link is unique — no ghost links, no duplicate Company column, no single-child nestings.
+- Rewrote footerUtilityBar: 24 quick-access links in the exact order the user specified (About, Get App, Help, Terms, Privacy, Cookies, DMCA, Careers, Ads & Business, Podcast, Stream, Creators, Fans, Distributors, Sync, Developers, News, US TIDA, Accessibility, Privacy Center, Legal Center, Support Center, Sign In, Contact Us). Mapped each label to a resolvable path; added /podcast and /us-tida as new routes.
+- Added Podcast (/podcast) and US TIDA (/us-tida) to platformRoutes in nav.ts so those utility links resolve as standalone pages (no 404). They render via the catch-all standalone layout.
+- Rewrote src/components/site-footer.tsx: removed the FooterLink nested-sub-link component (no longer needed — everything is flat). New layout order: (1) 6-col nav grid (grid-cols-2 → sm:grid-cols-3 → lg:grid-cols-6), (2) logo right-aligned, (3) utility bar (border-t, flex-wrap, 24 links, smaller text-xs uppercase tracking-wider), (4) copyright/cookies bottom rail (© 2026 Musicosy Corp. + Cookies/Privacy/Terms/Affiliate/English).
+- Lint: clean. All 32+ distinct footer paths return 200 (verified /podcast, /us-tida, /privacy-and-safety/reporting, /legal-and-policies/copyright-and-ip/dmca-policy, etc.).
+- Agent Browser verified:
+  - 6 column headers in order: Help & Support, Resources, Trust & Policies, For the Music Industry, Business, Company.
+  - Utility bar: exactly 24 links, all labels present and in the specified order.
+  - Click test: "Podcast" utility link → navigated to /podcast (new route, 200, standalone page renders).
+  - Mobile 375px: grid collapses to 2 columns. Desktop 1440px: 6 columns.
+  - VLM confirmed: 6 columns + orange logo + dense utility strip below logo + copyright row at bottom.
+  - No console errors.
+
+Stage Summary:
+- Footer simplified from 8 nested columns (~79 links, distracting) to 6 flat columns (30 links) + a 24-link utility bar below the logo + cookies bottom rail.
+- No nesting, no duplicates, no ghost links. Every link is unique and resolves.
+- Layout: nav grid → logo → utility bar (row below logo) → copyright/cookies (bottom rail).
+- Two new routes added (/podcast, /us-tida) so the utility bar has no dead links.
+- Responsive: 2 cols mobile → 3 cols tablet → 6 cols desktop.

@@ -105,28 +105,21 @@ export const megaMenu: NavNode[] = [
 ];
 
 /**
- * Footer navigation — eight columns + a bottom utility bar.
+ * Footer navigation — six flat columns (no nesting, no duplicates).
  *
- *   Help & Support · Resources · Trust, Privacy & Policies · Platform & Company
- *   · For Music Industry · Business & Advertising · Developers · Company
+ *   Help & Support · Resources · Trust & Policies · For the Music Industry
+ *   · Business · Company
  *
- * Each column is a NavNode; children may themselves have children (rendered
- * as indented sub-links). Every path here is folded into `allNav` (via
- * flatten) so the catch-all page resolves every footer link.
+ * Every path is folded into `allNav` (via flatten) so the catch-all page
+ * resolves every footer link.
  */
 export const footerNav: NavNode[] = [
-  // 1. Help & Support
   {
     label: "Help & Support",
     path: "/resources/help-center",
     children: [
-      {
-        label: "Help Center",
-        path: "/resources/help-center",
-        children: [
-          { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
-        ],
-      },
+      { label: "Help Center", path: "/resources/help-center" },
+      { label: "Using Musicosy", path: "/resources/help-center/using-musicosy" },
       { label: "Managing Your Account", path: "/support/managing-your-account" },
       { label: "New User FAQ", path: "/resources/new-user-faq" },
       { label: "Sign In", path: "/support/sign-in" },
@@ -134,7 +127,6 @@ export const footerNav: NavNode[] = [
       { label: "Contact Us", path: "/support/contact-us" },
     ],
   },
-  // 2. Resources
   {
     label: "Resources",
     path: "/resources",
@@ -143,149 +135,81 @@ export const footerNav: NavNode[] = [
       { label: "Resources & Guides", path: "/resources/guides" },
       { label: "Glossary", path: "/resources/glossary" },
       { label: "Accessibility", path: "/resources/accessibility" },
+      { label: "Company News", path: "/resources/blog" },
     ],
   },
-  // 3. Trust, Privacy & Policies
   {
-    label: "Trust, Privacy & Policies",
+    label: "Trust & Policies",
     path: "/privacy-and-safety",
     children: [
-      {
-        label: "Safety & Security",
-        path: "/privacy-and-safety",
-        children: [
-          { label: "A Safer Musicosy", path: "/privacy-and-safety/a-safer-musicosy" },
-          { label: "How We Address Misinformation", path: "/privacy-and-safety/how-we-address-misinformation" },
-          { label: "Recommender Systems", path: "/privacy-and-safety/recommender-systems" },
-        ],
-      },
-      {
-        label: "Privacy Center",
-        path: "/privacy-and-safety",
-        children: [
-          { label: "My Privacy", path: "/privacy-and-safety/my-privacy" },
-        ],
-      },
+      { label: "Safety & Security", path: "/privacy-and-safety" },
+      { label: "Privacy Center", path: "/privacy-and-safety" },
       { label: "Transparency Center", path: "/legal-and-policies/transparency-center" },
-      {
-        label: "Rules & Policies",
-        path: "/legal-and-policies",
-        children: [
-          { label: "Our Rules", path: "/legal-and-policies/our-rules" },
-        ],
-      },
+      { label: "Rules & Policies", path: "/legal-and-policies" },
+      { label: "Report a Safety Issue", path: "/privacy-and-safety/reporting" },
     ],
   },
-  // 4. Platform & Company
   {
-    label: "Platform & Company",
-    path: "/about",
-    children: [
-      {
-        label: "About Musicosy",
-        path: "/about",
-        children: [
-          { label: "Platform", path: "/about" },
-        ],
-      },
-      { label: "Download the App", path: "/download" },
-      { label: "Status", path: "/status" },
-      { label: "Company News", path: "/resources/blog" },
-      { label: "Brand Toolkit", path: "/brand-toolkit" },
-      { label: "Jobs & Internships", path: "/careers" },
-      { label: "Investors", path: "/investors" },
-    ],
-  },
-  // 5. For Music Industry
-  {
-    label: "For Music Industry",
+    label: "For the Music Industry",
     path: "/for-creators",
     children: [
-      { label: "Musicosy for Creators", path: "/for-creators" },
-      { label: "Musicosy for Labels", path: "/for-labels" },
-      { label: "Musicosy for Distributors", path: "/for-distributors" },
-      { label: "Musicosy for Sync Agents", path: "/for-sync-agents" },
+      { label: "For Creators", path: "/for-creators" },
+      { label: "For Labels", path: "/for-labels" },
+      { label: "For Distributors", path: "/for-distributors" },
+      { label: "For Sync Agents", path: "/for-sync-agents" },
     ],
   },
-  // 6. Business & Advertising
   {
-    label: "Business & Advertising",
+    label: "Business",
     path: "/for-business",
     children: [
-      { label: "Business Resources", path: "/for-business" },
-      {
-        label: "Musicosy for Business",
-        path: "/for-business",
-        children: [
-          { label: "Musicosy for Marketers", path: "/for-business" },
-          { label: "Marketing Insights", path: "/for-business" },
-          { label: "Brand Inspiration", path: "/for-business" },
-        ],
-      },
-      { label: "Resources & Guides", path: "/resources/guides" },
+      { label: "Musicosy for Business", path: "/for-business" },
       { label: "Advertise / Adnote", path: "/advertise" },
       { label: "Ads Help Center", path: "/advertising" },
     ],
   },
-  // 7. Developers
-  {
-    label: "Developers",
-    path: "/developers",
-    children: [
-      {
-        label: "Developer Resources",
-        path: "/developers",
-        children: [
-          { label: "Developer Home", path: "/developers" },
-        ],
-      },
-      { label: "Documentation", path: "/developers/developers/docs" },
-      {
-        label: "Developer Community",
-        path: "/developers/developers/ecosystem",
-        children: [
-          { label: "Forums", path: "/developers/developers/ecosystem" },
-          { label: "Communities", path: "/developers/developers/ecosystem" },
-        ],
-      },
-      {
-        label: "Developer & Engineering Blog",
-        path: "/resources/blog",
-        children: [
-          { label: "Developer Blog", path: "/resources/blog" },
-          { label: "Engineering Blog", path: "/resources/blog" },
-        ],
-      },
-      { label: "Developer Terms", path: "/legal-and-policies" },
-    ],
-  },
-  // 8. Company
   {
     label: "Company",
     path: "/about",
     children: [
-      { label: "About the Company", path: "/about" },
-      { label: "Company News", path: "/resources/blog" },
+      { label: "About Musicosy", path: "/about" },
       { label: "Brand Toolkit", path: "/brand-toolkit" },
       { label: "Jobs & Internships", path: "/careers" },
       { label: "Investors", path: "/investors" },
       { label: "Status", path: "/status" },
-      { label: "Contact Us", path: "/support/contact-us" },
+      { label: "Download the App", path: "/download" },
     ],
   },
 ];
 
 /**
- * Footer Utility Bar — the bottom rail of quick links that sits below the
- * eight-column nav grid. Kept separate from footerNav so it renders as a
- * horizontal strip, not a column.
+ * Footer Utility Bar — the dense quick-access strip that sits in a row below
+ * the logo, above the copyright/cookies bottom rail. Rendered as a horizontal
+ * flex-wrap (not a column).
  */
 export const footerUtilityBar: NavNode[] = [
-  { label: "Privacy Center", path: "/privacy-and-safety" },
-  { label: "Rules & Policies", path: "/legal-and-policies" },
+  { label: "About", path: "/about" },
+  { label: "Get App", path: "/download" },
+  { label: "Help", path: "/resources/help-center" },
+  { label: "Terms", path: "/legal-and-policies" },
+  { label: "Privacy", path: "/privacy-and-safety" },
+  { label: "Cookies", path: "/legal-and-policies" },
+  { label: "DMCA", path: "/legal-and-policies/copyright-and-ip/dmca-policy" },
+  { label: "Careers", path: "/careers" },
+  { label: "Ads & Business", path: "/for-business" },
+  { label: "Podcast", path: "/podcast" },
+  { label: "Stream", path: "/for-fans" },
+  { label: "Creators", path: "/for-creators" },
+  { label: "Fans", path: "/for-fans" },
+  { label: "Distributors", path: "/for-distributors" },
+  { label: "Sync", path: "/for-sync-agents" },
+  { label: "Developers", path: "/developers" },
+  { label: "News", path: "/resources/blog" },
+  { label: "US TIDA", path: "/us-tida" },
   { label: "Accessibility", path: "/resources/accessibility" },
-  { label: "Status", path: "/status" },
-  { label: "Download the App", path: "/download" },
+  { label: "Privacy Center", path: "/privacy-and-safety" },
+  { label: "Legal Center", path: "/legal-and-policies" },
+  { label: "Support Center", path: "/support" },
   { label: "Sign In", path: "/support/sign-in" },
   { label: "Contact Us", path: "/support/contact-us" },
 ];
@@ -689,6 +613,8 @@ export const platformRoutes: NavNode[] = [
   { label: "For Distributors", path: "/for-distributors", blurb: "Distribution pipeline, catalog management and royalty delivery." },
   { label: "For Sync Agents", path: "/for-sync-agents", blurb: "Sync briefs, licensing and catalog discovery for sync." },
   { label: "For Business", path: "/for-business", blurb: "Adnote — targeting built on real listening behavior." },
+  { label: "Podcast", path: "/podcast", blurb: "The Musicosy podcast — conversations with artists, producers and the team building the platform." },
+  { label: "US TIDA", path: "/us-tida", blurb: "US Transparency in Data and Ads — reports on government, takedown and ad requests." },
 ];
 
 /** Flatten a node tree into a list of every node (self + descendants). */
