@@ -2497,3 +2497,57 @@ Stage Summary:
 - Includes 4 tables, 4 callouts (2 notes + 2 warnings), 1 bold lead-in list (4 items), 7 H2 + 4 H3 headings, 4 FAQ Q&A pairs.
 - All 8 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Edit or delete a collection (Collections & Library position 8).
+
+---
+Task ID: 35
+Agent: main (Z.ai Code)
+Task: Write the "Edit or delete a collection" doc (Help Center → Using Musicosy → Collections & Library → position 8). Content provided verbatim by the user. This is the eighth doc in the Collections & Library sub-section (after Collections, Create collections, Shared collections, Playlists, Your Library, Keep and organize your Library, Save music to your Library).
+
+Work Log:
+- Read worklog tail (Task 34) for context: "Save music to your Library" doc complete (position 7), next doc was "Edit or delete a collection".
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Verified "Edit or delete a collection" route returns 200 (placeholder, no content yet).
+- Verified all 8 related article paths return 200 before writing: collections, create-collections, shared-collections, playlists, your-library, keep-and-organize-your-library, save-music-to-your-library, add-remove-and-reorder-playlist-items.
+- Created src/data/docs/edit-or-delete-a-collection.ts:
+  - path: /resources/help-center/using-musicosy/collections-and-library/edit-or-delete-a-collection
+  - 1 intro paragraph (update/remove collections as taste evolves/projects wrap up)
+  - H2 "How to edit a collection" + intro paragraph (Workspace Context + editing permissions)
+    - H3 "Steps to edit" + 5-step ordered list (Library → select collection → Settings/Edit Details → update fields → Save)
+    - H3 "Editable collection properties" + table (4 cols × 5 rows: Title or Name/Description/Cover Image/Visibility/Collaboration with Setlists/Crates Yes/No + Description) + callout (note): changing Public to Private removes from Search/profile/followers' Libraries
+  - H2 "Managing items inside your collection" + intro paragraph + 2-item list with bold lead-ins (For Setlists: Reorder mode drag/drop; For Crates: no playback sequence) + paragraph (remove item via Action Menu → Remove) + callout (warning): removing item doesn't delete media or Keep, just removes reference; refer to add/remove/reorder guide
+  - H2 "How to delete a collection" + intro paragraph (permanently delete)
+    - H3 "Steps to delete" + 4-step ordered list (open collection → Settings → Delete Collection → confirm in modal) + callout (warning): deletion is permanent, cannot restore; use Private instead to hide
+  - H2 "What happens when you delete a collection" + intro paragraph (folders vs catalog, deleting folder never destroys art) + table (3 cols × 4 rows: Delete a Setlist/Delete a Crate/Impact on Keeps/Impact on Purchases with collection impact + media impact)
+    - H3 "Collaborative and Workspace deletions" + 2-item list with bold lead-ins (Collaborative Setlists: removes from all collaborators; Workspace Collections: shared team asset, requires Studio Admin/Manager permissions)
+  - H2 "Frequently Asked Questions" + 4 FAQ H3+paragraph pairs:
+    - H3 "Will deleting a Setlist delete the songs inside it?" (no, reference list only)
+    - H3 "Can I undo a deleted collection?" (no restore function, must recreate manually)
+    - H3 "What happens to my followers if I delete a Public Setlist?" (disappears from profile/Search, followers lose access)
+    - H3 "Can I delete a System-Generated or Editorial Setlist?" (no, platform-managed, can hide/remove tracks from Up Next)
+  - related: 8 sibling paths (Collections, Create collections, Shared collections, Playlists, Your Library, Keep and organize your Library, Save music to your Library, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for editOrDeleteACollectionDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/edit-or-delete-a-collection → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Edit or delete a collection"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / COLLECTIONS & LIBRARY / EDIT OR DELETE A COLLECTION
+  - 6 H2 headings: How to edit a collection | Managing items inside your collection | How to delete a collection | What happens when you delete a collection | Frequently Asked Questions
+  - 7 H3 headings: Steps to edit | Editable collection properties | Steps to delete | Collaborative and Workspace deletions | + 4 FAQ questions
+  - 2 tables: Editable properties (4×5), Deletion impact (3×4) — all render with correct headers
+  - 2 ordered lists: 5-step edit + 4-step delete = 9 numbered steps total
+  - 2 bold lead-in lists: Managing items (2 items), Collaborative/Workspace deletions (2 items)
+  - 3 callouts verified via DOM query (div.border-l-2): all 3 render with correct text
+    1. note: "Changing a Public collection to Private will immediatel..."
+    2. warning: "Removing an item from your Setlist or Crate does not de..."
+    3. warning: "Deleting a collection is permanent. Once you confirm th..."
+  - Related articles: "RELATED ARTICLES" section renders with all 8 links
+  - Back/Next nav: Back → Save music to your Library (correct DFS predecessor, position 7); Next → Add, remove, and reorder playlist items (correct, position 9 — last doc in sub-section)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Edit or delete a collection" doc complete — Collections & Library sub-section now 8/9 docs with real content.
+- Doc covers editing collection details (5-step edit + editable properties table), managing items inside collections (reorder/remove), deleting a collection (4-step delete + impact table), Collaborative/Workspace deletions, and 4 FAQs.
+- Includes 2 tables, 3 callouts (1 note + 2 warnings), 2 ordered lists (9 steps total), 2 bold lead-in lists, 6 H2 + 7 H3 headings, 4 FAQ Q&A pairs.
+- All 8 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Add, remove, and reorder playlist items (Collections & Library position 9 — final doc in sub-section).
