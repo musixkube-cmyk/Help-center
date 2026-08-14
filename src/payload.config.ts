@@ -61,10 +61,10 @@ export default buildConfig({
   // Match the Next.js server. Payload runs in-process — same origin.
   serverURL: process.env.PAYLOAD_PUBLIC_URL ?? "http://localhost:3000",
   collections,
-  // No `editor` field set — Payload defaults to no rich text editor. We use
-  // the constrained `blocks` field (the 6 content blocks) instead of Lexical
-  // richText, so the lexical editor package is not needed at runtime. This
-  // also avoids a Node 24 + tsx top-level-await load error in the Payload CLI.
+  // No `editor` field set — all collections use the constrained `blocks` field
+  // (the 6 content blocks: paragraph, heading, list, callout, table, quote)
+  // instead of a richText editor. The @payloadcms/richtext-lexical package has
+  // been removed from package.json because no collection declares richText.
   db: postgresAdapter({
     pool: {
       connectionString: databaseURL,
@@ -76,7 +76,7 @@ export default buildConfig({
     // explicit schema name (it's the default). Leaving it unset uses the
     // default public schema correctly.
     // Production migrations are run via `payload migrate` in CI/CD.
-    migrationsDir: path.resolve(__dirname, "payload/migrations"),
+    migrationsDir: path.resolve(__dirname, "migrations"),
   }),
   // Don't enable GraphQL endpoint yet — adds route surface we don't need.
   graphQL: {
