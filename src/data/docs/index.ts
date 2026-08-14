@@ -51,6 +51,7 @@ import { mentionsDoc } from "./mentions";
 import { saveContentDoc } from "./save-content";
 import { blockAndMuteDoc } from "./block-and-mute";
 import { editOrDeleteYourCommentDoc } from "./edit-or-delete-your-comment";
+import { takeYourPostOffTheStageDoc } from "./take-your-post-off-the-stage";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -94,6 +95,7 @@ const docs: Record<string, Doc> = {
   [saveContentDoc.path]: saveContentDoc,
   [blockAndMuteDoc.path]: blockAndMuteDoc,
   [editOrDeleteYourCommentDoc.path]: editOrDeleteYourCommentDoc,
+  [takeYourPostOffTheStageDoc.path]: takeYourPostOffTheStageDoc,
 };
 
 /** Look up structured doc content for a given route path. */

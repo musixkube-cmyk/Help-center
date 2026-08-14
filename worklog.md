@@ -1927,3 +1927,47 @@ Stage Summary:
 - MegaPanel "Explore Help Center" link unchanged → still goes to full hub.
 - Implementation via optional `entryPath` field on NavNode — clean, extensible. Currently set only on Help Center; can be added to other megaMenu entries (Support Center, Trust & Policies, Legal Center) if user wants the same focused-view pattern for all.
 - Nav architecture otherwise unchanged (user confirmed "we are fine as it is").
+
+---
+Task ID: 22
+Agent: main (Z.ai Code)
+Task: Write the "Take your post off The Stage" doc (Help Center → Using Musicosy → Content Interaction → position 12/12). Content provided verbatim by the user. This is the final Content Interaction doc — completes the 12-doc Content Interaction section. Next document indicated: Help Center → Using Musicosy → Collections & Library → Collections.
+
+Work Log:
+- Read worklog.md tail (Tasks 19-21) for context: edit-or-delete-your-comment doc was already created in a prior session; mega menu Help Center click fix (entryPath) was completed in Task 21.
+- Verified edit-or-delete-your-comment.ts exists and matches the user's re-sent content verbatim. Verified via Agent Browser: H1 "Edit or delete your comment", 6 H2 sections, 11 numbered steps (6+5), tombstone callout renders, 5 related articles render. No changes needed.
+- Verified related article paths for the new doc before writing:
+  - /resources/help-center/using-musicosy/create-and-publish/choose-content-visibility → 200 (under Using Musicosy → Create & Publish)
+  - /resources/help-center/using-musicosy/content-interaction/edit-or-delete-your-comment → 200
+  - /resources/help-center/using-musicosy/content-interaction/resing-and-pass-the-mic → 200
+  - /support/reports-and-appeals/content-violations-and-bans → 200 (under Support → Reports & Appeals)
+  - /support/reports-and-appeals/report-a-post-account-live-comment-dm → 200
+  - /resources/help-center/getting-started/delete-or-deactivate-your-account → 200 (under Help Center → Getting Started, NOT under Support — initially tried /support/account-and-access/ which 404'd)
+- Created src/data/docs/take-your-post-off-the-stage.ts:
+  - path: /resources/help-center/using-musicosy/content-interaction/take-your-post-off-the-stage
+  - 2 intro paragraphs
+  - H2 "Take a post off The Stage": intro paragraph + 5-step ordered list + closing paragraph
+  - H2 "What stays intact": 3 paragraphs
+  - H2 "What people may see": intro paragraph + 4-item unordered list + closing paragraph (Resing/Ensemble/Harmony/Rework linked content re-evaluation)
+  - H2 "Put it back on The Stage": 2 paragraphs (restoration eligibility + no guarantee of same feed position)
+  - H2 "Take Off Stage versus other actions": 5-row × 3-col table (Action | MusicOSY Term | Result) covering Hide/Take Off Stage, Unpublish, Archive/Vault, Delete/Pull, Takedown/Enforcement + closing paragraph on DELETE_PENDING lifecycle
+  - H2 "When the option may be unavailable": intro paragraph + 5-item unordered list + closing paragraph
+  - related: 6 paths (Choose content visibility, Edit or delete your comment, Resing and Pass the Mic, Content violations & bans, Flag a post, Delete or deactivate your account)
+- Registered in src/data/docs/index.ts: added import + map entry for takeYourPostOffTheStageDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/content-interaction/take-your-post-off-the-stage → 200.
+- Agent Browser verified (desktop):
+  - H1: "Take your post off The Stage"
+  - 6 H2 headings: Take a post off The Stage | What stays intact | What people may see | Put it back on The Stage | Take Off Stage versus other actions | When the option may be unavailable
+  - Table: 3 columns (Action, MusicOSY Term, Result), 5 rows (Hide, Unpublish, Archive, Delete, Takedown) — renders correctly
+  - Ordered list: 5 numbered steps (1-5) for the "Take a post off The Stage" procedure
+  - Unordered lists: 9 bullet items total (4 under "What people may see" + 5 under "When the option may be unavailable")
+  - Related articles section: "RELATED ARTICLES" heading renders with all 6 links (Choose content visibility, Edit or delete your comment, Resing and Pass the Mic, Content violations & bans, Report a post/account/LIVE/comment/DM, Delete or deactivate your account)
+  - Back/Next nav: Back → Edit or delete your comment (correct DFS predecessor); Next → Collections & Library (correct — matches user's indicated next document)
+  - No console errors.
+
+Stage Summary:
+- "Take your post off The Stage" doc complete — Content Interaction section now 12/12 docs with real content (Like, Love and Keep content, Comment, Leave a Note and join the conversation, Share, Repost, Resing and Pass the Mic, Mentions, Save content, Block and mute, Edit or delete your comment, Take your post off The Stage).
+- Doc includes a 5-row comparison table (the only Content Interaction doc with a table besides Block and mute).
+- All 6 related article paths verified to return 200 before writing.
+- Next document per user: Help Center → Using Musicosy → Collections & Library → Collections (first doc of the next sub-section).
