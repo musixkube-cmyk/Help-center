@@ -433,8 +433,7 @@ export const helpCenterSections: NavNode[] = [
         blurb: "Core legal policies, agreements, verification, tax, data lifecycle, and compliance controls.",
         children: build("/legal-and-policies/legal-policy-and-compliance", [
           "Terms of use",
-          "Privacy policy",
-          "Community guidelines",
+          "Acceptable Use Policy",
           "Copyright policy",
           "Creator agreement",
           "Distribution agreement",
@@ -448,6 +447,7 @@ export const helpCenterSections: NavNode[] = [
           "Tax collection",
           "Tax reporting",
           "Consent management",
+          "Data Processing Addendum",
           "Data export",
           "Data deletion",
           "Account deletion",
