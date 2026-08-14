@@ -2395,3 +2395,55 @@ Stage Summary:
 - Includes 3 tables, 3 callouts (2 notes + 1 warning), 1 ordered list (4 steps with bold lead-ins), 2 bold lead-in lists, 6 H2 + 3 H3 headings.
 - All 8 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Keep and organize your Library (Collections & Library position 6).
+
+---
+Task ID: 33
+Agent: main (Z.ai Code)
+Task: Write the "Keep and organize your Library" doc (Help Center → Using Musicosy → Collections & Library → position 6). Content provided verbatim by the user. This is the sixth doc in the Collections & Library sub-section (after Collections, Create collections, Shared collections, Playlists, Your Library).
+
+Work Log:
+- Read worklog tail (Task 32) for context: "Your Library" doc complete (position 5), next doc was "Keep and organize your Library".
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Verified "Keep and organize your Library" route returns 200 (placeholder, no content yet).
+- Verified all 8 related article paths return 200 before writing: collections, create-collections, shared-collections, playlists, your-library, save-music-to-your-library, edit-or-delete-a-collection, add-remove-and-reorder-playlist-items.
+- Created src/data/docs/keep-and-organize-your-library.ts:
+  - path: /resources/help-center/using-musicosy/collections-and-library/keep-and-organize-your-library
+  - 2 intro paragraphs (Library = personal home, Keep = personal save relationship, Keeps controlled by you)
+  - H2 "What you can Keep" + intro paragraph + table (2 cols × 6 rows: Music/Video/Podcasts/Creators/Events/Commerce with examples) + callout (note): Keep vs Love — Keep is private save, Love is public appreciation
+  - H2 "How to Keep an item" + 3-step ordered list (find media → tap Keep button/bookmark → added to Library Keeps section; step 2 has bold lead-in) + closing paragraph (remove Keep by tapping again)
+  - H2 "Organizing your Library" + intro paragraph + table (2 cols × 5 rows: Filter by Type/Sort Options/Library Search/Setlists/Crates with how to use) + callout (warning): Keeping does not automatically add to Setlist or Crate — must manually add
+  - H2 "Moving Keeps into Collections" + intro paragraph + 2-item list with bold lead-ins (For continuous listening → Setlist, For project organization → Crate)
+  - H2 "Managing unavailable media" + intro paragraph (reference links) + table (2 cols × 3 rows: creator unpublishes/territory-restricted/subscription ends with Library behavior) + callout (warning): permanently unavailable (rights takedown/removal) cannot restore playback, reference remains in history
+  - H2 "Library privacy and visibility" + intro paragraph + 3-item list with bold lead-ins (Keeps are private, History is private, Collections dictate sharing)
+  - H2 "Frequently Asked Questions" + 4 FAQ H3+paragraph pairs:
+    - H3 "Does Keeping a track notify the creator?" (no, aggregate analytics only)
+    - H3 "Is there a limit to how many items I can Keep?" (tens of thousands, scales with taste)
+    - H3 "Can I Keep a post or a social update from The Stage?" (yes, stored alongside music/videos)
+    - H3 "How do I download my Keeps for offline listening?" (Keeping ≠ download; use Take It With You)
+  - related: 8 sibling paths (Collections, Create collections, Shared collections, Playlists, Your Library, Save music to your Library, Edit or delete a collection, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for keepAndOrganizeYourLibraryDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/keep-and-organize-your-library → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Keep and organize your Library"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / COLLECTIONS & LIBRARY / KEEP AND ORGANIZE YOUR LIBRARY
+  - 7 H2 headings: What you can Keep | How to Keep an item | Organizing your Library | Moving Keeps into Collections | Managing unavailable media | Library privacy and visibility | Frequently Asked Questions
+  - 4 H3 headings: 4 FAQ questions (Does Keeping notify / Is there a limit / Can I Keep a post / How do I download)
+  - 3 tables: What you can Keep (2×6), Organizing tools (2×5), Managing unavailable media (2×3) — all render with correct headers
+  - 1 ordered list: 3-step How to Keep (find → tap Keep button → added to Library), step 2 has bold lead-in, numbered 1-3
+  - 2 bold lead-in lists: Moving Keeps into Collections (2 items), Library privacy and visibility (3 items)
+  - 3 callouts verified via DOM query (div.border-l-2): all 3 render with correct text
+    1. note: "Keeping an item is different from Loving it..."
+    2. warning: "Keeping an item does not automatically add it to a Setl..."
+    3. warning: "If a Kept item becomes permanently unavailable due to a..."
+  - Related articles: "RELATED ARTICLES" section renders with all 8 links
+  - Back/Next nav: Back → Your Library (correct DFS predecessor, position 5); Next → Save music to your Library (correct, position 7)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Keep and organize your Library" doc complete — Collections & Library sub-section now 6/9 docs with real content.
+- Doc covers Keeping items (6 eligible types, Keep vs Love), how to Keep (3 steps), organizing tools (5 tools table), moving Keeps into collections (Setlist/Crate), managing unavailable media (3 events + permanent takedown), Library privacy (3 principles), and 4 FAQs.
+- Includes 3 tables, 3 callouts (1 note + 2 warnings), 1 ordered list (3 steps), 2 bold lead-in lists, 7 H2 + 4 H3 headings, 4 FAQ Q&A pairs.
+- All 8 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Save music to your Library (Collections & Library position 7).

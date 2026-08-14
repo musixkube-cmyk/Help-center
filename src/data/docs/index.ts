@@ -60,6 +60,7 @@ import { createCollectionsDoc } from "./create-collections";
 import { sharedCollectionsDoc } from "./shared-collections";
 import { playlistsDoc } from "./playlists";
 import { yourLibraryDoc } from "./your-library";
+import { keepAndOrganizeYourLibraryDoc } from "./keep-and-organize-your-library";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -112,6 +113,7 @@ const docs: Record<string, Doc> = {
   [sharedCollectionsDoc.path]: sharedCollectionsDoc,
   [playlistsDoc.path]: playlistsDoc,
   [yourLibraryDoc.path]: yourLibraryDoc,
+  [keepAndOrganizeYourLibraryDoc.path]: keepAndOrganizeYourLibraryDoc,
 };
 
 /** Look up structured doc content for a given route path. */
