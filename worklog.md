@@ -1282,3 +1282,48 @@ Stage Summary:
 - 2 articles relocated from Backstage & Community to their proper new sub-group homes; find-friends.ts updated to match.
 - Using Musicosy now has 11 sub-groups (was 8): Discover & Browse, Content Interaction, Collections & Library, Media & Playback, Backstage & Community, Create & Publish, Live & Events, Creator Studio & Workspaces, Creator Commerce & Services, Podcasts & RSS, Communities & Fan Clubs.
 - All routes are placeholders ready for doc content.
+
+---
+Task ID: 16
+Agent: main (Z.ai Code)
+Task: Write "Block and mute" doc — 10th Content Interaction doc (21st Using Musicosy doc). Placement: Help Center → Using Musicosy → Content Interaction → Block and mute. Nav node already present (after "Save content", before "Edit or delete your comment"); no nav tree changes made.
+
+Work Log:
+- Ran checkpoint.sh: sandbox reset detected; restored local to GitHub state (f81d716 "Save content"). Confirmed Save content doc (Task 15) was already completed and pushed.
+- Verified nav.ts line 249 already lists "Block and mute" in Content Interaction group — placement matches user instruction; no nav edits needed.
+- Verified all 4 related-article paths return 200 via curl:
+  - Leave a Note and join the conversation → /resources/help-center/using-musicosy/content-interaction/leave-a-note-and-join-the-conversation
+  - Resing and Pass the Mic → /resources/help-center/using-musicosy/content-interaction/resing-and-pass-the-mic
+  - Report a post / account / LIVE / comment / DM → /support/reports-and-appeals/report-a-post-account-live-comment-dm (Support center uses /support prefix, NOT /resources/help-center/support)
+  - Account privacy and visibility settings → /support/account-and-access/account-privacy-and-visibility-settings
+- Wrote src/data/docs/block-and-mute.ts (blockAndMuteDoc). Structure: 2 intro paragraphs + 7 H2 sections:
+  1. "Mute someone": paragraph + "You may choose to mute a member when:" 5-item bullet list + "To mute an eligible member:" 4-step ordered list + paragraph + callout (variant=note, from source italic *Note:* — "Note:" lead stripped per resing-doc pattern).
+  2. "Block someone": paragraph + paragraph + "To block an eligible member:" 5-step ordered list + paragraph.
+  3. "Block versus mute": 3-row × 3-col table (Control / Best for / What it changes: Mute, Block, Flag (Report)). Cell bold markers removed (first column auto-bolded by renderer).
+  4. "What blocking can affect": paragraph + 8-item bullet list + paragraph.
+  5. "Unmute or unblock": 3 paragraphs.
+  6. "Block does not replace Flagging": paragraph + "Consider Flagging..." 7-item bullet list + paragraph.
+  7. "A practical example": 2-item bullet list (Mute/Block+Flag guidance; source mid-sentence bold on action verbs flattened to plain text since renderer has no inline-bold support).
+- Inline bold markers (Mute, Block, Personal Context, Workspace, More, Note, Signals, Backstage, Studio, etc.) stripped to plain text per renderer capability.
+- Registered blockAndMuteDoc in src/data/docs/index.ts (import + docs map entry).
+- Lint: clean. No errors.
+- Route verified 200: /resources/help-center/using-musicosy/content-interaction/block-and-mute
+- Agent Browser verified (desktop 1440×900 + mobile iPhone 14 / 390×844):
+  - H1 "Block and mute"; sidebar shows current node link.
+  - All 7 H2 sections render: Mute someone, Block someone, Block versus mute, What blocking can affect, Unmute or unblock, Block does not replace Flagging, A practical example.
+  - 1 table (3 rows × 3 cols) renders with headers [Control, Best for, What it changes]; first row [Mute, Reducing unwanted content..., Reduces visibility...].
+  - 1 callout renders: "Muting does not necessarily remove an existing Follow, delete prior messages, Flag the account, prevent every possible interaction, or make the person unable to find you."
+  - 2 ordered lists render with correct numbering (mute 4-step starts at "1"; block 5-step starts at "1"). Renderer uses <ul> containers with OrderedListItem number badges.
+  - 4 related articles render with correct hrefs (leave-a-note, resing-and-pass under /resources/help-center; report-a-post, account-privacy under /support).
+  - Back/Next DFS: BACK → "Save content" (save-content), NEXT → "Edit or delete your comment" (edit-or-delete-your-comment). Correct.
+  - No console errors (only React DevTools info + HMR connected).
+  - Mobile: 3-column table fits 390px viewport (tableWidth 342px, tableRight 366px, no horizontal overflow, bodyHorizontalScroll 0).
+  - Sticky footer: docHeight 7895px on mobile (long content) — footer pushed to natural document end (footerBottom 7895 = docHeight), no overlap.
+  - Golden path: clicked "Report a post / account / LIVE / comment / DM" related link → navigated to /support/reports-and-appeals/report-a-post-account-live-comment-dm with correct title. Cross-center link works.
+- Committed (20c8b78) and pushed to GitHub main.
+
+Stage Summary:
+- "Block and mute" is now fully written and rendered as the 10th real Content Interaction doc (21st Using Musicosy doc).
+- Content Interaction group: 10/12 real docs done. Remaining placeholders: Edit or delete your comment, Take your post off The Stage.
+- Cross-center related links confirmed working to both Support center sub-groups (Reports & Appeals, Account & Access).
+- Note: worklog file on GitHub only contained entries through Task ID 10; doc-writing tasks 11-15 (Like, Love and Keep, Comment, Leave a Note, Share, Repost, Resing, Mentions, Save content) were committed but their worklog entries were not present in the restored file. This Task 16 entry continues the sequence per the project's intended numbering.
