@@ -564,21 +564,6 @@ export const collectionsDoc: Doc = {
       type: "paragraph",
       text: "No. Setlists, Crates, and Keeps are reference records. They do not consume storage or upload allowances. Only actual media files you upload or download affect those limits.",
     },
-
-    // === Related Topics ===
-    { type: "heading", text: "Related Topics" },
-    {
-      type: "table",
-      headers: ["Topic", "Where to Find It"],
-      rows: [
-        ["Your Library", "Help Center > Collections and Library > Your Library"],
-        ["Playback and Queue Management", "Help Center > Media and Playback"],
-        ["Downloads and Offline Access", "Help Center > Media and Playback"],
-        ["Subscriptions and Purchases", "Help Center > Creator Commerce and Services"],
-        ["Privacy and Visibility Settings", "Help Center > Account and Access"],
-        ["Workspace Roles and Permissions", "Help Center > Creator Studio and Workspaces"],
-      ],
-    },
   ],
   related: [
     "/resources/help-center/using-musicosy/collections-and-library/your-library",
