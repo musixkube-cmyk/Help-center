@@ -47,6 +47,7 @@ import { leaveANoteAndJoinTheConversationDoc } from "./leave-a-note-and-join-the
 import { shareDoc } from "./share";
 import { repostDoc } from "./repost";
 import { resingAndPassTheMicDoc } from "./resing-and-pass-the-mic";
+import { mentionsDoc } from "./mentions";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -86,6 +87,7 @@ const docs: Record<string, Doc> = {
   [shareDoc.path]: shareDoc,
   [repostDoc.path]: repostDoc,
   [resingAndPassTheMicDoc.path]: resingAndPassTheMicDoc,
+  [mentionsDoc.path]: mentionsDoc,
 };
 
 /** Look up structured doc content for a given route path. */
