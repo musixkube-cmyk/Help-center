@@ -2447,3 +2447,53 @@ Stage Summary:
 - Includes 3 tables, 3 callouts (1 note + 2 warnings), 1 ordered list (3 steps), 2 bold lead-in lists, 7 H2 + 4 H3 headings, 4 FAQ Q&A pairs.
 - All 8 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Save music to your Library (Collections & Library position 7).
+
+---
+Task ID: 34
+Agent: main (Z.ai Code)
+Task: Write the "Save music to your Library" doc (Help Center → Using Musicosy → Collections & Library → position 7). Content provided verbatim by the user. This is the seventh doc in the Collections & Library sub-section (after Collections, Create collections, Shared collections, Playlists, Your Library, Keep and organize your Library).
+
+Work Log:
+- Read worklog tail (Task 33) for context: "Keep and organize your Library" doc complete (position 6), next doc was "Save music to your Library".
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Dev server had just restarted due to memory threshold (some routes returned 000 on first check). Waited 3s, re-verified all 8 related article paths return 200: collections, create-collections, shared-collections, playlists, your-library, keep-and-organize-your-library, edit-or-delete-a-collection, add-remove-and-reorder-playlist-items.
+- Created src/data/docs/save-music-to-your-library.ts:
+  - path: /resources/help-center/using-musicosy/collections-and-library/save-music-to-your-library
+  - 2 intro paragraphs (Keep = save music to Library for future listening, private sanctuary)
+  - H2 "How to Keep music" + intro paragraph + table (2 cols × 4 rows: The Listen Player/Discover or The Stage/Search Results/Artist Pages with how to Keep) + callout (note): filled bookmark icon = already Kept, tap again to remove
+  - H2 "What happens when you Keep music" + intro paragraph (personal relationship, no unintended actions) + table (2 cols × 5 rows: Add to Library/Improve recommendations/Notify creator/Make visible to followers/Grant playback access with Yes/No answers) + callout (warning): Keeping subscriber-only/paid track adds reference but remains locked until purchase/Circle join
+  - H2 "Keep vs. Love" + intro paragraph + table (3 cols × 5 rows: Primary Purpose/Visibility/Library Organization/Creator Notification/Best Used When for Keep vs Love) + callout (note): can both Keep and Love same track
+  - H2 "Playing and organizing your saved music" + intro paragraph + 4-item list with bold lead-ins (Play immediately, Add to a Setlist, Add to a Crate, Take It With You)
+  - H2 "How your Library handles unavailable music" + intro paragraph (reference links) + table (2 cols × 3 rows: creator unpublishes/territory-restricted/subscription ends with Library behavior) + callout (warning): permanently unavailable (rights takedown/removal) cannot restore playback, reference remains in history
+  - H2 "Frequently Asked Questions" + 4 FAQ H3+paragraph pairs:
+    - H3 "Is there a limit to how many songs I can Keep?" (tens of thousands, scales with taste)
+    - H3 "If I Keep a song, does it automatically download to my device?" (no, use Take It With You)
+    - H3 "Can other members see what I have Kept?" (no, strictly private; only via shared Public/Unlisted Setlist)
+    - H3 "Does Keeping a track count as a stream for the creator?" (no, Keep is library action not playback; qualified stream requires active listening for required duration)
+  - related: 8 sibling paths (Collections, Create collections, Shared collections, Playlists, Your Library, Keep and organize your Library, Edit or delete a collection, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for saveMusicToYourLibraryDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/save-music-to-your-library → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Save music to your Library"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / COLLECTIONS & LIBRARY / SAVE MUSIC TO YOUR LIBRARY
+  - 7 H2 headings: How to Keep music | What happens when you Keep music | Keep vs. Love | Playing and organizing your saved music | How your Library handles unavailable music | Frequently Asked Questions
+  - 4 H3 headings: 4 FAQ questions (limit / auto-download / visibility / stream count)
+  - 4 tables: How to Keep (2×4), What happens (2×5), Keep vs Love (3×5), Unavailable music (2×3) — all render with correct headers
+  - 1 bold lead-in list: Playing and organizing (4 items: Play immediately/Add to Setlist/Add to Crate/Take It With You)
+  - 4 callouts verified via DOM query (div.border-l-2): all 4 render with correct text
+    1. note: "If you have already Kept an item, the bookmark icon wil..."
+    2. warning: "Keeping a subscriber-only track or a paid release will..."
+    3. note: "You can both Keep and Love the same track. Many members..."
+    4. warning: "If a Kept item becomes permanently unavailable due to a..."
+  - Related articles: "RELATED ARTICLES" section renders with all 8 links
+  - Back/Next nav: Back → Keep and organize your Library (correct DFS predecessor, position 6); Next → Edit or delete a collection (correct, position 8)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Save music to your Library" doc complete — Collections & Library sub-section now 7/9 docs with real content.
+- Doc covers Keeping music specifically: how to Keep from 4 browse surfaces, what Keep does/doesn't do (5-row action table), Keep vs Love comparison (5-feature table), playing/organizing saved music (4 options), unavailable music handling (3 events + permanent takedown), and 4 FAQs.
+- Includes 4 tables, 4 callouts (2 notes + 2 warnings), 1 bold lead-in list (4 items), 7 H2 + 4 H3 headings, 4 FAQ Q&A pairs.
+- All 8 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Edit or delete a collection (Collections & Library position 8).
