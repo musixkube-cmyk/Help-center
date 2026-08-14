@@ -1895,3 +1895,35 @@ Stage Summary:
 - All 3 nav data sources updated (megaMenu, footerNav, footerBottomRail, helpCenterSections).
 - No existing doc related-article links broken (verified zero references before move).
 - Nav restructure (section-specific top nav) NOT executed — user confirmed current nav architecture is fine ("we are fine as it is").
+
+---
+Task ID: 21
+Agent: main (Z.ai Code)
+Task: Fix top-nav "Help Center" click behavior. User reported: clicking the "Help Center" text label in the top nav (not hovering) lands on the full hub (all 6 root sections in sidebar), but they want it to land on "help related docs only" (focused Help Center view). Footer "Help Center" should keep going to the full hub (all centers, grid + sidebar).
+
+Work Log:
+- Ran checkpoint.sh: local matches GitHub (e7c0736). No reset.
+- Diagnosed with Agent Browser: confirmed `/resources/help-center` (the current top-nav destination) shows ALL 6 root sections in the sidebar (Help Center, Support Center, Trust & Policies, Legal Center, For the Music Industry, Business & Advertising) — the "full hub". Meanwhile `/resources/help-center/getting-started` shows ONLY the Help Center root section — the "help docs only" focused view.
+- Root cause: the header's top-nav text link used `href={node.path}` which is `/resources/help-center` (the full hub landing page). The footer also used the same path. Both went to the same destination.
+- Solution: added optional `entryPath?: string` field to the NavNode type in nav.ts. When set, the header's top-nav text link uses `entryPath` instead of `path`. The footer and MegaPanel "Explore" links continue using `path` (the full hub).
+- Set `entryPath: "/resources/help-center/getting-started"` on the megaMenu Help Center node only. Other megaMenu entries (Support Center, Trust & Policies, Legal Center) left unchanged — can be extended later if user wants the same pattern.
+- Updated src/components/site/site-header.tsx in 2 places:
+  - Desktop top-nav text link (line 178): `href={node.entryPath ?? node.path}`
+  - Mobile menu text link (line 221): `href={node.entryPath ?? node.path}`
+  - MegaPanel "Explore {node.label}" link (line 103): kept as `href={node.path}` (full hub)
+  - MegaPanel "Open Help Center" CTA (line 146): kept hardcoded `/resources/help-center` (full hub)
+- Lint: clean. No errors.
+- Agent Browser verified (desktop 1440×900):
+  - Top-nav "Help Center" click from deep doc page (/resources/help-center/using-musicosy/content-interaction/block-and-mute) → navigates to /resources/help-center/getting-started. H1 "Getting Started". Sidebar shows ONLY /resources/help-center root section (isFocusedHelpView: true). Correct — "help related docs only".
+  - Footer "Help Center" link href confirmed as /resources/help-center (full hub).
+  - /resources/help-center (full hub) renders with isFullHub: true — sidebar shows all 6 root sections (25 root section paths including /resources/help-center, /support/*, /privacy-and-safety/*, /legal-and-policies/*, /for-creators/*, /for-business/*). Correct — "home page with all the grid and sidebar".
+  - MegaPanel "Explore Help Center" link href confirmed as /resources/help-center (full hub). Correct.
+  - No console errors.
+- Committed (650d6e6) and pushed to GitHub main.
+
+Stage Summary:
+- BEHAVIOR FIX: Top-nav "Help Center" text click now lands on the focused Help Center view (/resources/help-center/getting-started, sidebar shows only Help Center docs) — matches user's "help related docs only" requirement.
+- Footer "Help Center" link unchanged → still goes to full hub (/resources/help-center, all 6 root sections) — matches user's "home page with all the grid and sidebar" requirement.
+- MegaPanel "Explore Help Center" link unchanged → still goes to full hub.
+- Implementation via optional `entryPath` field on NavNode — clean, extensible. Currently set only on Help Center; can be added to other megaMenu entries (Support Center, Trust & Policies, Legal Center) if user wants the same focused-view pattern for all.
+- Nav architecture otherwise unchanged (user confirmed "we are fine as it is").
