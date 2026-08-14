@@ -1372,3 +1372,387 @@ Stage Summary:
 - Content Interaction group: 11/12 real docs done. Only remaining placeholder: "Take your post off The Stage" (which is the user-specified Next document).
 - Cross-center related link to Support (Reports & Appeals) confirmed working.
 - No nav tree changes made (node was pre-existing).
+
+
+---
+Task ID: explore-nav-arch
+Agent: Explore (sub-agent)
+Task: Map the navigation/header/layout architecture of the Musicosy Next.js 16 App Router project at /home/z/my-project. Read nav.ts fully (~832 lines), the site header, root layout, home page, catch-all, Help Center landing, sidebar, and footer. Report file paths, line numbers, the full Legal/Policies tree, and whether the header is context-aware or global. Research only — NO file modifications.
+
+Work Log:
+- Read worklog.md fully (Task IDs 1–18 + named tasks + tail Tasks 7–10, 16–17). Most recent doc-writing tasks: Block and mute (Task 16) and Edit or delete your comment (Task 17) both placed under Help Center → Using Musicosy → Content Interaction. Site has been progressively dedicated to a SUPPORT/Help-Center experience (Task support-only-purge) — no music marketing pages remain.
+- Read src/data/nav.ts (832 lines, FULL).
+- Read src/components/site/site-header.tsx (246 lines, FULL).
+- Read src/components/site/site-footer.tsx (95 lines, FULL).
+- Read src/components/site/help-center-sidebar.tsx (113 lines, FULL).
+- Read src/components/site/nav-link.tsx (42 lines) + doc-nav.tsx (58 lines).
+- Read src/app/layout.tsx (65 lines) + src/app/page.tsx (124 lines) + src/app/[...path]/page.tsx (243 lines).
+- Read src/app/resources/help-center/page.tsx (111 lines) — dedicated Help Center landing.
+- Read src/app/developers/layout.tsx (42 lines) + src/app/advertising/layout.tsx (59 lines) — nested portal layouts.
+- Read src/data/docs/index.ts (102 lines) — docs registry (37 docs as of latest task).
+
+Findings:
+
+═══════════════════════════════════════════════════════════════════════
+1. TOP-LEVEL NAVIGATION (mega menu) STRUCTURE  — src/data/nav.ts
+═══════════════════════════════════════════════════════════════════════
+
+`megaMenu` (lines 39–88) is a 4-entry array. Each top-level entry has a `path`, `blurb`, and an ABBREVIATED `children` list (group labels only — NOT the full leaf tree). The full leaf trees live in `helpCenterSections` (see below).
+
+  ┌──────────────────────┬───────────────────────────────────┬──────────────────────────────────────────────────────────────────────┐
+  │ Top-level entry      │ path                              │ children (abbreviated)                                              │
+  ├──────────────────────┼───────────────────────────────────┼──────────────────────────────────────────────────────────────────────┤
+  │ Help Center          │ /resources/help-center            │ Getting Started, Using Musicosy, New User FAQ, Resources & Guides,  │
+  │                      │                                   │ Glossary, Company News / Blog (6)                                   │
+  ├──────────────────────┼───────────────────────────────────┼──────────────────────────────────────────────────────────────────────┤
+  │ Support Center       │ /support                          │ Account & Access, Reports & Appeals, Payments & Purchases,          │
+  │                      │                                   │ Technical Support, Sign In, Contact Us (6)                          │
+  ├──────────────────────┼───────────────────────────────────┼──────────────────────────────────────────────────────────────────────┤
+  │ Trust & Policies     │ /privacy-and-safety               │ Safety & Security, Privacy Center, Transparency Center,             │
+  │                      │                                   │ Report a Safety Issue (4)                                           │
+  ├──────────────────────┼───────────────────────────────────┼──────────────────────────────────────────────────────────────────────┤
+  │ Legal Center         │ /legal-and-policies               │ Terms of Use, Copyright & IP, Law Enforcement, Our Rules (4)        │
+  └──────────────────────┴───────────────────────────────────┴──────────────────────────────────────────────────────────────────────┘
+
+`build(base, items)` (lines 16–32): recursive helper that assigns `path = base + "/" + slug(label)` for each item. Strings become leaf nodes; `[label, kids]` tuples become branches with `children: build(path, kids)`. Used by helpCenterSections and adsHelpCenter — NOT by megaMenu (whose children have hard-coded paths).
+
+`helpCenterSections` (lines 213–461) — 6 top-level "center" trees carrying the FULL document tree (every leaf). This is the canonical source the sidebar uses.
+
+  1. Help Center (/resources/help-center)
+     - Getting Started → 16 docs (What is Musicosy?, Create an account, …, Delete or deactivate your account)
+     - Using Musicosy → 11 sub-groups, ~70 leaf docs total:
+         Discover & Browse (11), Content Interaction (12), Collections & Library (9),
+         Media & Playback (10), Backstage & Community (8), Create & Publish (20),
+         Live & Events (17), Creator Studio & Workspaces (20), Creator Commerce & Services (8),
+         Podcasts & RSS (3), Communities & Fan Clubs (4)
+  2. Support Center (/support) — 4 sub-groups:
+     Account & Access (15), Reports & Appeals (14), Payments & Purchases (9), Technical Support (7)
+  3. Trust & Policies (/privacy-and-safety) — 4 children (see full tree below)
+  4. Legal Center (/legal-and-policies) — 4 children (see full tree below)
+  5. For the Music Industry (/for-creators) — For Creators, For Labels, For Distributors, For Sync Agents + 4 resource sub-pages (8 leaves total)
+  6. Business & Advertising (/for-business) — Musicosy for Business, Advertise / Adnote, Ads Help Center (3 leaves)
+
+`adsHelpCenter` (lines 467–667) — single NavNode at /advertising with 18 sub-groups containing ~150 leaves (the AdNote ad-studio help tree).
+
+`platformRoutes` (lines 673–682) — 8 standalone persona landing routes: For Fans, For Creators, For Labels, For Distributors, For Sync Agents, For Business, Podcast, US TIDA. These are no longer in the mega menu but kept resolvable via allNav.
+
+`footerNav` (lines 99–167) — 6 flat columns: Help & Support (8 links), Resources (5), Trust & Policies (5), For the Music Industry (4), Business (3), Company (6). 30 total links, no nesting.
+
+`footerUtilityBar` (lines 174–191) — 16 quick-access links (About, Get App, Help, Careers, Ads & Business, Podcast, Stream, Creators, Fans, Distributors, Sync, Developers, News, US TIDA, Sign In, Contact Us).
+
+`footerBottomRail` (lines 198–207) — 8 legal/policy links (Terms, Privacy, Cookies, DMCA, Accessibility, Privacy Center, Legal Center, Support Center).
+
+Helpers:
+  - `flatten(nodes)` (lines 685–695) — DFS every node + descendants.
+  - `allNav` (lines 709–725) — deduped flat list: helpCenterSections FIRST (full trees win), then megaMenu, adsHelpCenter, platformRoutes, flatten(footerNav).
+  - `findNode(path, nodes)` (lines 727–736) — recursive lookup by exact path.
+  - `findTrail(path)` (lines 738–748) — DFS breadcrumb trail.
+  - `rootSections` (lines 761–779) — [...helpCenterSections, Resources] (Resources is added manually since it's no longer in megaMenu). These are the "center" trees that get the sidebar treatment.
+  - `treeContains(node, path)` (lines 781–787) + `findRootSection(path)` (lines 794–799) — TREE-WALK (not prefix) so /support/managing-your-account maps to the Using Musicosy center even though its path starts with /support.
+  - `flattenTree(node)` (lines 806–814) — DFS pre-order (matches sidebar render order).
+  - `getNeighbors(path, rootSection)` (lines 821–832) — {prev, next} by index in flattened tree, used by Back/Next buttons.
+
+═══════════════════════════════════════════════════════════════════════
+FULL LEGAL & POLICIES TREE (every node + path)
+═══════════════════════════════════════════════════════════════════════
+
+NOTE: There are TWO separate top-level centers — "Trust & Policies" (/privacy-and-safety) and "Legal Center" (/legal-and-policies). They are distinct trees in helpCenterSections.
+
+─── Trust & Policies  (root: /privacy-and-safety, nav.ts lines 278–378) ───
+Trust & Policies
+├── Trust & Policies Home  →  /privacy-and-safety
+├── Safety & Security  →  /privacy-and-safety/safety-and-security
+│   ├── Safety  →  /privacy-and-safety/safety
+│   │   ├── Platform Rules
+│   │   ├── Content Restrictions
+│   │   ├── Guidance for parents/caregivers
+│   │   ├── Age verification
+│   │   ├── Underage appeals
+│   │   ├── Under 13 Experience
+│   │   ├── Youth Portal
+│   │   ├── Teen privacy & safety settings
+│   │   ├── Post privacy settings
+│   │   ├── Stitch privacy settings
+│   │   ├── Manage video downloads
+│   │   ├── Activity status
+│   │   ├── Suggested accounts
+│   │   ├── Manage topics
+│   │   └── Audience controls  (15 leaves, all under /privacy-and-safety/safety/<slug>)
+│   ├── Content & Conduct  →  /privacy-and-safety/content-and-conduct
+│   │   ├── Community Guidelines
+│   │   ├── Community Principles
+│   │   ├── Youth Safety & Well-Being
+│   │   ├── Safety & Civility
+│   │   ├── Mental & Behavioral Health
+│   │   ├── Sensitive & Mature Themes
+│   │   ├── Integrity & Authenticity
+│   │   ├── Regulated Goods & Services
+│   │   ├── For You feed Eligibility Standards
+│   │   ├── Creator Code of Conduct
+│   │   ├── Restricted Mode
+│   │   ├── Content levels on posts
+│   │   ├── Age-restricted LIVE content
+│   │   ├── Dangerous & deceptive content
+│   │   ├── Violent extremism
+│   │   ├── Content Algorithm
+│   │   └── Political Ads  (17 leaves)
+│   └── Security  →  /privacy-and-safety/security
+│       ├── Content violations & bans
+│       ├── Transaction policy violations
+│       └── Avoid phishing  (3 leaves)
+├── Privacy Center  →  /privacy-and-safety/privacy  (14 leaves)
+│   ├── Collecting your personal data
+│   ├── Protecting your personal data
+│   ├── Your data rights
+│   ├── California Notice of Collection
+│   ├── Account privacy
+│   ├── Cookies policy
+│   ├── Location detection
+│   ├── Information we collect
+│   ├── Consumer Health Data Privacy Policy
+│   ├── Privacy Policies
+│   ├── Privacy Policy
+│   ├── Kids Privacy Policy
+│   ├── Google Privacy Policy
+│   └── SheerID Privacy Policy
+└── Transparency Center  →  /legal-and-policies/transparency-center  (5 leaves, NOTE: under /legal-and-policies path even though tree-wise it sits inside Trust & Policies)
+    ├── Community enforcement transparency
+    ├── Content moderation transparency
+    ├── Government and legal requests
+    ├── Copyright transparency
+    └── Advertising transparency
+
+Trust & Policies totals: 4 sub-categories + 3 sub-sub-categories + 55 leaf documents.
+
+─── Legal Center  (root: /legal-and-policies, nav.ts lines 380–431) ───
+Legal Center
+├── Rules & Policies Home  →  /legal-and-policies  (leaf)
+├── Terms of Use  →  /legal-and-policies/terms-of-use  (18 leaves)
+│   ├── Subscription Terms & Conditions
+│   ├── Gift Card Terms
+│   ├── User Guidelines
+│   ├── Song Purchase Terms
+│   ├── Community Rules & Guidelines
+│   ├── Distribution Agreement
+│   ├── Music Terms
+│   ├── Commercial Music Library Terms
+│   ├── Buyer Policy
+│   ├── Branded Content Policy
+│   ├── Rewards Policy
+│   ├── Campaign Terms & Conditions
+│   ├── Community Terms
+│   ├── Intellectual Property Policy
+│   ├── DMCA Policy
+│   ├── Arbitration (NAMA DR)
+│   ├── Open Source Software Notices
+│   └── AI Services Terms
+├── Copyright & IP  →  /legal-and-policies/copyright-and-ip  (6 leaves)
+│   ├── Intellectual Property Policy
+│   ├── Trademark & counterfeiting
+│   ├── DMCA Policy
+│   ├── Copyright reporting
+│   ├── Commercial use
+│   └── Ownership & copyright
+└── Law Enforcement  →  /legal-and-policies/law-enforcement  (1 leaf)
+    └── Law Enforcement Data Request Guidelines
+
+Legal Center totals: 4 sub-categories + 25 leaf documents.
+
+Combined Legal/Policies content (both centers): 8 sub-categories + 80 leaf documents.
+
+═══════════════════════════════════════════════════════════════════════
+2. HEADER / TOP-NAV COMPONENT  — src/components/site/site-header.tsx
+═══════════════════════════════════════════════════════════════════════
+
+Single header component: `SiteHeader` (lines 160–246). It is a 'use client' component.
+
+  - Sticky bar (line 164): `sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur`.
+  - Layout (line 165): flex row, logo left, mega-menu nav center-left, Sign-in/Contact-us buttons right, hamburger on mobile.
+  - Logo (lines 166–172): single `<img src="/adnote-logo.png" alt="Musicosy" className="h-9 w-auto" />` wrapped in a NavLink to "/". (Note: the worklog claimed text + image logo side-by-side, but the current code is image-only — the text "MUSICOSY" was removed at some point.)
+
+  Top-nav rendering logic (lines 174–187):
+    ```
+    <nav className="hidden flex-1 items-end gap-7 pb-1 lg:flex">
+      {megaMenu.map((node) => (
+        <div key={node.path} className="group static">
+          <NavLink href={node.path} activeProps={{ className: "text-accent" }}>
+            {node.label}
+          </NavLink>
+          <MegaPanel node={node} />
+        </div>
+      ))}
+    </nav>
+    ```
+  → Renders ALL 4 top-level mega-menu entries (Help Center, Support Center, Trust & Policies, Legal Center). No subset, no filtering. The header is GLOBAL and renders the SAME 4 items on every page.
+
+  Mega-panel (MegaPanel component, lines 83–157):
+    - Triggered by Tailwind `group-hover:*` (CSS-only, no JS state) — invisible absolute panel that becomes visible on hover of the parent `.group` div.
+    - Full-width dropdown with a 5-column grid: intro rail (col 1, spans 2 rows) + 3 group columns + dark "Need a hand?" support CTA panel (col 5, spans 2 rows).
+    - `groups = node.children.slice(0, 6)` (line 85) — shows up to 6 of the (abbreviated) child groups. Since megaMenu children have no further leaves (they're all 1-level deep), `(child.children ?? [child]).slice(0, 6)` (line 121) just renders the group label as a single MegaItem.
+    - Each MegaItem (lines 59–81) shows a deterministic lucide icon (iconFor hashes the path) + label + group name.
+    - The "Need a hand?" promo panel (lines 129–152) is dark `bg-ink text-ink-foreground` with accent glow + "Open Help Center →" CTA. (This is the dark promo panel that earlier worklog tasks discussed preserving.)
+
+  Right-side buttons (lines 189–205): "Sign in" (ghost) → /support/sign-in, "Contact us" (solid) → /support/contact-us.
+
+  Mobile menu (lines 207–243): hamburger toggles a `max-h-[70vh] overflow-y-auto` panel that lists each megaMenu top-level item + its (abbreviated) children in a 2-col grid. Click closes the menu via `setOpen(false)`. NOTE: the mobile menu is FLAT 2-level (top-level + children only) — it does NOT recursively expand into deeper leaves.
+
+  CONTEXT-AWARENESS: ❌ The header is NOT context-aware. It renders the same 4 top-level mega-menu items + same logo + same right-side CTAs on every page in the app, including the developer portal, ad portal, and Help Center. The portal layouts (developers/layout.tsx, advertising/layout.tsx) add their OWN sub-header bar BELOW the global SiteHeader (which is rendered by the root layout). They do not replace it.
+
+═══════════════════════════════════════════════════════════════════════
+3. LAYOUT & ROUTING
+═══════════════════════════════════════════════════════════════════════
+
+ROOT LAYOUT — src/app/layout.tsx (65 lines, server component):
+  - Lines 8–20: Bebas Neue (display) + Barlow (body) via next/font/google, mapped to --font-display / --font-sans CSS vars.
+  - Lines 22–44: Metadata ("Musicosy Help Center") + viewport.
+  - Lines 46–65: Renders `<html><body>` with a `flex min-h-screen flex-col` shell:
+      ```
+      <SiteHeader />
+      <div className="flex-1">{children}</div>
+      <SiteFooter />
+      <Toaster />
+      ```
+  → Header and footer are GLOBAL — rendered on every page including /developers, /advertising, /advertise, /resources/help-center, and catch-all routes. Toaster sits outside the flex shell.
+
+HOME PAGE — src/app/page.tsx (124 lines, server component):
+  - Metadata: "Musicosy Help Center — Support, safety and policies".
+  - HELP_CARDS (lines 15–46): 6 cards — Help Center (/resources/help-center), Support Center (/support), Trust & Policies (/privacy-and-safety), Legal Center (/legal-and-policies), Resources (/resources), For the Music Industry (/for-creators).
+  - QUICK_LINKS (lines 48–55): New user FAQ, Glossary, Accessibility, Contact us, Developer docs, Advertise.
+  - Renders (lines 57–123): Hero ("How can we help you?" h1 + blurb + quick-link text row) → 6-card grid (clean, no icons/grid-lines per Task minimalist-redesign) → "Still need a hand?" contact strip.
+  → Home does NOT show the "full tree" — it shows 6 marketing-style cards that route INTO the various centers. The actual nav tree is only exposed inside each center (via the sidebar).
+
+CATCH-ALL — src/app/[...path]/page.tsx (243 lines, async server component):
+  - resolvePath (lines 13–15): joins params.path with "/".
+  - generateMetadata (lines 17–37): uses findNode to title the page; robots noindex on miss.
+  - Default export (lines 39–243): Two render paths:
+    (A) CENTER layout (when findRootSection(path) returns a section, lines 57–181):
+        - Two-column grid: sticky sidebar (lg:sticky lg:top-[57px] lg:h-[calc(100vh-57px)] lg:overflow-y-auto, lines 66–71) + main content.
+        - Sidebar renders the SINGLE root section via `<HelpCenterSidebar sections={[rootSection]} />` (line 70) — NOT the full tree.
+        - Main content: breadcrumb (Home / trail / current) → H1 → blurb (hidden if doc exists) → children grid OR DocContent (if doc registered) OR placeholder with Contact us / Sign in buttons.
+        - DocNav (Back/Next) at bottom for non-root-landing pages (line 153).
+        - Root-landing CTA on the section's home page (lines 156–176).
+    (B) STANDALONE layout (when no root section, lines 186–242):
+        - No sidebar. Hero + blurb + "Browse Help Center" + "Contact us" buttons + optional children grid.
+        - Used for /about, /careers, /download, /brand-toolkit, /investors, /podcast, /us-tida, /for-fans, etc.
+
+ROUTE GROUPS: None. There are no `(group)` folders in src/app/. The structure is flat with nested layouts only for /developers and /advertising:
+  src/app/
+    layout.tsx                  (root — wraps SiteHeader + children + SiteFooter)
+    page.tsx                    (home /)
+    [...path]/page.tsx          (catch-all for all docs/sections/leaves)
+    not-found.tsx               (404)
+    error.tsx                   (error boundary)
+    icon.png + apple-icon.png   (Next.js file-convention favicons)
+    globals.css
+    api/route.ts                (API route, ~134 bytes)
+    resources/help-center/page.tsx   (dedicated Help Center landing, overrides catch-all)
+    advertise/page.tsx               (adnote gate page)
+    advertising/layout.tsx           (Ads portal sub-layout with dark sub-header + sidebar)
+    advertising/page.tsx             (Ads portal landing)
+    advertising/[...slug]/page.tsx   (Ads portal catch-all)
+    developers/layout.tsx            (Developer portal sub-layout with dark sub-header + sidebar)
+    developers/page.tsx              (Developer portal landing)
+    developers/[...slug]/page.tsx    (Developer portal catch-all)
+
+═══════════════════════════════════════════════════════════════════════
+4. SIDEBAR COMPONENT — src/components/site/help-center-sidebar.tsx (113 lines)
+═══════════════════════════════════════════════════════════════════════
+
+`HelpCenterSidebar` (lines 100–113) is a 'use client' component taking a `sections: NavNode[]` prop.
+
+  - Uses `usePathname()` to know the current page.
+  - Renders each section via recursive `SidebarItem` (lines 10–98).
+  - Depth-0 sections (lines 25–45) render as UPPERCASE group labels (e.g. "HELP CENTER", "TRUST & POLICIES") with children below — always expanded.
+  - Depth-1+ items (lines 47–97): each has a NavLink (with active highlighting: `bg-accent/10 text-accent` for exact match, `text-foreground` for in-trail, muted otherwise) + a ChevronDown expand button if it has children.
+  - Open state (line 22): `useState(isInTrail || depth === 0)` — top-level + in-trail branches auto-expand on mount. Other branches start collapsed but are clickable to expand. (Note: `setOpen` only mutates local state — no auto-collapse on navigation away.)
+  - Children render inside `ml-4 border-l border-border pl-2` indented blocks.
+
+  WHAT IT SHOWS:
+    - On the dedicated /resources/help-center landing: `sections={helpCenterSections}` → renders ALL 6 root sections (Help Center, Support Center, Trust & Policies, Legal Center, For the Music Industry, Business & Advertising) with their full trees.
+    - On every catch-all center page: `sections={[rootSection]}` → renders ONLY the matching root section's tree (e.g. /legal-and-policies page shows only the Legal Center tree).
+    - On /advertising pages: `sections={[adsHelpCenter]}` → renders the 18-section Ads Help Center tree.
+    - On /developers pages: uses a separate PortalSidebar component (src/components/portal/portal-sidebar.tsx, 172 lines) — different design (icons + collapsible groups), but same pattern.
+
+═══════════════════════════════════════════════════════════════════════
+5. FOOTER — src/components/site/site-footer.tsx (95 lines, server component)
+═══════════════════════════════════════════════════════════════════════
+
+Dark bar: `bg-ink text-ink-foreground`. Four stacked sections:
+
+  (1) 6-column nav grid (lines 8–33): grid-cols-2 → sm:grid-cols-3 → lg:grid-cols-6. Renders `footerNav` (6 flat columns, 30 links total, no nesting). Each column has an uppercase heading link + a `<ul>` of leaf links.
+
+  (2) Logo (lines 36–55): right-aligned, 150×36px, rendered as a CSS-masked div using `url('/adnote-logo.png')` with `--accent` (orange) as the mask fill color. Pure-CSS, no `<img>`.
+
+  (3) Utility bar (lines 58–73): horizontal `flex flex-wrap` strip with the 16 `footerUtilityBar` links in uppercase text-xs tracking-wider.
+
+  (4) Bottom rail (lines 76–92): `© 2026 Musicosy Corp.` + the 8 `footerBottomRail` legal/policy links + a static "English" language label.
+
+  This matches the "6col-flat-utility" pattern documented in the worklog (Task footer-6col-flat-utility) — flat columns + utility bar below logo + cookies/legal bottom rail.
+
+═══════════════════════════════════════════════════════════════════════
+6. HOW A USER REACHES HELP CENTER DOCS TODAY (click path)
+═══════════════════════════════════════════════════════════════════════
+
+YES — there IS a dedicated Help Center landing page at /resources/help-center (src/app/resources/help-center/page.tsx, 111 lines). It overrides the catch-all for that exact path.
+
+Trace to reach a doc like /resources/help-center/using-musicosy/content-interaction/block-and-mute:
+
+  Path A (via header mega menu — fastest):
+    1. Click "Help Center" in the global top-nav header (always visible).
+    2. Lands on /resources/help-center (dedicated landing). The sidebar shows ALL 6 help-center sections with full trees.
+    3. In the sidebar, expand "Help Center" → "Using Musicosy" → "Content Interaction" → click "Block and mute".
+       (Or scroll the main content: "Start here" cards + "Advertising" hub, but no direct doc links — the sidebar is the only doc-level entry point from this page.)
+    4. Lands on /resources/help-center/using-musicosy/content-interaction/block-and-mute — the sidebar now switches to show ONLY the Help Center tree (rootSection), with Content Interaction expanded and "Block and mute" highlighted.
+
+  Path B (via home card):
+    1. From home (/), click the "Help Center" card (one of 6 HELP_CARDS on the home grid).
+    2. Same landing as step 2 above; continue from step 3.
+
+  Path C (via footer):
+    1. Footer "Help & Support" column → "Help Center" link → /resources/help-center.
+    2. Continue from step 3 in Path A.
+
+  Path D (via header mega-panel hover):
+    1. Hover "Help Center" in the top-nav. Mega-panel drops down with 6 abbreviated group links (Getting Started, Using Musicosy, New User FAQ, Resources & Guides, Glossary, Company News / Blog).
+    2. Click "Using Musicosy" → /resources/help-center/using-musicosy (catch-all center page; sidebar shows ONLY the Help Center tree, "Using Musicosy" expanded).
+    3. In sidebar, expand "Content Interaction" → click "Block and mute".
+
+  NOTE on context-awareness: The header is GLOBAL and shows the same 4 mega-menu items everywhere. Once you click into a center (e.g. /legal-and-policies), the header doesn't change to highlight "Legal Center" with a contextual sub-nav — it stays the same. The only context-aware navigation is the SIDEBAR, which switches trees based on findRootSection(path).
+
+═══════════════════════════════════════════════════════════════════════
+SUMMARY TABLE
+═══════════════════════════════════════════════════════════════════════
+
+| Aspect                            | Status / Location                                                                               |
+|-----------------------------------|-------------------------------------------------------------------------------------------------|
+| Header component                  | src/components/site/site-header.tsx (lines 160–246)                                             |
+| Header context-aware?             | ❌ NO — global, same 4 mega-menu items + same logo + same CTAs on every page                    |
+| Mega-menu data source             | `megaMenu` export in src/data/nav.ts (lines 39–88), 4 entries, abbreviated children only        |
+| Full nav tree data source         | `helpCenterSections` export in src/data/nav.ts (lines 213–461), 6 root sections                 |
+| Mega-panel trigger                | CSS-only `group-hover:*` (no JS state), 5-col grid with intro rail + 3 group cols + dark CTA   |
+| Mobile menu                       | Hamburger toggle, FLAT 2-level (top-level + children), no recursive expand                      |
+| Root layout                       | src/app/layout.tsx (65 lines) — wraps SiteHeader + children + SiteFooter globally               |
+| Home page                         | src/app/page.tsx — 6 HELP_CARDS routing to centers, NO full tree on home                        |
+| Catch-all page                    | src/app/[...path]/page.tsx (243 lines) — 2 render paths: CENTER (sidebar+content) / STANDALONE  |
+| Help Center landing (dedicated)   | src/app/resources/help-center/page.tsx (111 lines) — overrides catch-all for that exact path    |
+| Sidebar component                 | src/components/site/help-center-sidebar.tsx (113 lines), recursive, expandable, depth-0 open    |
+| Sidebar data shown                | Landing: ALL 6 helpCenterSections. Center pages: ONLY the matching rootSection (single-element).|
+| Footer component                  | src/components/site/site-footer.tsx (95 lines) — 6-col nav + logo + utility bar + bottom rail   |
+| Footer pattern                    | "6col-flat-utility" — 6 flat columns, 16-link utility bar, 8-link bottom rail, no nesting       |
+| Section-specific nav pattern      | ✅ YES — `findRootSection(path)` + `<HelpCenterSidebar sections={[rootSection]} />` switches the |
+|                                   | sidebar tree per-section. Header does NOT do this — only the sidebar.                           |
+| Portal sub-headers (existing)     | /developers (src/app/developers/layout.tsx) + /advertising (src/app/advertising/layout.tsx) —   |
+|                                   | each adds its own dark sub-header BELOW the global SiteHeader with portal-specific branding.    |
+| Route groups                      | None — flat app dir + nested layouts only for /developers and /advertising                      |
+| Back/Next nav                     | src/components/site/doc-nav.tsx — derived from `getNeighbors(path, rootSection)` (DFS order)    |
+| Docs registry                     | src/data/docs/index.ts — 37 docs registered (most recent: edit-or-delete-your-comment)          |
+
+Key architectural facts for the next agent:
+  1. The header is GLOBAL and shows only 4 top-level mega items. If the user wants per-section header context (e.g. a Legal Center sub-header showing "Terms of Use | Copyright & IP | Law Enforcement"), there is currently NO pattern for it — the only existing per-section-context pattern is the SIDEBAR (via findRootSection).
+  2. The existing sub-header pattern (developers/layout.tsx, advertising/layout.tsx) is a NESTED LAYOUT under the route prefix — these render their own dark sub-header INSIDE the layout, BELOW the global SiteHeader. This is the cleanest existing pattern for adding a per-section header.
+  3. The mega-menu shows only abbreviated children (group labels) — leaves are never exposed via the header. Users must go through the sidebar.
+  4. `helpCenterSections` is the canonical source-of-truth tree. `megaMenu` is a SEPARATE abbreviated copy with manually-maintained paths (lines 39–88). If you add a new section, you must update BOTH (and rootSections, which is `[...helpCenterSections, Resources]`).
+  5. allNav dedup keeps the FIRST occurrence by path — helpCenterSections is listed before megaMenu deliberately so the full leaf trees win (Task center-sidebar-everywhere documented this fix).
+
+Stage Summary:
+- Mapped the entire navigation/header/layout architecture of /home/z/my-project. Header is GLOBAL (4 mega items, same on every page, NOT context-aware). Sidebar IS context-aware via findRootSection + rootSections. Footer is the "6col-flat-utility" pattern (6 flat columns + 16-link utility bar + 8-link bottom rail). Two existing nested-layout sub-headers (developers, advertising) provide the only pattern for adding per-section header context. Full Legal & Policies tree documented above (Trust & Policies = 4 sub-cats + 55 leaves; Legal Center = 4 sub-cats + 25 leaves; combined = 8 sub-cats + 80 leaves). No files modified. Worklog appended.
