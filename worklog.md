@@ -1853,3 +1853,45 @@ Stage Summary:
 - Legal, Policy & Compliance group: still 24 items, now deduplicated and expanded with the 2 missing policies.
 - NOTE: The larger reorganization proposed in prior turn (Move 1: relocate Privacy Center from /privacy-and-safety/privacy to /legal-and-policies/privacy; Move 2: relocate User Guidelines + Community Rules & Guidelines from Terms of Use to Trust & Policies → Content & Conduct) was NOT executed — user only requested duplicate removal + AUP/DPA addition. Those moves remain available if user confirms.
 - NOTE 2: The Privacy Policy node still exists in TWO places: Privacy Center (/privacy-and-safety/privacy/privacy-policy) and (previously) Legal Policy & Compliance. The Legal Policy & Compliance duplicate is now removed; the Privacy Center copy remains the canonical location. If user wants the larger Privacy Center relocation, that's the pending Move 1.
+
+---
+Task ID: 20
+Agent: main (Z.ai Code)
+Task: Execute the two-part legal/policy tree reorganization for clearer delineation (user confirmed "yes that is what i proposed and it makes sense"). Move 1: relocate Privacy Center from Trust & Policies → Legal Center (all 14 leaves change path from /privacy-and-safety/privacy/* → /legal-and-policies/privacy/*). Move 2: relocate User Guidelines + Community Rules & Guidelines from Legal Center → Terms of Use → Trust & Policies → Content & Conduct (where Community Guidelines already lives).
+
+Work Log:
+- Ran checkpoint.sh: local matches GitHub (ae66a67). No reset.
+- Verified blast radius: grep across all docs/*.ts found ZERO references to /privacy-and-safety/privacy, terms-of-use/user-guidelines, or terms-of-use/community-rules — safe to move without breaking related-article links.
+- Updated src/data/nav.ts in 7 locations:
+  - megaMenu Trust & Policies children: REMOVED "Privacy Center" entry (was → /privacy-and-safety/privacy).
+  - megaMenu Legal Center children: ADDED "Privacy Center" entry (→ /legal-and-policies/privacy) after Law Enforcement.
+  - footerNav Trust & Policies column: updated "Privacy Center" path from /privacy-and-safety/privacy → /legal-and-policies/privacy (kept in Trust & Policies footer column for topical quick-access; footer is utility not tree-mirror).
+  - footerBottomRail: updated "Privacy Center" path from /privacy-and-safety → /legal-and-policies/privacy (was mislabeled, pointing to Trust & Policies root).
+  - helpCenterSections Trust & Policies: REMOVED entire Privacy Center block (14 leaves) from children.
+  - helpCenterSections Legal Center: ADDED Privacy Center block (14 leaves) after Legal, Policy & Compliance, with path /legal-and-policies/privacy and build("/legal-and-policies/privacy", [...]).
+  - helpCenterSections Content & Conduct: ADDED "User Guidelines" and "Community Rules & Guidelines" after "Community Guidelines" (consolidates all guideline docs under Trust & Policies).
+  - helpCenterSections Terms of Use: REMOVED "User Guidelines" and "Community Rules & Guidelines" from children (was 18 items, now 16).
+- Lint: clean. No errors.
+- Route verification:
+  - OLD Privacy Center paths now 404: /privacy-and-safety/privacy (404), /privacy-and-safety/privacy/privacy-policy (404), /privacy-and-safety/privacy/cookies-policy (404).
+  - NEW Privacy Center paths 200: /legal-and-policies/privacy (200), /legal-and-policies/privacy/privacy-policy (200), /legal-and-policies/privacy/cookies-policy (200), /legal-and-policies/privacy/kids-privacy-policy (200).
+  - OLD guideline paths now 404: /legal-and-policies/terms-of-use/user-guidelines (404), /legal-and-policies/terms-of-use/community-rules-and-guidelines (404).
+  - NEW guideline paths 200: /privacy-and-safety/content-and-conduct/user-guidelines (200), /privacy-and-safety/content-and-conduct/community-rules-and-guidelines (200).
+- Agent Browser verified (desktop 1440×900):
+  - Trust & Policies landing (/privacy-and-safety): H1 "Trust & Policies"; sidebar no longer lists Privacy Center as a sub-group (shows Trust & Policies Home, Safety & Security, Transparency Center only).
+  - Legal Center landing (/legal-and-policies): H1 "Legal Center"; sidebar now lists Privacy Center alongside Terms of Use, Copyright & IP, Law Enforcement, Legal Policy & Compliance, Our Rules, Rules & Policies Home.
+  - Privacy Center at new location (/legal-and-policies/privacy): H1 "Privacy Center"; 14 child cards render correctly (Collecting your personal data, Protecting your personal data, Your data rights, California Notice of Collection, Account privacy, Cookies policy, Location detection, Information we collect, Consumer Health Data Privacy Policy, Privacy Policies, Privacy Policy, Kids Privacy Policy, Google Privacy Policy, SheerID Privacy Policy).
+  - Content & Conduct (/privacy-and-safety/content-and-conduct): H1 "Content & Conduct"; 19 cards (was 17); User Guidelines at position 2 and Community Rules & Guidelines at position 3 (after Community Guidelines). Links point to new paths /privacy-and-safety/content-and-conduct/user-guidelines and /community-rules-and-guidelines.
+  - Terms of Use (/legal-and-policies/terms-of-use): 16 cards (was 18); no User Guidelines or Community Rules & Guidelines present anywhere on page. Confirmed removed.
+  - No console errors.
+- Committed (69a7af5) and pushed to GitHub main.
+
+Stage Summary:
+- CLEAR DELINEATION ACHIEVED:
+  - Trust & Policies (/privacy-and-safety): Safety, Content & Conduct (incl. ALL guidelines: Community Guidelines, User Guidelines, Community Rules & Guidelines), Security, Transparency Center. NO privacy policy docs.
+  - Legal Center (/legal-and-policies): Terms of Use, Copyright & IP, Law Enforcement, Legal Policy & Compliance (24 items incl. AUP + DPA), Privacy Center (14 privacy/data leaves). ALL formal legal/privacy documents now housed together.
+- Privacy Center moved: /privacy-and-safety/privacy/* → /legal-and-policies/privacy/* (14 leaves, all paths changed, old paths 404).
+- Guidelines consolidated: User Guidelines + Community Rules & Guidelines moved from Terms of Use → Content & Conduct (2 items, paths changed, old paths 404).
+- All 3 nav data sources updated (megaMenu, footerNav, footerBottomRail, helpCenterSections).
+- No existing doc related-article links broken (verified zero references before move).
+- Nav restructure (section-specific top nav) NOT executed — user confirmed current nav architecture is fine ("we are fine as it is").
