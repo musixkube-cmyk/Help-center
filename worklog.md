@@ -3247,3 +3247,67 @@ Stage Summary:
 - Related articles include 2 cross-section/cross-category links (block-and-mute in Content Interaction + account-privacy-and-visibility-settings and report-a-profile in Support Center) following the pattern from Task 45.
 - All 7 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Start a group conversation (Backstage & Community position 4).
+
+---
+Task ID: 47
+Agent: main (Z.ai Code)
+Task: Write the "Start a group conversation" doc (Help Center → Using Musicosy → Backstage & Community → position 4). Content provided verbatim by the user. This is the fourth doc in the Backstage & Community sub-section (after What is Backstage?=1, Send a message=2, Manage message requests=3).
+
+Work Log:
+- Read worklog tail (Task 46) for context: Backstage & Community sub-section 3/8 complete (Manage message requests was last), next doc was "Start a group conversation" (position 4).
+- Confirmed git status clean; last commit = "Add 'Manage message requests' Help Center doc (Backstage & Community 3/8)".
+- Investigated the user's 6 related article labels and mapped them to actual nav node routes:
+  * "Send a message" → /resources/help-center/using-musicosy/backstage-and-community/send-a-message (sibling)
+  * "Manage message requests" → /resources/help-center/using-musicosy/backstage-and-community/manage-message-requests (sibling)
+  * "Share content in Backstage" → /resources/help-center/using-musicosy/backstage-and-community/share-content-in-backstage (sibling)
+  * "Block and mute" → /resources/help-center/using-musicosy/content-interaction/block-and-mute (cross-section)
+  * "Manage your privacy and discoverability settings" → /support/account-and-access/account-privacy-and-visibility-settings (cross-category, Support Center)
+  * "Start a Workspace channel" → /resources/help-center/using-musicosy/creator-studio-and-workspaces/create-or-join-a-workspace (cross-section, Creator Studio & Workspaces — no exact "start-a-workspace-channel" route exists; this is the closest thematic match for starting a workspace channel)
+- Verified all 6 mapped related article routes return 200 before writing.
+- Created src/data/docs/start-a-group-conversation.ts:
+  - path: /resources/help-center/using-musicosy/backstage-and-community/start-a-group-conversation
+  - 2 intro paragraphs (group messaging in Backstage; connect with multiple members; private/encrypted vs public Stage/Crowd Chat)
+  - H2 "How to create a group conversation" + intro paragraph (start from Backstage inbox or by adding members to new chat)
+    - H3 "From your Backstage inbox" + ordered list (5 steps: open Backstage tab → New Message icon → search/select up to 50 → Create Group → type + Send)
+    - H3 "From an existing one-on-one chat" + ordered list (5 steps: open existing conversation → tap group icon → search/select additional → Add to Conversation → auto-converts to group) + callout (note): added member gets Signal Center notification; can view name/participants/history from point added
+  - H2 "Rules for adding members" + intro paragraph (strict rules to protect privacy/prevent spam) + table (2 cols × 4 rows: Connection Status / Message Intake Settings / Workspace Boundaries / Notification with Details) + callout (note, from "Important:"): adding member doesn't grant access to Library/Keeps/listening history; privacy boundaries intact
+  - H2 "Group roles and permissions" + intro paragraph (basic administrative roles) + table (3 cols × 2 rows: Group Creator/Admin / Standard Member with Who holds this role + Permissions)
+    - H3 "Managing group settings" + intro paragraph (tap group name at top) + bold-lead-in list (3 items: Rename Group: / Change Group Image: / Remove a Member:)
+  - H2 "Sharing music and media in groups" + intro paragraph (rich media sharing; Pass the Mic button) + table (2 cols × 4 rows: Tracks Albums Episodes / Setlists Crates / Images Voice Notes / Event Tickets Merch with How it appears in the group) + callout (note, from "Important:"): entitlement rules still apply; subscriber-only/paid media locked for members without access
+  - H2 "Managing notifications and muting" + intro paragraph (may not want notifications for every message) + ordered list (3 steps: open group → tap group name/Mute icon → choose duration) + callout (note): muting stops push/badge but still see messages when opening Backstage
+  - H2 "Privacy, safety, and moderation" + intro paragraph (tools for harassment/spam/uncomfortable situations)
+    - H3 "Blocking a member in a group" + ordered list (2 steps: tap profile card → Select Block) + bold-lead-in list (1 item: The Result: — no longer see their messages; can't DM you; remain for others unless admin removes)
+    - H3 "Leaving a group" + ordered list (2 steps: tap group name → Leave Group) + bold-lead-in list (1 item: The Result: — removed from participants; archived read-only unless Delete)
+    - H3 "Flagging (Reporting) a group" + ordered list (3 steps: tap group name → Flag Group → select reason) + bold-lead-in list (1 item: The Result: — Trust & Safety reviews confidentially; participants not notified)
+  - related: 6 mapped paths (send-a-message, manage-message-requests, share-content-in-backstage, block-and-mute cross-section, account-privacy-and-visibility-settings cross-category, create-or-join-a-workspace cross-section)
+- Registered in src/data/docs/index.ts: added import + map entry for startAGroupConversationDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/backstage-and-community/start-a-group-conversation → 200.
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Start a group conversation — Musicosy"
+  - H1: "Start a group conversation"
+  - 6 H2 headings: How to create a group conversation | Rules for adding members | Group roles and permissions | Sharing music and media in groups | Managing notifications and muting | Privacy, safety, and moderation
+  - 6 H3 headings: From your Backstage inbox | From an existing one-on-one chat | Managing group settings | Blocking a member in a group | Leaving a group | Flagging (Reporting) a group
+  - 3 tables: Rules for adding members (4×2 with Requirement/Details), Group roles and permissions (2×3 with Role/Who holds this role/Permissions), Sharing music and media (4×2 with Media Type/How it appears in the group) — all render with correct headers
+  - 4 callouts verified via DOM query (div.border-l-2): all 4 render with correct text + note variant
+    1. note: added member gets Signal Center notification; can view name/participants/history from point added
+    2. note: adding member doesn't grant access to Library/Keeps/listening history
+    3. note: entitlement rules still apply; subscriber-only/paid media locked for members without access
+    4. note: muting stops push/badge but still see messages when opening Backstage
+  - 5 ordered lists: From Backstage inbox (5 steps), From existing chat (5 steps), Managing notifications (3 steps), Blocking (2 steps), Leaving (2 steps), Flagging (3 steps) = 20 steps total — verified numeric prefixes render ("1Open the Backstage tab...", "1Open an existing Backstage conversation...", "1Open the group conversation...", "1Tap their profile card...", "1Tap the group name at the top...", "1Tap the group name.")
+  - 4 bold-lead-in unordered lists: Managing group settings (3 items: Rename Group:/Change Group Image:/Remove a Member:), Blocking result (1 item: The Result:), Leaving result (1 item: The Result:), Flagging result (1 item: The Result:) — verified bold lead-ins render as <span class="font-semibold text-foreground">
+  - Related articles: "RELATED ARTICLES" section renders with all 6 links (Send a message, Manage message requests, Share content in Backstage, Block and mute, Account privacy and visibility settings, Create or join a workspace)
+  - Back/Next nav: Back → Manage message requests (/resources/help-center/using-musicosy/backstage-and-community/manage-message-requests — correct, position 3, the DFS predecessor); Next → Group Conversations & Live Chat (/resources/help-center/using-musicosy/backstage-and-community/group-conversations-and-live-chat — correct, position 5, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR/Fast Refresh dev logs)
+  - VLM visual verification (desktop screenshot): confirmed H1 "START A GROUP CONVERSATION", section headings "HOW TO CREATE A GROUP CONVERSATION" + "FROM YOUR BACKSTAGE INBOX" visible and properly styled, sidebar present with current page "Start a group conversation" correctly highlighted with light orange background, no overflow/broken elements/icons intact. Verdict: "The page renders correctly with proper hierarchy, functional navigation highlighting, and a clean layout."
+  - Mobile (390×844): H1 + 6 H2 + 6 H3 + 3 tables + 4 callouts all present, no horizontal overflow, footer visible, scrollH=8561 (content flows naturally).
+
+Stage Summary:
+- "Start a group conversation" doc complete — Backstage & Community sub-section now 4/8 docs with real content (What is Backstage?=1, Send a message=2, Manage message requests=3, Start a group conversation=4). HALFWAY POINT of the sub-section.
+- Doc covers group messaging in Backstage: creating groups (2 methods: from Backstage inbox 5-step + from existing one-on-one chat 5-step), rules for adding members (4 requirements: Connection Status/Message Intake Settings/Workspace Boundaries/Notification), group roles and permissions (2 roles: Group Creator/Admin + Standard Member + 3 admin settings: Rename/Change Image/Remove), sharing music and media (4 media types with appearance), managing notifications and muting (3-step), and privacy/safety/moderation (3 actions: Blocking 2-step + Leaving 2-step + Flagging 3-step, each with The Result explanation).
+- Includes 3 tables, 4 callouts (all notes), 5 ordered lists (20 steps total), 4 bold-lead-in unordered lists (6 items total), 6 H2 + 6 H3 headings.
+- Related articles include 2 cross-section/cross-category links (block-and-mute in Content Interaction + account-privacy-and-visibility-settings in Support Center + create-or-join-a-workspace in Creator Studio & Workspaces) following the pattern from Tasks 45-46.
+- All 6 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Group Conversations & Live Chat (Backstage & Community position 5).
