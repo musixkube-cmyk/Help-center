@@ -2740,3 +2740,102 @@ Stage Summary:
 - Includes 4 tables, 3 callouts (1 note + 2 warnings), 1 ordered list (4 steps), 1 bold lead-in list (3 items), 6 H2 + 1 H3 headings.
 - All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
 - Next document per nav tree order: Fullscreen (Media & Playback position 3).
+
+---
+Task ID: 39
+Agent: main (Z.ai Code)
+Task: Write the "Fullscreen" doc (Help Center → Using Musicosy → Media & Playback → position 3). Content provided verbatim by the user. This is the third doc in the Media & Playback sub-section (after "Listen on MusicOSY" = Task 37 = position 1, and "Video playing" = Task 38 = position 2).
+
+Work Log:
+- Read worklog tail (Task 38) for context: Media & Playback sub-section 2/10 complete (Listen on MusicOSY + Video playing), next doc was "Fullscreen" (position 3).
+- Confirmed git status clean; last commit = "Append worklog entry for Video playing doc (Task 38)".
+- Confirmed Media & Playback nav section order (nav.ts line 259): Fullscreen is position 3 (after Listen on Musicosy, Video playing).
+- Verified all 10 routes return 200 before writing (the doc itself + all 9 related articles): fullscreen, listen-on-musicosy, video-playing, on-demand-playback, sound, manage-your-playback-queue, manage-your-up-next-queue, continue-listening, music-playback-troubleshooting, video-playback-troubleshooting.
+- Created src/data/docs/fullscreen.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/fullscreen
+  - H2 "Overview" + 2 paragraphs (fullscreen = immersive presentation; preserves all controls/access checks/entitlements, doesn't alter queue or bypass restrictions)
+  - H2 "Entering and exiting fullscreen"
+    - H3 "How to enter fullscreen" + table (2 cols × 5 rows: Player button / Device rotation / Double-tap mobile / Keyboard shortcut desktop / Cast device)
+    - H3 "How to exit fullscreen" + table (2 cols × 5 rows: Player button / Device rotation / Swipe down mobile / Keyboard shortcut / Navigate away)
+    - callout (note): entering/exiting fullscreen doesn't start new session or alter Up Next; playback continues seamlessly
+  - H2 "Fullscreen controls" + intro paragraph (controls overlay and fade)
+    - H3 "Accessing controls in fullscreen" + paragraph (tap video surface / move cursor on desktop)
+    - H3 "Available controls in fullscreen" + table (2 cols × 16 rows: Play/Pause, Next/Previous, Seek bar, Volume, Captions, Transcript, Playback speed, Quality selection, Picture-in-Picture, Cast, Keep, Add to Setlist, Add to Up Next, Pass the Mic, Report, Exit fullscreen)
+    - callout (warning): all standard-player controls remain available in fullscreen; no interaction removed
+  - H2 "Fullscreen and video formats" + intro paragraph (two formats behave differently)
+    - H3 "16:9 widescreen content" + paragraph + table (2 cols × 4 rows: Desktop/Laptop / Tablet landscape / Phone landscape / Television via Cast with Fullscreen Behavior)
+    - H3 "9:16 vertical content" + paragraph + table (2 cols × 4 rows: Phone portrait / Phone landscape / Tablet Desktop / Television via Cast)
+    - callout (note): 9:16 vertical maintains aspect ratio; no stretch/crop/distort
+  - H2 "Fullscreen and Picture-in-Picture" + intro paragraph (two distinct modes)
+    - table (3 cols × 5 rows: Feature / Fullscreen / Picture-in-Picture — Screen coverage, Other app access, Controls, Best used when, Queue interaction)
+    - H3 "Switching between modes" + 2-step ordered list (fullscreen→PiP via PiP icon; PiP→fullscreen via Expand icon)
+    - callout (warning): switching doesn't restart video, change queue, or trigger new session; position preserved
+  - H2 "Fullscreen and captions, transcripts, and lyrics" + intro paragraph (accessibility fully functional)
+    - H3 "Captions and subtitles" + table (2 cols × 4 rows: Enable / Select language / Disable / Adjust size)
+    - H3 "Transcripts" + paragraph (side panel/overlay, tap line to jump to timestamp)
+    - H3 "Lyrics" + paragraph (synchronized lyrics for music videos, tap line to seek)
+    - callout (note): captions/transcripts/lyrics subject to rights/licensing/availability; fullscreen doesn't unlock unavailable accessibility content
+  - H2 "Fullscreen and background playback" + intro paragraph (transition based on entitlement/creator settings/content type)
+    - table (2 cols × 5 rows: exit fullscreen stay in Listen / navigate to another section / lock device or switch apps / enter Studio / sign out with Behavior)
+    - callout (warning): background audio subject to plan/creator settings/rights/OS policies; some premium videos require active unlocked screen
+  - H2 "Fullscreen and device behavior"
+    - H3 "Orientation and auto-rotation" + table (2 cols × 3 rows: Auto-rotate enabled / Auto-rotate disabled / Desktop Laptop)
+    - H3 "Multiple displays and casting" + intro paragraph + 4-step ordered list (receiving screen enters fullscreen / device becomes remote / controls on casting device / access checks re-evaluated)
+    - callout (note): casting interruption → resume on local device from same position; offline → pause until connectivity or downloaded copy
+    - H3 "Split-screen and multitasking" + intro paragraph + 4-item list (fills window not screen / video continues / controls accessible / exit returns to in-window view)
+  - H2 "Fullscreen and access controls" + intro paragraph (presentation mode only; doesn't alter/bypass/weaken access rules)
+    - table (2 cols × 6 rows: Territory restrictions / Subscription expiry / Content removal / Age restrictions / Block and mute / Ad-free entitlement with Behavior in Fullscreen)
+    - callout (warning): public share link/embed doesn't grant access; every session re-evaluates entitlement/territory/age/relationship
+  - H2 "Fullscreen and the Up Next queue" + intro paragraph (full queue access without exiting)
+    - H3 "Managing your queue in fullscreen" + 3-step ordered list with NESTED children on step 3 (Tap video → Tap Queue icon → From the panel you can: [View / Remove / Reorder / Add from Library or Search / Clear queue])
+    - callout (note): editing Up Next in fullscreen doesn't modify saved Setlist; queue changes are session-only
+  - H2 "Fullscreen and live sessions" + intro paragraph
+    - table (2 cols × 6 rows: Live chat Crowd Chat / Live reactions / Host announcements / Seek Scrub / Quality selection / Exit fullscreen with Behavior)
+    - callout (warning): during active live broadcast, cannot seek; scrub bar disabled; restored for replays
+  - H2 "Troubleshooting fullscreen" + table (3 cols × 8 rows: Issue / Possible Cause / Solution — button missing, video doesn't fill, controls don't appear, exits unexpectedly, freezes, captions missing, blocked on managed device, casting doesn't enter fullscreen)
+  - H2 "Frequently Asked Questions" + 6 FAQ H3+paragraph pairs:
+    - H3 "Does entering fullscreen change my playback quality?" (No, display mode only)
+    - H3 "Can I use fullscreen while on a video call or using another app?" (split-screen/PiP for reduced window; true fullscreen hides other apps)
+    - H3 "Does fullscreen use more data or battery?" (no, unless you manually increase quality)
+    - H3 "Can I take a screenshot or recording in fullscreen?" (respects creator/rights holder capture protections)
+    - H3 "Does fullscreen work with downloaded videos?" (Yes, Take It With You offline fullscreen)
+    - H3 "Why does my video show black bars in fullscreen?" (letterboxing/pillarboxing from aspect ratio mismatch; no crop/stretch)
+  - related: 9 sibling paths (Listen on Musicosy, Video playing, On-demand playback, Sound, Manage your playback queue, Manage your Up Next queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+- Registered in src/data/docs/index.ts: added import + map entry for fullscreenDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/fullscreen → 200 (compiled in 5.9s, rendered in 1692ms).
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Fullscreen — Musicosy"
+  - H1: "Fullscreen"
+  - 13 H2 headings: Overview | Entering and exiting fullscreen | Fullscreen controls | Fullscreen and video formats | Fullscreen and Picture-in-Picture | Fullscreen and captions, transcripts, and lyrics | Fullscreen and background playback | Fullscreen and device behavior | Fullscreen and access controls | Fullscreen and the Up Next queue | Fullscreen and live sessions | Troubleshooting fullscreen | Frequently Asked Questions
+  - 20 H3 headings (doc body, excluding mega-menu nav column headers): How to enter fullscreen | How to exit fullscreen | Accessing controls in fullscreen | Available controls in fullscreen | 16:9 widescreen content | 9:16 vertical content | Switching between modes | Captions and subtitles | Transcripts | Lyrics | Orientation and auto-rotation | Multiple displays and casting | Split-screen and multitasking | Managing your queue in fullscreen | 6 FAQ questions (Does entering fullscreen change playback quality / Can I use fullscreen while on video call / Does fullscreen use more data or battery / Can I take screenshot or recording / Does fullscreen work with downloaded videos / Why does my video show black bars)
+  - 12 tables: How to enter (5×2), How to exit (5×2), Available controls (16×2), 16:9 behavior (4×2), 9:16 behavior (4×2), Fullscreen vs PiP (5×3), Captions actions (4×2), Background playback scenarios (5×2), Orientation (3×2), Access controls rules (6×2), Live sessions features (6×2), Troubleshooting (8×3) — all render with correct headers
+  - 3 ordered lists: Switching between modes (2 steps), Multiple displays/casting (4 steps), Managing queue in fullscreen (3 steps with 5 nested children on step 3) — all render with numeric prefixes (confirmed "1Tap the video...2Tap the Queue...3From the panel")
+  - 1 unordered list: Split-screen/multitasking (4 items)
+  - Nested list confirmed: queue management step 3 "From the panel, you can:" has 5 nested children (View / Remove / Reorder / Add from Library or Search / Clear queue)
+  - 10 callouts verified via DOM query (div.border-l-2): all 10 render with correct text + correct icon/variant
+    1. note: entering/exiting fullscreen doesn't start new session
+    2. warning: all standard-player controls remain available
+    3. note: 9:16 vertical maintains aspect ratio
+    4. warning: switching PiP/fullscreen preserves position
+    5. note: captions/transcripts/lyrics subject to rights
+    6. warning: background audio subject to entitlements
+    7. note: casting session interruption resume
+    8. warning: share link doesn't grant access
+    9. note: editing Up Next doesn't modify Setlist
+    10. warning: live broadcast seek disabled
+  - Related articles: "RELATED ARTICLES" section renders with all 9 links
+  - Back/Next nav: Back → Video playing (correct — position 2, the DFS predecessor); Next → On-demand playback (correct — position 4, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR connected + Fast Refresh)
+  - VLM visual verification (desktop screenshot): confirmed H1 "FULLSCREEN", section headings (Overview, Entering and exiting fullscreen, How to enter fullscreen), table renders cleanly with Method/Action columns, sidebar navigation present, no layout problems / no overflow, clean well-structured layout.
+  - Mobile (390×844): H1 + 13 H2 + 12 tables + 10 callouts all present, no horizontal overflow, footer visible, scrollH=19491 (content flows naturally).
+
+Stage Summary:
+- "Fullscreen" doc complete — Media & Playback sub-section now 3/10 docs with real content.
+- Most comprehensive Media & Playback doc so far: 13 H2 sections, 20 H3 subheadings, 12 tables, 3 ordered lists (one with nested children), 1 unordered list, 10 callouts (6 notes + 4 warnings), 6 FAQs.
+- Covers: overview (presentation mode only), entering/exiting fullscreen (5 methods each), 16 available controls, video format behavior (16:9 + 9:16 across 4 device types each), Fullscreen vs PiP (comparison table + switching), captions/transcripts/lyrics accessibility, background playback transitions (5 scenarios), device behavior (orientation, casting, split-screen), access controls (6 rules preserved), Up Next queue management (with nested action list), live sessions (6 features + seek warning), troubleshooting (8 issues with causes/solutions), and 6 FAQs.
+- Includes 12 tables, 10 callouts (6 notes + 4 warnings), 3 ordered lists (9 steps total + 5 nested children), 1 unordered list, 13 H2 + 20 H3 headings.
+- All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
+- Next document per nav tree order: On-demand playback (Media & Playback position 4).
