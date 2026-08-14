@@ -3112,3 +3112,73 @@ Stage Summary:
 - Includes 2 tables, 2 callouts (1 note + 1 warning), 2 ordered lists (4 bold-lead-in items + 3 steps = 7 total), 2 unordered lists with bold leads (4 items total), 6 H2 + 6 H3 headings (3 privacy subsections + 3 FAQs).
 - All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
 - Next document per nav tree order: Music playback troubleshooting (Media & Playback position 9).
+
+---
+Task ID: 45
+Agent: main (Z.ai Code)
+Task: Write the "Send a message" doc (Help Center → Using Musicosy → Backstage & Community → position 2). Content provided verbatim by the user. This is the second doc in the Backstage & Community sub-section (after What is Backstage?=1). NOTE: This is the first Backstage & Community doc being written — a different sub-section from the Media & Playback docs (Tasks 38-44).
+
+Work Log:
+- Read worklog tail (Task 44) for context: Media & Playback sub-section 8/10 complete (Continue listening was last), but the user has now shifted to the Backstage & Community sub-section with the "Send a message" article.
+- Confirmed git status clean; last commit = "Add 'Continue listening' Help Center doc (Media & Playback 8/10)".
+- Investigated the nav tree (src/data/nav.ts line 260) to identify the Backstage & Community sub-section path and sibling docs:
+  * Sub-section path: /resources/help-center/using-musicosy/backstage-and-community
+  * 8 sibling docs: What is Backstage? | Send a message | Manage message requests | Start a group conversation | Group Conversations & Live Chat | Share content in Backstage | Pass the Mic (Sharing) | Mute a conversation
+- The user's 5 related article labels did NOT exactly match the sibling nav node titles:
+  * "Backstage inbox" → no exact match; mapped to "What is Backstage?" sibling
+  * "Manage your privacy and safety" → mapped to "Manage message requests" sibling (closest thematic match for message privacy)
+  * "Block or mute a member" → mapped to "Block and mute" in Content Interaction sub-section (existing doc at /resources/help-center/using-musicosy/content-interaction/block-and-mute)
+  * "Share collections" → mapped to "Share content in Backstage" sibling
+  * "Report a safety or policy violation" → mapped to "Report a post / account / LIVE / comment / DM" in Support Center (/support/reports-and-appeals/report-a-post-account-live-comment-dm)
+- Verified all 5 mapped related article routes return 200 before writing. Also verified all 8 Backstage & Community sibling routes return 200.
+- Reviewed prior docs (block-and-mute.ts, share.ts) related arrays for cross-section/cross-category pattern: confirmed that related arrays can contain siblings, cross-section docs, and cross-category docs (e.g., Support Center routes).
+- Reviewed the doc-content.tsx renderer: confirmed nested list children render as indented <ul> with muted bullets, callout `title` renders as small uppercase bold label, bold-lead-in lists render lead as <span class="font-semibold text-foreground">.
+- Created src/data/docs/send-a-message.ts:
+  - path: /resources/help-center/using-musicosy/backstage-and-community/send-a-message
+  - 2 intro paragraphs (private DM in Backstage; secure/private environment separate from public Stage feed; guide covers starting conversations, sharing media, managing privacy)
+  - H2 "How to start a conversation" + intro paragraph (initiate from almost anywhere)
+    - H3 "From a member or creator profile" + ordered list (4 steps: navigate profile → tap Message icon → type → Send)
+    - H3 "From your Backstage inbox" + ordered list (5 steps: open Backstage tab → tap New Message icon → search username → select name → type + Send)
+    - callout (note): messaging creator/member who doesn't follow you → routed to Message Requests; no push notification until approved
+  - H2 "What you can send in Backstage" + intro paragraph (rich multimedia hub; more than plain text) + table (2 cols × 7 rows: Text / Audio Clips / Images and Videos / Catalog Media / Collections / Commerce / Profiles with Description) + callout (note, from "Important:"): sharing Setlist/Crate/subscriber-only track → recipient must still meet access/entitlement requirements; sharing doesn't bypass paywalls/territory restrictions
+  - H2 "Sharing media using Pass the Mic" + intro paragraph (no copy/paste needed; Pass the Mic button on almost every item) + ordered list (5 steps: find item → tap Pass the Mic → select Backstage → choose conversation/recipient → add caption + Send) + closing paragraph (recipient gets rich interactive card playable within chat)
+  - H2 "Message Requests and Privacy" + intro paragraph (tiered inbox system based on relationship with sender) + table (2 cols × 3 rows: Primary / Requests / Hidden Requests with What Goes Here)
+    - H3 "Managing a Message Request" + intro paragraph (three options) + unordered list with bold leads (3 items: Accept: / Delete: / Block:) + callout (warning): don't click external links/download files from unverified requests; MusicOSY never asks for password/payment via Backstage
+  - H2 "Group conversations" + intro paragraph (group messaging for bandmates/teams/friends)
+    - H3 "Creating a group" + ordered list (4 steps: open Backstage + New Message → select multiple members → tap Create Group → name group + send first message)
+    - H3 "Group limits and permissions" + table (2 cols × 4 rows: Maximum Members / Adding Members / Removing Members / Leaving a Group with Details) + callout (note): sharing private Setlist into group → all members can view; ensure comfortable with access
+  - H2 "Privacy and Safety controls" + intro paragraph (complete control; Settings > Privacy and Safety > Backstage) + table (2 cols × 4 rows: Allow Messages From / Read Receipts / Typing Indicators / Media Auto-Download with Description)
+    - H3 "Blocking and Reporting" + intro paragraph (if harassing/violating guidelines) + ordered list (4 steps: open conversation → tap name at top → select Block → select Report) + callout (note, from "Important:"): blocking removes conversation history; unblocking later doesn't restore previous chat
+  - related: 5 mapped paths (what-is-backstage, manage-message-requests, block-and-mute cross-section, share-content-in-backstage, report-a-post-account-live-comment-dm cross-category)
+- Registered in src/data/docs/index.ts: added import + map entry for sendMessageDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/backstage-and-community/send-a-message → 200.
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Send a message — Musicosy"
+  - H1: "Send a message"
+  - 6 H2 headings: How to start a conversation | What you can send in Backstage | Sharing media using "Pass the Mic" | Message Requests and Privacy | Group conversations | Privacy and Safety controls
+  - 6 H3 headings: From a member or creator profile | From your Backstage inbox | Managing a Message Request | Creating a group | Group limits and permissions | Blocking and Reporting
+  - 4 tables: What you can send (7×2 with Media Type/Description), Message Requests (3×2 with Inbox Folder/What Goes Here), Group limits (4×2 with Feature/Details), Privacy and Safety (4×2 with Setting/Description) — all render with correct headers
+  - 5 callouts verified via DOM query (div.border-l-2): all 5 render with correct text + correct icon/variant
+    1. note: messaging non-follower → routed to Message Requests; no push notification until approved
+    2. note: sharing Setlist/Crate/subscriber-only track → recipient must still meet access requirements
+    3. warning: don't click external links/download files from unverified requests; MusicOSY never asks for password/payment
+    4. note: sharing private Setlist into group → all members can view
+    5. note: blocking removes conversation history; unblocking doesn't restore
+  - 5 ordered lists: From profile (4 steps), From inbox (5 steps), Pass the Mic (5 steps), Creating a group (4 steps), Blocking and Reporting (4 steps) = 22 steps total — verified numeric prefixes render ("1Navigate to the profile...", "1Open the Backstage tab...", "1Find the song...", "1Open Backstage...", "1Open the conversation...")
+  - 1 unordered list with bold leads: Managing a Message Request (3 items: Accept: / Delete: / Block:) — verified bold lead-ins render as <span class="font-semibold text-foreground">
+  - Related articles: "RELATED ARTICLES" section renders with all 5 links (What is Backstage?, Manage message requests, Block and mute, Share content in Backstage, Report a post / account / LIVE / comment / DM)
+  - Back/Next nav: Back → What is Backstage? (/resources/help-center/using-musicosy/backstage-and-community/what-is-backstage — correct, position 1, the DFS predecessor within Backstage & Community sub-section, and also the last Media & Playback doc in DFS order); Next → Manage message requests (/resources/help-center/using-musicosy/backstage-and-community/manage-message-requests — correct, position 3, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR/Fast Refresh dev logs)
+  - VLM visual verification (desktop screenshot): confirmed H1 "SEND A MESSAGE", section headings "HOW TO START A CONVERSATION" + "FROM A MEMBER OR CREATOR PROFILE" visible, sidebar navigation present with current page "Send a message" correctly highlighted in orange within "Backstage & Community" section, breadcrumb navigation intact, typography/spacing correct, no overflow/broken elements. Verdict: "The page renders perfectly according to standard Help Center design patterns. All requested elements (headings, sidebar highlighting) are functioning as expected."
+  - Mobile (390×844): H1 + 6 H2 + 6 H3 + 4 tables + 5 callouts all present, no horizontal overflow, footer visible, scrollH=8942 (content flows naturally).
+
+Stage Summary:
+- "Send a message" doc complete — Backstage & Community sub-section now 2/8 docs with real content (What is Backstage? may have been written in an earlier session).
+- Doc covers private direct messaging in Backstage: starting conversations (2 methods: from profile 4-step + from inbox 5-step), shareable media types (7: Text, Audio Clips, Images/Videos, Catalog Media, Collections, Commerce, Profiles), Pass the Mic sharing (5-step), Message Requests and tiered inbox (3 folders: Primary/Requests/Hidden Requests + 3-option management: Accept/Delete/Block), group conversations (creating 4-step + limits table: 50 max/anyone adds/creator-admin removes/anyone leaves), and privacy/safety controls (4 settings + blocking/reporting 4-step).
+- Includes 4 tables, 5 callouts (4 notes + 1 warning), 5 ordered lists (22 steps total), 1 unordered list with bold leads (3 items), 6 H2 + 6 H3 headings.
+- First Backstage & Community doc written in this session. Related articles include cross-section (Block and mute in Content Interaction) and cross-category (Report a post/account/LIVE/comment/DM in Support Center) links — following the pattern established in prior Content Interaction docs.
+- All 5 related article paths verified to return 200 before writing (mapped from user's conceptual labels to actual nav node paths).
+- Next document per nav tree order: The remaining Media & Playback docs (Music playback troubleshooting position 9, Video playback troubleshooting position 10), OR continue with Backstage & Community docs. Awaiting user's next content.
