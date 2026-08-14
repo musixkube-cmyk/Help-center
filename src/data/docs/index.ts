@@ -55,6 +55,7 @@ import { takeYourPostOffTheStageDoc } from "./take-your-post-off-the-stage";
 import { createOnMusicosyDoc } from "./create-on-musicosy";
 import { whatIsStudioDoc } from "./what-is-studio";
 import { saveAndManageDraftsDoc } from "./save-and-manage-drafts";
+import { collectionsDoc } from "./collections";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -102,6 +103,7 @@ const docs: Record<string, Doc> = {
   [createOnMusicosyDoc.path]: createOnMusicosyDoc,
   [whatIsStudioDoc.path]: whatIsStudioDoc,
   [saveAndManageDraftsDoc.path]: saveAndManageDraftsDoc,
+  [collectionsDoc.path]: collectionsDoc,
 };
 
 /** Look up structured doc content for a given route path. */

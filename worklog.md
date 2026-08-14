@@ -2155,3 +2155,41 @@ Stage Summary:
 - "Save and manage drafts" doc related articles updated to 5 (removed the non-existent 6th link).
 - User acknowledged the deviation and is rectifying their workflow to stay on track with the established tree.
 - Next document per user: Help Center → Create & Publish → Upload music, video, and artwork.
+
+---
+Task ID: 28
+Agent: main (Z.ai Code)
+Task: Write the "Collections" doc (Help Center → Using Musicosy → Collections & Library → position 1). This is the first doc in the Collections & Library sub-section. User provided comprehensive content covering Keeps, Setlists, Crates, Library, sharing, management, playback, Workspaces, and FAQs. User also noted "we reverted again go pull from github now" — confirmed local was already up to date with GitHub (671ed80).
+
+Work Log:
+- Confirmed git status clean, pulled from GitHub (already up to date at 671ed80).
+- Verified Collections route + all 8 sibling paths in Collections & Library return 200.
+- Created src/data/docs/collections.ts — the largest doc in the help center to date:
+  - path: /resources/help-center/using-musicosy/collections-and-library/collections
+  - 11 H2 sections: Overview, Keeps (Saved Items), Setlists (Playlists), Crates (Curated Groupings), Your Library, Sharing Collections, Managing Collections, Collections and Playback, Collections in Workspaces, Frequently Asked Questions, Related Topics
+  - 33 H3 subheadings (What You Can Keep, How to Keep an Item, Keep Rules, Setlist Types, Creating a Setlist, Adding Items, Removing/Reordering, Editing, Deleting, Collaborative Setlists, Use Cases for Crates, Creating a Crate, Adding Items to a Crate, Crate vs Setlist vs Keep, What Lives in Your Library, Organizing, Library Privacy, Sharing a Setlist, Sharing a Crate, Editing a Collection, Deleting a Collection, Restoring, Playing a Setlist, Setlist Playback Rules, Crates and Playback, + 8 FAQ questions)
+  - 14 tables: Collection types overview, What You Can Keep (7 rows), Keep Rules (4 rows), Setlist Types (7 rows), Removing/Reordering (3 rows), Collaborative Setlist settings (4 rows), Crate Use Cases (6 rows), Crate vs Setlist vs Keep (6 rows), Library sections (10 rows), Library Privacy (5 rows), Sharing visibility (4 rows), Setlist Playback Rules (4 rows), Personal vs Workspace Collections (5 rows), Related Topics (6 rows)
+  - 9 callouts: 1 note (Library overview), 2 warnings (Keeping ≠ follow/purchase, Deleting Setlist permanent), 2 notes (Setlist reference not copy, Collaborator eligibility), 1 note (Queue ≠ Setlist), 3 warnings (Sharing ≠ access grant, Deleting Collection permanent, Personal vs Workspace isolation)
+  - 6+ ordered lists: Keep an item (3 steps), Create Setlist (9 steps), Delete Setlist (4 steps), Invite collaborator (5 steps), Create Crate (8 steps), Play Setlist (4 steps), Share Setlist (6 steps), Edit Collection (4 steps), Delete Collection (4 steps) = 47 numbered steps total
+  - 8 FAQ Q&A pairs as H3 + paragraph
+  - related: 6 sibling paths (Your Library, Create collections, Shared collections, Playlists, Keep and organize your Library, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for collectionsDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/collections → 200.
+- Agent Browser verified (desktop):
+  - H1: "Collections"
+  - 11 H2 headings render correctly
+  - 33 H3 subheadings render
+  - 14 tables render (first table headers: Collection Type, MusicOSY Name, Purpose)
+  - 47 numbered steps render across all ordered lists
+  - 9/9 callouts found (all note and warning callouts render with correct text)
+  - Related articles: "RELATED ARTICLES" section renders with all 6 links
+  - Back/Next nav: Back → Collections & Library (parent section, since this is the first doc); Next → Create collections (second doc in sub-section)
+  - No console errors.
+
+Stage Summary:
+- "Collections" doc complete — Collections & Library sub-section now 1/9 docs with real content.
+- This is the largest and most comprehensive doc in the help center: 11 H2 sections, 33 H3 subheadings, 14 tables, 9 callouts, 47 numbered steps, 8 FAQs.
+- Covers all three Collection types (Keeps, Setlists, Crates) with detailed comparison tables, creation/editing/deletion workflows, collaboration, sharing, playback rules, Workspace collections, and privacy.
+- All 6 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Create collections (Collections & Library position 2).
