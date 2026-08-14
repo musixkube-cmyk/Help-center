@@ -44,6 +44,7 @@ import { likeDoc } from "./like";
 import { loveAndKeepContentDoc } from "./love-and-keep-content";
 import { commentDoc } from "./comment";
 import { leaveANoteAndJoinTheConversationDoc } from "./leave-a-note-and-join-the-conversation";
+import { shareDoc } from "./share";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -80,6 +81,7 @@ const docs: Record<string, Doc> = {
   [loveAndKeepContentDoc.path]: loveAndKeepContentDoc,
   [commentDoc.path]: commentDoc,
   [leaveANoteAndJoinTheConversationDoc.path]: leaveANoteAndJoinTheConversationDoc,
+  [shareDoc.path]: shareDoc,
 };
 
 /** Look up structured doc content for a given route path. */
