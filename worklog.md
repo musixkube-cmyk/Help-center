@@ -2633,3 +2633,57 @@ Stage Summary:
 - All 8 related article paths verified to return 200 before writing.
 - Collections & Library sub-section (9 docs) is now fully complete with real content.
 - Next sub-section per nav tree: Media & Playback.
+
+---
+Task ID: 37
+Agent: main (Z.ai Code)
+Task: Write the "Listen on MusicOSY" doc (Help Center → Using Musicosy → Media & Playback → position 1). Content provided verbatim by the user. This is the first doc in the Media & Playback sub-section (after completing all 9 Collections & Library docs in Tasks 28-36).
+
+Work Log:
+- Read worklog tail (Task 36) for context: Collections & Library sub-section complete (9/9), next sub-section was Media & Playback.
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Confirmed Media & Playback nav section has 10 items; "Listen on Musicosy" is position 1.
+- Verified "Listen on Musicosy" route returns 200 (placeholder, no content yet).
+- Verified all 6 related article paths return 200 before writing (all from Collections & Library sub-section): collections, playlists, add-remove-and-reorder-playlist-items, your-library, keep-and-organize-your-library, save-music-to-your-library.
+- Created src/data/docs/listen-on-musicosy.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/listen-on-musicosy
+  - 2 intro paragraphs (Listen = dedicated playback hub, vs The Stage for social discovery)
+  - H2 "The Player Interface" + intro paragraph + table (3 cols × 3 rows: Now-Playing Bar/Full-Screen Player/Queue View with Description + Best Used When) + callout (note): video/live session auto-prioritizes video feed, can toggle to audio-only
+  - H2 "Core Playback Controls" + intro paragraph + table (2 cols × 5 rows: Play/Pause, Next/Previous, Scrub Bar, Shuffle, Repeat with functions)
+  - H2 "Managing the Up Next Queue" + intro paragraph
+    - H3 "Queue Ownership" + intro paragraph (Setlist/album takes ownership, Search breaks ownership) + table (2 cols × 4 rows: Press Play on Setlist/Add to Up Next/Play Next/Play new song from Search with queue effects) + callout (warning): editing Up Next doesn't change saved Setlist
+  - H2 "Audio and Video Settings" + intro paragraph (audio + video in same player)
+    - H3 "Playback Modes" + table (2 cols × 3 rows: Audio Only/Video Enabled/Auto-Play Video with descriptions)
+    - H3 "Audio Quality" + intro paragraph + table (2 cols × 3 rows: Data Saver/Standard/High Fidelity with best for) + callout (warning): High Fidelity consumes significantly more data
+  - H2 "Autoplay and Continuous Discovery" + intro paragraph (Autoplay → personalized radio station) + 2-item list with bold lead-ins (How it works, Learning your taste) + callout (note): can disable Autoplay in Playback Settings
+  - H2 "Lyrics and synchronized media" + intro paragraph + 4-step ordered list (open Full-Screen → tap Lyrics icon → scroll in real-time → tap line to scrub) + closing paragraph (synchronized vocal stems/commentary)
+  - H2 "Offline Listening (Take It With You)" + intro paragraph + 3-step ordered list (navigate to eligible media → tap Take It With You icon → downloads to local storage) + callout (warning): 30-day network validation required
+  - related: 6 paths (all from Collections & Library: Collections, Playlists, Add/remove/reorder playlist items, Your Library, Keep and organize your Library, Save music to your Library)
+- Registered in src/data/docs/index.ts: added import + map entry for listenOnMusicosyDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/listen-on-musicosy → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Listen on Musicosy"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / MEDIA & PLAYBACK / LISTEN ON MUSICOSY
+  - 8 H2 headings: The Player Interface | Core Playback Controls | Managing the Up Next Queue | Audio and Video Settings | Autoplay and Continuous Discovery | Lyrics and synchronized media | Offline Listening (Take It With You)
+  - 3 H3 headings: Queue Ownership | Playback Modes | Audio Quality
+  - 5 tables: Player Interface (3×3), Core Controls (2×5), Queue Ownership (2×4), Playback Modes (2×3), Audio Quality (2×3) — all render with correct headers
+  - 2 ordered lists: 4-step lyrics + 3-step offline = 7 numbered steps total
+  - 1 bold lead-in list: Autoplay (2 items: How it works, Learning your taste)
+  - 5 callouts verified via DOM query (div.border-l-2): all 5 render with correct text
+    1. note: video feed priority
+    2. warning: Up Next ≠ Setlist
+    3. warning: High Fidelity data usage
+    4. note: disable Autoplay
+    5. warning: 30-day validation
+  - Related articles: "RELATED ARTICLES" section renders with all 6 links
+  - Back/Next nav: Back → Media & Playback (parent section, since this is the first doc); Next → Video playing (position 2)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Listen on MusicOSY" doc complete — Media & Playback sub-section now 1/10 docs with real content.
+- Doc covers the Listen environment (playback hub): player interface (3 views), core controls (5), Up Next queue management (ownership + 4 actions), audio/video settings (3 playback modes + 3 quality tiers), Autoplay, synchronized lyrics (4-step), and offline listening (3-step + 30-day validation).
+- Includes 5 tables, 5 callouts (2 notes + 3 warnings), 2 ordered lists (7 steps), 1 bold lead-in list, 8 H2 + 3 H3 headings.
+- All 6 related article paths verified to return 200 before writing (all from Collections & Library).
+- Next document per nav tree order: Video playing (Media & Playback position 2).
