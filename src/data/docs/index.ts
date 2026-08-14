@@ -69,6 +69,7 @@ import { videoPlayingDoc } from "./video-playing";
 import { fullscreenDoc } from "./fullscreen";
 import { onDemandPlaybackDoc } from "./on-demand-playback";
 import { soundDoc } from "./sound";
+import { manageYourPlaybackQueueDoc } from "./manage-your-playback-queue";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -130,6 +131,7 @@ const docs: Record<string, Doc> = {
   [fullscreenDoc.path]: fullscreenDoc,
   [onDemandPlaybackDoc.path]: onDemandPlaybackDoc,
   [soundDoc.path]: soundDoc,
+  [manageYourPlaybackQueueDoc.path]: manageYourPlaybackQueueDoc,
 };
 
 /** Look up structured doc content for a given route path. */

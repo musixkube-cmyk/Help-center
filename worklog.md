@@ -2946,3 +2946,56 @@ Stage Summary:
 - Includes 3 tables, 3 callouts (2 notes + 1 warning), 1 ordered list (3 steps), 2 bold lead-in lists (3 items total), 6 H2 + 6 H3 headings.
 - All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
 - Next document per nav tree order: Manage your playback queue (Media & Playback position 6).
+
+---
+Task ID: 42
+Agent: main (Z.ai Code)
+Task: Write the "Manage your playback queue" doc (Help Center → Using Musicosy → Media & Playback → position 6). Content provided verbatim by the user. This is the sixth doc in the Media & Playback sub-section (after Listen on MusicOSY=1, Video playing=2, Fullscreen=3, On-demand playback=4, Sound=5).
+
+Work Log:
+- Read worklog tail (Task 41) for context: Media & Playback sub-section 5/10 complete (Listen on MusicOSY + Video playing + Fullscreen + On-demand playback + Sound), next doc was "Manage your playback queue" (position 6).
+- Confirmed git status clean; last commit = "Add 'Sound' Help Center doc (Media & Playback 5/10)".
+- Verified all 10 routes return 200 before writing (the doc itself + all 9 related articles): manage-your-playback-queue, listen-on-musicosy, video-playing, fullscreen, on-demand-playback, sound, manage-your-up-next-queue, continue-listening, music-playback-troubleshooting, video-playback-troubleshooting.
+- Created src/data/docs/manage-your-playback-queue.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/manage-your-playback-queue
+  - 2 intro paragraphs (queue = temporary sequence in Listen environment; Setlist = permanent; queue holds current track + Up Next + history; managing queue = curate immediate experience without altering Collections/Setlists)
+  - H2 "Understanding queue ownership" + intro paragraph (platform establishes queue owner; determines upcoming tracks + what happens when current finishes) + table (3 cols × 3 rows: Play a Setlist or Album / Play a single track from Search / Play a Creator Radio Station with Queue Owner + What Happens Next) + callout (note, from "Important:"): listening to Album + search for different song breaks ownership
+  - H2 "Viewing your queue interface" + intro paragraph (open queue panel from Now-Playing bar or Full-Screen Player; 3 sections) + table (2 cols × 3 rows: Playing Now / Up Next / Recently Played with Description) + callout (note): tap Recently Played item to restart or add back to Up Next
+  - H2 "Modifying your active queue" + intro paragraph (full control of Up Next; change mood instantly)
+    - H3 "Adding media to your queue" + intro paragraph (find new song while browsing The Stage / searching → inject into session) + ordered list (3 steps: Action Menu → Add to Up Next (end) / Play Next (after current))
+    - H3 "Reordering and removing items" + ordered list (4 steps: open queue panel → press hold drag handle → drag up/down → tap Remove icon)
+    - H3 "Clearing the queue" + intro paragraph (start completely fresh) + ordered list (3 steps: open queue panel → tap Clear Queue / Clear Up Next → confirm) + callout (warning): clearing queue only affects current session; doesn't delete from Setlists or remove Keeps
+  - H2 "Saving your queue as a Setlist" + intro paragraph (build perfect sequence on fly → convert to permanent Setlist) + ordered list (5 steps: open queue panel → tap Save as Setlist → enter title + description → choose visibility → tap Create) + closing paragraph (current Up Next order saved to Library as new Setlist; edit/share/replay)
+  - H2 "Queue vs. Setlist" + intro paragraph (common to confuse; use table) + table (3 cols × 4 rows: Lifespan / Editing Impact / Sharing / Offline Access with Playback Queue (Up Next) vs Setlist (Playlist))
+  - H2 "Autoplay and the infinite queue" + intro paragraph (Up Next reaches end → Autoplay transitions into algorithmic radio) + unordered list (3 items: analyzes genres/moods/creators | generates infinite queue | Love/Keep/skip adjusts algorithm) + callout (note): disable Autoplay in Playback Settings
+  - related: 9 sibling paths (Listen on Musicosy, Video playing, Fullscreen, On-demand playback, Sound, Manage your Up Next queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+- Registered in src/data/docs/index.ts: added import + map entry for manageYourPlaybackQueueDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/manage-your-playback-queue → 200.
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Manage your playback queue — Musicosy"
+  - H1: "Manage your playback queue"
+  - 6 H2 headings: Understanding queue ownership | Viewing your queue interface | Modifying your active queue | Saving your queue as a Setlist | Queue vs. Setlist | Autoplay and the infinite queue
+  - 3 H3 headings (doc body): Adding media to your queue | Reordering and removing items | Clearing the queue
+  - 3 tables: Understanding queue ownership (3×3 with Your Action/Queue Owner/What Happens Next), Viewing your queue interface (3×2 with Queue Section/Description), Queue vs. Setlist (4×3 with Feature/Playback Queue (Up Next)/Setlist (Playlist)) — all render with correct headers
+  - 4 ordered lists: Adding media (3 steps), Reordering and removing (4 steps), Clearing the queue (3 steps), Saving your queue as a Setlist (5 steps) = 15 steps total — verified numeric prefixes render correctly ("1Tap the Action Menu...", "1Open the queue panel from the player...", "1Open the queue panel.", "1Open your queue panel while your session is active.")
+  - 1 unordered list: Autoplay (3 items, no numeric prefix — "Autoplay analyzes the genres...")
+  - 4 callouts verified via DOM query (div.border-l-2): all 4 render with correct text + correct icon/variant
+    1. note: If you are listening to an Album and manually search for different song, you break ownership
+    2. note: You can tap any item in your Recently Played list to restart or add back to Up Next
+    3. warning: Clearing your queue or removing items only affects current session; doesn't delete from Setlists or remove Keeps
+    4. note: You can disable Autoplay in your Playback Settings
+  - Related articles: "RELATED ARTICLES" section renders with all 9 links (Listen on Musicosy, Video playing, Fullscreen, On-demand playback, Sound, Manage your Up Next queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+  - Back/Next nav: Back → Sound (/resources/help-center/using-musicosy/media-and-playback/sound — correct, position 5, the DFS predecessor); Next → Manage your Up Next queue (/resources/help-center/using-musicosy/media-and-playback/manage-your-up-next-queue — correct, position 7, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR/Fast Refresh dev logs)
+  - VLM visual verification (desktop screenshot): confirmed H1 "MANAGE YOUR PLAYBACK QUEUE", section heading "UNDERSTANDING QUEUE OWNERSHIP", table renders cleanly with headers "Your Action" / "Queue Owner" / "What Happens Next" (aligned and legible), sidebar navigation present with current page highlighted in light orange, no layout problems / no overflow / no broken elements. Verdict: "The page is rendering correctly."
+  - Mobile (390×844): H1 + 6 H2 + 3 H3 + 3 tables + 4 callouts all present, no horizontal overflow, footer visible, scrollH=8331 (content flows naturally).
+
+Stage Summary:
+- "Manage your playback queue" doc complete — Media & Playback sub-section now 6/10 docs with real content.
+- Doc covers the temporary playback queue: queue ownership (3 owner types: Setlist/Album, Single Track, Creator Radio Station), the queue interface (3 sections: Playing Now / Up Next / Recently Played), modifying the active queue (add via Action Menu → Add to Up Next / Play Next, reorder via drag handle, remove via Remove icon, clear via Clear Queue), saving a queue as a Setlist (5-step conversion), queue vs. Setlist comparison (4 features: Lifespan / Editing Impact / Sharing / Offline Access), and Autoplay and the infinite queue (algorithmic radio + feedback adjustment + disable option).
+- Includes 3 tables, 4 callouts (3 notes + 1 warning), 4 ordered lists (15 steps total), 1 unordered list (3 items), 6 H2 + 3 H3 headings.
+- All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
+- Next document per nav tree order: Manage your Up Next queue (Media & Playback position 7).
