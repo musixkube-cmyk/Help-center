@@ -1327,3 +1327,48 @@ Stage Summary:
 - Content Interaction group: 10/12 real docs done. Remaining placeholders: Edit or delete your comment, Take your post off The Stage.
 - Cross-center related links confirmed working to both Support center sub-groups (Reports & Appeals, Account & Access).
 - Note: worklog file on GitHub only contained entries through Task ID 10; doc-writing tasks 11-15 (Like, Love and Keep, Comment, Leave a Note, Share, Repost, Resing, Mentions, Save content) were committed but their worklog entries were not present in the restored file. This Task 16 entry continues the sequence per the project's intended numbering.
+
+---
+Task ID: 17
+Agent: main (Z.ai Code)
+Task: Write "Edit or delete your comment" doc — 11th Content Interaction doc (22nd Using Musicosy doc). Placement: Help Center → Using Musicosy → Content Interaction → Edit or delete your comment. Nav node already present (after "Block and mute", before "Take your post off The Stage"); no nav tree changes made. User-specified Next document: Take your post off The Stage.
+
+Work Log:
+- Ran checkpoint.sh: local matches GitHub (5c49165). No sandbox reset.
+- Verified nav.ts line 249 already lists "Edit or delete your comment" in Content Interaction group — placement matches user instruction; no nav edits needed.
+- Verified all 5 related-article paths return 200 via curl:
+  - Leave a Note and join the conversation → /resources/help-center/using-musicosy/content-interaction/leave-a-note-and-join-the-conversation
+  - Mentions → /resources/help-center/using-musicosy/content-interaction/mentions
+  - Block and mute → /resources/help-center/using-musicosy/content-interaction/block-and-mute
+  - Flag a post / account / LIVE / Note / DM → /support/reports-and-appeals/report-a-post-account-live-comment-dm (source title says "Note" but maps to the existing "Report a post / account / LIVE / comment / DM" Support article; cross-center link)
+  - Take your post off The Stage → /resources/help-center/using-musicosy/content-interaction/take-your-post-off-the-stage (currently placeholder; will be written next per user's "Next document" instruction)
+- Wrote src/data/docs/edit-or-delete-your-comment.ts (editOrDeleteYourCommentDoc). Structure: 2 intro paragraphs + 6 H2 sections:
+  1. "Edit your Note": "To edit a Note:" 6-step ordered list + paragraph (use cases: typos, missing context, broken links, incorrect @mentions, clearer version) + paragraph (only own Notes; "Edited" marker transparency).
+  2. "Delete your Note": "To delete a Note:" 5-step ordered list + paragraph (what deletion does NOT do: delete post, remove others' Notes, undo Loves, change ownership) + paragraph (distinct member vs content-owner controls) + callout (variant=note, from source italic *Note:* — "Note:" lead stripped per established pattern; tombstone record retention for safety/legal/audit).
+  3. "What happens to replies": 2 paragraphs (thread structure preservation; replies remain authors' contributions; edits don't auto-change replies).
+  4. "When editing or deleting is unavailable": "You may not be able to edit or delete a Note if:" 6-item bullet list + paragraph.
+  5. "Editing is not a safety tool": 3 paragraphs (delete own content; Flag others' violating Notes; Mute/Block for boundaries).
+  6. "About Signals and records": 2 paragraphs (prior Signals/screenshots may persist; limited records retained for safety/legal/audit).
+- Inline bold markers (Note, The Stage, More, Edit, Save, Delete, Remove, Loves, Taken Off Stage, Studio, Backstage, Flag, Mute, Block, Signal) stripped to plain text per renderer capability. Backtick `@mentions` rendered as plain text "@mentions" (renderer has no inline code support). Curly quotes preserved in "Edited" and "deleted" state references.
+- Registered editOrDeleteYourCommentDoc in src/data/docs/index.ts (import + docs map entry).
+- Lint: clean. No errors.
+- Route verified 200: /resources/help-center/using-musicosy/content-interaction/edit-or-delete-your-comment
+- All 5 related links render in HTML (verified via grep).
+- Agent Browser verified (desktop 1440×900 + mobile iPhone 14 / 390×844):
+  - H1 "Edit or delete your comment".
+  - All 6 H2 sections render: Edit your Note, Delete your Note, What happens to replies, When editing or deleting is unavailable, Editing is not a safety tool, About Signals and records.
+  - 1 callout renders: "For safety, legal, or audit purposes, MusicOSY may retain a minimal, non-public tombstone record..." (from source *Note:*).
+  - 2 ordered lists render with correct numbering (edit 6-step starts 1,2,3...; delete 5-step starts 1,2,3...). Renderer uses <ul> containers with OrderedListItem number badges.
+  - 2 unordered lists render (6-item "when unavailable" + 5-item related articles).
+  - 5 related articles render with correct hrefs (4 under /resources/help-center + 1 cross-center /support/reports-and-appeals/...).
+  - Back/Next DFS: BACK → "Block and mute" (block-and-mute), NEXT → "Take your post off The Stage" (take-your-post-off-the-stage). Correct.
+  - No console errors (only React DevTools info + HMR connected).
+  - Mobile: docHeight 6554px (long content) — footer pushed to natural document end (footerBottom 6553.5 ≈ docHeight), no overlap. No horizontal overflow (bodyHorizontalScroll 0). Callout renders correctly within viewport (right edge 366px).
+  - Golden path: clicked "Take your post off The Stage" related link → navigated to /resources/help-center/using-musicosy/content-interaction/take-your-post-off-the-stage with correct title.
+- Committed (872b662) and pushed to GitHub main.
+
+Stage Summary:
+- "Edit or delete your comment" is now fully written and rendered as the 11th real Content Interaction doc (22nd Using Musicosy doc).
+- Content Interaction group: 11/12 real docs done. Only remaining placeholder: "Take your post off The Stage" (which is the user-specified Next document).
+- Cross-center related link to Support (Reports & Appeals) confirmed working.
+- No nav tree changes made (node was pre-existing).
