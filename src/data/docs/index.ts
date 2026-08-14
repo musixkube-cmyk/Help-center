@@ -49,6 +49,7 @@ import { repostDoc } from "./repost";
 import { resingAndPassTheMicDoc } from "./resing-and-pass-the-mic";
 import { mentionsDoc } from "./mentions";
 import { saveContentDoc } from "./save-content";
+import { blockAndMuteDoc } from "./block-and-mute";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -90,6 +91,7 @@ const docs: Record<string, Doc> = {
   [resingAndPassTheMicDoc.path]: resingAndPassTheMicDoc,
   [mentionsDoc.path]: mentionsDoc,
   [saveContentDoc.path]: saveContentDoc,
+  [blockAndMuteDoc.path]: blockAndMuteDoc,
 };
 
 /** Look up structured doc content for a given route path. */
