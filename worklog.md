@@ -2242,3 +2242,49 @@ Stage Summary:
 - Includes 2 tables, 3 callouts (1 warning + 2 notes), 3 ordered lists (16 steps total), 5 H2 + 4 H3 headings.
 - All 8 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Shared collections (Collections & Library position 3).
+
+---
+Task ID: 30
+Agent: main (Z.ai Code)
+Task: Write the "Shared collections" doc (Help Center → Using Musicosy → Collections & Library → position 3). Content provided verbatim by the user. This is the third doc in the Collections & Library sub-section (after Collections and Create collections).
+
+Work Log:
+- Read worklog tail (Task 29) for context: "Create collections" doc complete (position 2), next doc was "Shared collections".
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Verified "Shared collections" route returns 200 (placeholder, no content yet).
+- Verified all 8 related article paths return 200 before writing: collections, create-collections, playlists, your-library, keep-and-organize-your-library, save-music-to-your-library, edit-or-delete-a-collection, add-remove-and-reorder-playlist-items.
+- Created src/data/docs/shared-collections.ts:
+  - path: /resources/help-center/using-musicosy/collections-and-library/shared-collections
+  - 2 intro paragraphs + 2-item list with bold lead-ins (Setlists, Crates) + guide purpose paragraph
+  - H2 "Collection visibility and sharing levels" + intro paragraph + table (4 cols × 5 rows: Private/Unlisted/Public/Collaborative/Workspace-owned with Who Can See/Who Can Edit/Best Use Case) + callout (note): Public does not grant playback access to paid/restricted content
+  - H2 "How to share a collection" + intro paragraph + 3-step ordered list (open collection → Pass the Mic icon → choose destination) + 3-item list with bold lead-ins (Backstage, Copy Link, External Apps) + callout (warning): sharing Private collection link only works for you
+  - H2 "Building a Collaborative Setlist" + intro paragraph
+    - H3 "Inviting collaborators" + 5-step ordered list (Settings → Toggle Collaborative → Invite Collaborator → search member → assign permission + send)
+    - H3 "Collaboration permissions" + intro paragraph + table (2 cols × 3 rows: Add items/Remove items/Reorder items with descriptions) + callout (note): collaborators can only add media they are entitled to view/play
+  - H2 "Workspace and team collections" + intro paragraph + 3-item list with bold lead-ins (Context Switching, Team Access, Leaving a Workspace)
+  - H2 "How shared collections handle media changes" + intro paragraph + table (2 cols × 4 rows: track removed/territory-restricted/collaborator removed/Crate item sold out with outcomes)
+  - H2 "Following and saving shared collections" + intro paragraph + 3-item list with bold lead-ins (Keep, Follow (Setlists only), Add to Up Next)
+  - related: 8 sibling paths (Collections, Create collections, Playlists, Your Library, Keep and organize your Library, Save music to your Library, Edit or delete a collection, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for sharedCollectionsDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/shared-collections → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Shared collections"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / COLLECTIONS & LIBRARY / SHARED COLLECTIONS
+  - 6 H2 headings: Collection visibility and sharing levels | How to share a collection | Building a Collaborative Setlist | Workspace and team collections | How shared collections handle media changes | Following and saving shared collections
+  - 2 H3 headings: Inviting collaborators | Collaboration permissions
+  - 2 ordered lists: 3-step share flow + 5-step collaborator invite = 8 numbered steps total
+  - 4 unordered lists with bold lead-ins: intro (Setlists, Crates), sharing destinations (Backstage, Copy Link, External Apps), workspace (Context Switching, Team Access, Leaving a Workspace), following (Keep, Follow, Add to Up Next)
+  - 3 tables: visibility levels (4×5), collaboration permissions (2×3), media changes (2×4) — all cells render correctly
+  - 3 callouts: Public does not grant access (note), Private link only works for you (warning), collaborator eligibility (note)
+  - Related articles: "RELATED ARTICLES" section renders with all 8 links
+  - Back/Next nav: Back → Create collections (correct DFS predecessor, position 2); Next → Playlists (correct, position 4)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Shared collections" doc complete — Collections & Library sub-section now 3/9 docs with real content.
+- Doc covers sharing Setlists/Crates, 5 visibility levels (incl. Workspace-owned), Pass the Mic share flow, Collaborative Setlists (inviting + permission table), Workspace team collections, media change handling (reference links), and following/saving shared collections.
+- Includes 3 tables, 3 callouts (1 warning + 2 notes), 2 ordered lists (8 steps), 4 bold lead-in lists, 6 H2 + 2 H3 headings.
+- All 8 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Playlists (Collections & Library position 4).
