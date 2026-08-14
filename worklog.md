@@ -2193,3 +2193,52 @@ Stage Summary:
 - Covers all three Collection types (Keeps, Setlists, Crates) with detailed comparison tables, creation/editing/deletion workflows, collaboration, sharing, playback rules, Workspace collections, and privacy.
 - All 6 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Create collections (Collections & Library position 2).
+
+---
+Task ID: 29
+Agent: main (Z.ai Code)
+Task: Write the "Create collections" doc (Help Center → Using Musicosy → Collections & Library → position 2). Content provided verbatim by the user. This is the second doc in the Collections & Library sub-section (after the "Collections" overview doc created in Task 28).
+
+Work Log:
+- Read worklog tail (Task 28) for context: "Collections" overview doc complete (position 1), next doc was "Create collections".
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Verified "Create collections" route returns 200 (placeholder, no content yet) and "Collections" route returns 200 (existing doc from Task 28).
+- Verified all 8 related article paths return 200 before writing: collections, shared-collections, playlists, your-library, keep-and-organize-your-library, save-music-to-your-library, edit-or-delete-a-collection, add-remove-and-reorder-playlist-items.
+- Created src/data/docs/create-collections.ts:
+  - path: /resources/help-center/using-musicosy/collections-and-library/create-collections
+  - 4 intro paragraphs (collections overview, Setlists = ordered playback, Crates = themed grouping, guide purpose)
+  - H2 "How to create a Setlist" + intro paragraph
+    - H3 "Creation steps" + 6-step ordered list (Library → Create Setlist → Title → Description/Cover → Visibility → Create) + closing paragraph
+    - callout (note): Collaborative Setlist collaborator eligibility
+    - H3 "Setlist visibility settings" + intro paragraph + table (4 cols × 4 rows: Private/Unlisted/Public/Collaborative with Who Can See/Who Can Edit/Best Use Case)
+  - H2 "How to create a Crate" + intro paragraph
+    - H3 "Creation steps" + 6-step ordered list (Library → Create Crate → Name → Description → Visibility → Create)
+    - callout (warning): Crate has no playback sequence — plays individual items or adds to Up Next
+  - H2 "Choosing the right collection type" + intro paragraph + table (3 cols × 4 rows: Primary Purpose/Eligible Items/Playback Behavior/Collaboration for Setlist vs Crate)
+  - H2 "Adding items to your collections" + intro paragraph + 4-step ordered list (Find item → Action Menu → Add to Setlist/Crate → Choose collection or Create New)
+    - callout (note): Adding creates reference link not copy; unavailable items display "Unavailable" status
+  - H2 "Managing your collections" + closing paragraph (refers to dedicated management guides)
+  - related: 8 sibling paths (Collections, Shared collections, Playlists, Your Library, Keep and organize your Library, Save music to your Library, Edit or delete a collection, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for createCollectionsDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/create-collections → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Create collections"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / COLLECTIONS & LIBRARY / CREATE COLLECTIONS
+  - 5 H2 headings: How to create a Setlist | How to create a Crate | Choosing the right collection type | Adding items to your collections | Managing your collections
+  - 4 H3 headings: Creation steps (×2) | Setlist visibility settings
+  - 3 ordered lists: 6+6+4 = 16 numbered steps total, all rendering with correct badge sequence
+  - 2 tables: Setlist visibility (4×4) and Collection type comparison (3×4) — all cells render correctly
+  - 3 callouts: Collaborative Setlist note (note variant), Crate no playback sequence (warning variant), Reference link not copy (note variant)
+  - Related articles: "RELATED ARTICLES" section renders with all 8 links
+  - Back/Next nav: Back → Collections (correct DFS predecessor, position 1); Next → Shared collections (correct, position 3)
+  - Footer: pushed naturally to bottom (page is 7539px tall, content exceeds viewport)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Create collections" doc complete — Collections & Library sub-section now 2/9 docs with real content.
+- Doc covers creating Setlists and Crates with creation steps, visibility settings table, collection type comparison table, adding items workflow, and management guidance.
+- Includes 2 tables, 3 callouts (1 warning + 2 notes), 3 ordered lists (16 steps total), 5 H2 + 4 H3 headings.
+- All 8 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Shared collections (Collections & Library position 3).
