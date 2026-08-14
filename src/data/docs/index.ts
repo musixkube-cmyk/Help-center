@@ -42,6 +42,7 @@ import { manageTopicsAndInterestsDoc } from "./manage-topics-and-interests";
 import { trendingContentAndFreshDropsDoc } from "./trending-content-and-fresh-drops";
 import { likeDoc } from "./like";
 import { loveAndKeepContentDoc } from "./love-and-keep-content";
+import { commentDoc } from "./comment";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -76,6 +77,7 @@ const docs: Record<string, Doc> = {
   [trendingContentAndFreshDropsDoc.path]: trendingContentAndFreshDropsDoc,
   [likeDoc.path]: likeDoc,
   [loveAndKeepContentDoc.path]: loveAndKeepContentDoc,
+  [commentDoc.path]: commentDoc,
 };
 
 /** Look up structured doc content for a given route path. */
