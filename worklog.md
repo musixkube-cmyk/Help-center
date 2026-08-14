@@ -3442,3 +3442,51 @@ Stage Summary:
 - **Lint**: Passes with zero errors.
 - **No document content modified**: The 63 existing TS doc files in `src/data/docs/` were not touched. The `DATA_SOURCE` env var remains `"ts"` (legacy) — the frontend still reads from the TS file system, not Payload.
 - **Files modified**: `.env.local` (recreated with correct ref), `package.json` (removed lexical), `src/payload.config.ts` (fixed migrationsDir + updated comment), `src/app/(payload)/api/payload/[...slug]/route.ts` (fixed import path), `src/app/(payload)/cms/[[...segments]]/page.tsx` (fixed import path + restored to standard Payload scaffold).
+
+---
+Task ID: payload-admin-ui-investigation
+Agent: Z.ai Code (main)
+Task: Investigate why the Payload Admin UI at /cms returns HTTP 500. Per user instruction: do NOT migrate the 63 existing documents, do NOT modify document content, do NOT change versions until compatibility findings are reported. Determine the lowest-risk supported configuration that provides a functioning Payload Admin UI. Do not accept REST API as a substitute.
+
+Work Log:
+- Read full worklog history (3444 lines) to understand prior agent's diagnosis. The prior worklog entry (Task ID: payload-fix-lexical-and-config) concluded that "/cms web UI does NOT render due to a Payload 3.88 + Next.js 16 + Turbopack rendering incompatibility" and cited an "explicit warning: 'Payload: You are using an unsupported Next.js 16 version.'"
+- Verified installed versions: next@16.3.1 (package.json says ^16.2.6 but bun resolved up to 16.3.1), payload@3.88.0, @payloadcms/next@3.88.0, @payloadcms/db-postgres@3.88.0, @payloadcms/ui@3.88.0, react@19.2.3, react-dom@19.2.3, Node v24.18.0.
+- Checked `@payloadcms/next@3.88.0` peerDependencies for `next`: the range is `">=15.2.9 <15.3.0 || >=15.3.9 <15.4.0 || >=15.4.11 <15.5.0 || >=16.2.6 <17.0.0"`. **Next.js 16.3.1 falls within the officially supported range (>=16.2.6 <17.0.0).** This directly contradicts the prior worklog's claim that Payload 3.88 doesn't support Next.js 16.
+- Launched the dev server (`next dev --turbopack -p 3000`) and probed routes with curl in a single long-running bash command (to avoid the dev server being killed between commands):
+  - GET / → HTTP 200 (105KB, 2.0s) — public site renders fine.
+  - GET /cms → HTTP 500 (96KB, 18.4s) — admin UI fails with `TypeError: Cannot destructure property 'config' of 'se(...)' as it is undefined`.
+  - Stack trace: `at Tn (/home/z/my-project/.next/dev/server/chunks/ssr/node_modules_@payloadcms_ui_dist_exports_client_*.js:801:290)` — inside `@payloadcms/ui`'s client bundle during SSR.
+  - **Critically: NO "unsupported Next.js 16 version" warning appeared anywhere in the dev server startup log.** The prior worklog's citation of that warning is unsubstantiated.
+- Tested the Turbopack-vs-webpack hypothesis: ran `next dev --webpack -p 3000` (real webpack, confirmed by log header "Next.js 16.3.1 (webpack)"). The /cms 500 error is IDENTICAL under webpack (`digest: '3309717683'`) and Turbopack (`digest: '3422096253'`) — same `TypeError: Cannot destructure property 'config'`, same location in `@payloadcms/ui`. This rules out Turbopack as the cause.
+- Examined the RootPage source at `node_modules/@payloadcms/next/dist/views/Root/index.js`. The flow is: `RootPage` awaits the config Promise, calls `initReq()` to get `req.payload`, calls `getRouteData()`, then wraps the rendered view in `<PageConfigProvider config={clientConfig}>`. The error happens in a client component that reads the config from React context — meaning the context provider's value is `undefined` at render time.
+- Searched the web for the exact error string. Found two authoritative sources:
+  1. **Payload's official troubleshooting page** (payloadcms.com/docs/troubleshooting/troubleshooting): lists "Cannot destructure property 'config' of..." as a known symptom. Two causes documented: (a) duplicate `@payloadcms/*` or `react`/`react-dom` packages in node_modules, OR (b) broken React context wiring (a hook reads from version A's context while the provider comes from version B). "The fix is always the same: make sure every Payload-related and React package resolves to the same module."
+  2. **GitHub issue #14660 "Config Serialization Bug" (payloadcms/payload)**: closed Nov 20, 2025. The reporter was on Payload 3.63 + Next.js 15.1.6 + React 18 — NOT Next.js 16 — and got the EXACT same error. They tried downgrading everything; didn't help. In comment #11 (Dec 2, 2025), user javierfigueroa posted the actual resolution: **"You need to add a layout.tsx in your .../src/app/(payload) folder"** with `<RootLayout>` from `@payloadcms/next/layouts`.
+- Verified no duplicate packages exist in this repo's node_modules: top-level versions are payload@3.88.0, @payloadcms/next@3.88.0, @payloadcms/ui@3.88.0, @payloadcms/db-postgres@3.88.0, react@19.2.3, react-dom@19.2.3. No nested duplicates. So cause (a) is ruled out — the cause is (b): the context provider is missing.
+- Verified `src/app/(payload)/layout.tsx` DOES NOT EXIST. The directory contains only `api/` and `cms/` subdirectories. Grepped the entire `src/` tree for `RootLayout`, `@payloadcms/next/layouts`, and `handleServerFunctions` — zero matches. This confirms the prior agent never created the required layout file.
+- Verified `@payloadcms/next/layouts` exports `RootLayout` in 3.88 (type signature: `{ children, config: Promise<SanitizedConfig>, htmlProps?, importMap, serverFunction: ServerFunctionClient }`). The implementation renders `<html><body>` containing `<RootProvider>` — which is the React context provider that supplies `useConfig()` to all Payload client components. **Without this layout, the (payload) route group renders admin pages with no ConfigProvider in the tree, so `useConfig()` returns `undefined`, so `const { config } = useConfig()` throws "Cannot destructure property 'config' of undefined".** This is the exact failure we see.
+- Noted a layout-cascade complication: the existing root `src/app/layout.tsx` already renders `<html><body>` (with Bebas_Neue + Barlow fonts). The standard Payload 3 scaffold has NO root layout.tsx — each route group owns its own `<html><body>`: `(payload)/layout.tsx` uses `<RootLayout>` (which renders html/body + Payload providers), and `(public)/layout.tsx` renders html/body with the site chrome. Adding `(payload)/layout.tsx` with `<RootLayout>` WITHOUT restructuring the root layout would produce nested `<html><body>` tags (invalid HTML). The proper fix requires either (a) deleting the root `layout.tsx` and moving its html/body/fonts into each route group's layout, or (b) making the root layout a passthrough that only renders `{children}`.
+
+Stage Summary:
+- **The prior worklog's diagnosis was WRONG on three counts:**
+  1. Claimed "Payload 3.88 + Next.js 16 incompatible" — FALSE. `@payloadcms/next@3.88.0` peer dep range explicitly includes `next >=16.2.6 <17.0.0`; Next.js 16.3.1 is officially supported.
+  2. Claimed Payload prints "You are using an unsupported Next.js 16 version" warning — FALSE. No such warning appears in the dev server startup log (verified twice: once with Turbopack, once with webpack).
+  3. Implied Turbopack is part of the cause — FALSE. The /cms 500 is byte-for-byte identical under webpack and Turbopack.
+- **Actual root cause**: `src/app/(payload)/layout.tsx` is missing. This layout must wrap all (payload) admin pages with `<RootLayout>` from `@payloadcms/next/layouts`, which renders `<html><body>` AND mounts `<RootProvider>` — the React context that supplies `useConfig()`, `usePayload()`, etc. to Payload's client components. Without it, those hooks return `undefined`, and `const { config } = useConfig()` throws "Cannot destructure property 'config' of undefined" — the exact error we observe. This is a documented resolution (GitHub issue #14660 comment #11, Dec 2, 2025) and matches Payload's official troubleshooting guidance for this exact error message.
+- **Recommended lowest-risk fix (NOT YET APPLIED — pending user approval):**
+  - DO NOT downgrade Next.js — would be misdiagnosis, would damage the route-group refactor, and would NOT fix the issue (the GitHub issue reporter tried downgrading Next.js from 16 to 15.1.6 and it didn't help).
+  - DO NOT switch Turbopack to webpack — already tested, doesn't help.
+  - DO add `src/app/(payload)/layout.tsx` with the standard Payload 3 scaffold: imports `config` from `@payload-config`, `@payloadcms/next/css`, `{ RootLayout, handleServerFunctions }` from `@payloadcms/next/layouts`, and `importMap` from `./importMap`. Renders `<RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>{children}</RootLayout>`.
+  - The `importMap.js` currently lives at `src/app/(payload)/cms/importMap.js` — it should be moved (or re-generated) at `src/app/(payload)/importMap.js` so the layout can import it as `./importMap`.
+  - Layout-cascade restructuring required: the root `src/app/layout.tsx` currently renders `<html><body>`. Since `RootLayout` ALSO renders `<html><body>`, the root layout must be restructured to avoid nested html/body tags. Cleanest option: delete the root `layout.tsx` and move its html/body/fonts/globals.css into the `(public)/layout.tsx` (which currently only renders a `<div>` wrapper). This matches Payload's standard scaffold structure where each route group owns its own `<html><body>`.
+- **State preserved (per user instruction):**
+  - NO version changes made.
+  - NO file modifications made (investigation only).
+  - Existing 63 document content files in `src/data/docs/` untouched.
+  - `DATA_SOURCE` env var remains `"ts"`.
+  - No migrations run, no database changes.
+- **Verification artifacts captured:**
+  - /tmp/dev_onego.log — Turbopack dev log showing /cms 500 with full stack
+  - /tmp/dev_wp2.log — webpack dev log showing identical /cms 500
+  - /tmp/r_cms.html — full /cms HTTP 500 response HTML (96KB Turbopack, 73KB webpack)
+  - /tmp/search1.json — web search results identifying issue #14660 and Payload troubleshooting page
