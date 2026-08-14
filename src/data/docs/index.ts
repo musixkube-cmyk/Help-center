@@ -41,6 +41,7 @@ import { recommendedCreatorsAndMusicDoc } from "./recommended-creators-and-music
 import { manageTopicsAndInterestsDoc } from "./manage-topics-and-interests";
 import { trendingContentAndFreshDropsDoc } from "./trending-content-and-fresh-drops";
 import { likeDoc } from "./like";
+import { loveAndKeepContentDoc } from "./love-and-keep-content";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -74,6 +75,7 @@ const docs: Record<string, Doc> = {
   [manageTopicsAndInterestsDoc.path]: manageTopicsAndInterestsDoc,
   [trendingContentAndFreshDropsDoc.path]: trendingContentAndFreshDropsDoc,
   [likeDoc.path]: likeDoc,
+  [loveAndKeepContentDoc.path]: loveAndKeepContentDoc,
 };
 
 /** Look up structured doc content for a given route path. */
