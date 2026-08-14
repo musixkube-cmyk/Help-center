@@ -50,6 +50,7 @@ import { resingAndPassTheMicDoc } from "./resing-and-pass-the-mic";
 import { mentionsDoc } from "./mentions";
 import { saveContentDoc } from "./save-content";
 import { blockAndMuteDoc } from "./block-and-mute";
+import { editOrDeleteYourCommentDoc } from "./edit-or-delete-your-comment";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -92,6 +93,7 @@ const docs: Record<string, Doc> = {
   [mentionsDoc.path]: mentionsDoc,
   [saveContentDoc.path]: saveContentDoc,
   [blockAndMuteDoc.path]: blockAndMuteDoc,
+  [editOrDeleteYourCommentDoc.path]: editOrDeleteYourCommentDoc,
 };
 
 /** Look up structured doc content for a given route path. */
