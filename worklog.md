@@ -1819,3 +1819,37 @@ Stage Summary:
 - Two nav data sources (megaMenu abbreviated + helpCenterSections full) must be manually synced.
 - Existing nested-layout sub-header pattern (/developers, /advertising) is the cleanest model for per-section top nav if user wants it.
 - Legal Center full tree documented: 4 sub-groups + 25 leaves (pre-Task-18). Trust & Policies: 4 sub-cats + 55 leaves. Combined 80 policy leaves across 2 centers.
+
+---
+Task ID: 19
+Agent: main (Z.ai Code)
+Task: Verify presence of Acceptable Use Policy and Data Processing Addendum in tree (user asked "arent we missing" these). Remove duplicate "Privacy policy" and "Community guidelines" nodes from the Legal, Policy & Compliance group (duplicates that caused confusion: Privacy Policy also lives in Privacy Center; Community Guidelines also lives in Trust & Policies → Content & Conduct).
+
+Work Log:
+- Ran checkpoint.sh: local matches GitHub (f9da25b). No reset.
+- Verified AUP and DPA do NOT exist anywhere in tree: grep on nav.ts found no matches for "Acceptable Use", "Data Processing", "Addendum", "AUP", "DPA". All path variants return 404 (/legal-and-policies/acceptable-use-policy, /legal-and-policies/legal-policy-and-compliance/acceptable-use-policy, /legal-and-policies/terms-of-use/acceptable-use-policy, /privacy-and-safety/acceptable-use-policy, and same 4 variants for data-processing-addendum).
+- Confirmed blast radius of removal: grep across all docs/*.ts found ZERO references to /legal-and-policies/legal-policy-and-compliance/privacy-policy or /community-guidelines — safe to remove without breaking related-article links.
+- Edited src/data/nav.ts Legal, Policy & Compliance group children array:
+  - REMOVED: "Privacy policy" (duplicate of Privacy Center's Privacy Policy node)
+  - REMOVED: "Community guidelines" (duplicate of Trust & Policies → Content & Conduct's Community Guidelines node)
+  - ADDED: "Acceptable Use Policy" (placed after "Terms of use" — AUP is typically a companion to Terms of Use)
+  - ADDED: "Data Processing Addendum" (placed after "Consent management" — in the data-governance cluster, since DPA is a GDPR/data-protection legal doc)
+  - Net: still 24 items in the group.
+- Lint: clean. No errors.
+- Route verification:
+  - Removed duplicates now 404: /legal-and-policies/legal-policy-and-compliance/privacy-policy (404), /legal-and-policies/legal-policy-and-compliance/community-guidelines (404). Correct.
+  - New policies 200: /legal-and-policies/legal-policy-and-compliance/acceptable-use-policy (200), /legal-and-policies/legal-policy-and-compliance/data-processing-addendum (200).
+  - All 24/24 group children return 200.
+- Agent Browser verified (desktop 1440×900):
+  - Group landing (/legal-and-policies/legal-policy-and-compliance): H1 renders, 24 child cards render.
+  - Card labels confirmed in order: Terms of use, Acceptable Use Policy, Copyright policy, Creator agreement, Distribution agreement, Advertising agreement, Subscription terms, Merchant terms, Payout terms, Age verification, Identity verification, Business verification, Tax collection, Tax reporting, Consent management, Data Processing Addendum, Data export, Data deletion, Account deletion, Archive/purge workflow, Legal hold, Territory restrictions, Sanctions restrictions, Audit retention.
+  - AUP at position 1 (after Terms of use); DPA at position 15 (after Consent management). Correct placement.
+  - No "Privacy policy" or "Community guidelines" cards present. Duplicates removed.
+- Committed (d2831f6) and pushed to GitHub main.
+
+Stage Summary:
+- Acceptable Use Policy and Data Processing Addendum were confirmed MISSING — now added to Legal, Policy & Compliance group.
+- Duplicate "Privacy policy" and "Community guidelines" removed from Legal, Policy & Compliance group (the canonical copies remain in Privacy Center and Trust & Policies → Content & Conduct respectively).
+- Legal, Policy & Compliance group: still 24 items, now deduplicated and expanded with the 2 missing policies.
+- NOTE: The larger reorganization proposed in prior turn (Move 1: relocate Privacy Center from /privacy-and-safety/privacy to /legal-and-policies/privacy; Move 2: relocate User Guidelines + Community Rules & Guidelines from Terms of Use to Trust & Policies → Content & Conduct) was NOT executed — user only requested duplicate removal + AUP/DPA addition. Those moves remain available if user confirms.
+- NOTE 2: The Privacy Policy node still exists in TWO places: Privacy Center (/privacy-and-safety/privacy/privacy-policy) and (previously) Legal Policy & Compliance. The Legal Policy & Compliance duplicate is now removed; the Privacy Center copy remains the canonical location. If user wants the larger Privacy Center relocation, that's the pending Move 1.
