@@ -2687,3 +2687,56 @@ Stage Summary:
 - Includes 5 tables, 5 callouts (2 notes + 3 warnings), 2 ordered lists (7 steps), 1 bold lead-in list, 8 H2 + 3 H3 headings.
 - All 6 related article paths verified to return 200 before writing (all from Collections & Library).
 - Next document per nav tree order: Video playing (Media & Playback position 2).
+
+---
+Task ID: 38
+Agent: main (Z.ai Code)
+Task: Write the "Video playing" doc (Help Center → Using Musicosy → Media & Playback → position 2). Content provided verbatim by the user. This is the second doc in the Media & Playback sub-section (after "Listen on MusicOSY" = Task 37 = position 1).
+
+Work Log:
+- Read worklog tail (Task 37) for context: Media & Playback sub-section 1/10 complete (Listen on MusicOSY), next doc was "Video playing" (position 2).
+- Confirmed git status clean, working tree clean; last commit = "Add 'Listen on MusicOSY' Help Center doc (Media & Playback 1/10)".
+- Confirmed Media & Playback nav section order (nav.ts line 259): Listen on Musicosy (1), Video playing (2), Fullscreen (3), On-demand playback (4), Sound (5), Manage your playback queue (6), Manage your Up Next queue (7), Continue listening (8), Music playback troubleshooting (9), Video playback troubleshooting (10).
+- Verified all 10 routes return 200 before writing (the doc itself + all 9 related articles): video-playing, listen-on-musicosy, fullscreen, on-demand-playback, sound, manage-your-playback-queue, manage-your-up-next-queue, continue-listening, music-playback-troubleshooting, video-playback-troubleshooting.
+- Reviewed the DocBlock types (types.ts) + CalloutBlock renderer (doc-content.tsx): callouts render with an Info icon (note) or AlertTriangle icon (warning); the optional title field is NOT used in prior docs — the "Note:"/"Important:"/"Warning:" labels in the user's content are dropped (the icon communicates the variant). Established convention confirmed via add-remove-and-reorder-playlist-items.ts callouts.
+- Created src/data/docs/video-playing.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/video-playing
+  - 2 intro paragraphs (video content variety: widescreen MVs, podcasts, vertical Stage clips, live replays; audio+video unified in one playback engine / Up Next queue)
+  - H2 "Supported video formats" + intro paragraph + table (2 cols × 2 rows: 16:9 Widescreen / 9:16 Vertical with Primary Use Case) + callout (note): Stage vertical autoplay on mute, tap/"Play Full" restores audio
+  - H2 "Core player controls" + intro paragraph + table (2 cols × 10 rows: Play/Pause, Scrub Bar, Playback Speed, Quality Selection, Captions & Transcripts, Picture-in-Picture, Fullscreen, Keep, Love, Add to Setlist with functions)
+  - H2 "Continuous watching and the Up Next queue" + intro paragraph (audio+video share playback engine, seamless Setlist/album transitions)
+    - H3 "Managing video in your queue" + 3-item bold lead-in list (Adding to Up Next / Autoplay / Background Audio — auto-downgrade to audio-only on lock/background) + callout (warning): background audio subject to plan entitlements, creator distribution settings, regional rights; some premium/subscriber-only videos require active unlocked screen
+  - H2 "Offline viewing (Take It With You)" + intro paragraph + 4-step ordered list (navigate → tap download icon → select quality → downloads to local storage) + callout (warning): downloaded videos are protected offline entitlements not permanent files, 30-day network validation, invalidated if entitlement expires or creator removes video
+  - H2 "Accessibility and viewing preferences" + intro paragraph + table (2 cols × 4 rows: Closed Captions / Transcripts / Reduced Motion / Chapters with descriptions)
+  - H2 "Handling unavailable or restricted videos" + intro paragraph (rights/licensing/territory agreements) + table (2 cols × 4 rows: Territory Restriction / Creator Unpublishes / Network Loss / Entitlement Expiry with player behavior)
+  - related: 9 sibling paths (Listen on Musicosy, Fullscreen, On-demand playback, Sound, Manage your playback queue, Manage your Up Next queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+- Registered in src/data/docs/index.ts: added import + map entry for videoPlayingDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/video-playing → 200 (compiled in 30ms, rendered in 1751ms).
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Video playing — Musicosy"
+  - H1: "Video playing"
+  - 6 H2 headings: Supported video formats | Core player controls | Continuous watching and the Up Next queue | Offline viewing (Take It With You) | Accessibility and viewing preferences | Handling unavailable or restricted videos
+  - 1 H3 in doc body: "Managing video in your queue" (other H3s are mega-menu column headers in the site nav)
+  - 4 tables: Supported formats (2×2), Core controls (10×2), Accessibility (4×2), Unavailable/restricted (4×2) — all render with correct headers
+  - 1 ordered list: 4 numbered steps for offline viewing (verified "1Navigate...2Tap...3Select...4The video..." in DOM text; renderer uses styled list with numeric prefixes)
+  - 1 bold lead-in list: 3 items (Adding to Up Next / Autoplay / Background Audio) under "Managing video in your queue"
+  - 3 callouts verified via DOM query (div.border-l-2): all 3 render with correct text + correct icon
+    1. note (Info icon, accent border): Stage vertical autoplay on mute
+    2. warning (AlertTriangle icon, destructive border): background audio entitlement restrictions
+    3. warning (AlertTriangle icon, destructive border): downloaded videos / 30-day validation
+  - Breadcrumb: Help Center → Using Musicosy → Media & Playback → Video playing (breadcrumb links confirmed)
+  - Related articles: "RELATED ARTICLES" section renders with all 9 links
+  - Back/Next nav: Back → Listen on Musicosy (correct — position 1, the DFS predecessor); Next → Fullscreen (correct — position 3, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR connected)
+  - VLM visual verification (desktop screenshot): confirmed H1 "VIDEO PLAYING", section headings "SUPPORTED VIDEO FORMATS" + "CORE PLAYER CONTROLS", table renders cleanly (16:9 + 9:16 with use cases), note callout renders with info icon, no layout problems / no text overflow, sidebar + main content aligned.
+  - Mobile (390×844): H1 + 6 H2 + 4 tables + 3 callouts all present, no horizontal overflow, footer visible, scrollH=8037 (content flows naturally).
+
+Stage Summary:
+- "Video playing" doc complete — Media & Playback sub-section now 2/10 docs with real content.
+- Doc covers the video player: supported formats (16:9 widescreen + 9:16 vertical), 10 core player controls (play/pause, scrub, speed, quality, captions, PiP, fullscreen, keep, love, add to setlist), continuous watching with unified audio+video Up Next queue (adding/autoplay/background audio), offline viewing (Take It With You 4-step + 30-day entitlement validation), accessibility (captions, transcripts, reduced motion, chapters), and handling unavailable/restricted videos (territory/unpublish/network loss/entitlement expiry).
+- Includes 4 tables, 3 callouts (1 note + 2 warnings), 1 ordered list (4 steps), 1 bold lead-in list (3 items), 6 H2 + 1 H3 headings.
+- All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
+- Next document per nav tree order: Fullscreen (Media & Playback position 3).
