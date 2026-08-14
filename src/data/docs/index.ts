@@ -68,6 +68,7 @@ import { listenOnMusicosyDoc } from "./listen-on-musicosy";
 import { videoPlayingDoc } from "./video-playing";
 import { fullscreenDoc } from "./fullscreen";
 import { onDemandPlaybackDoc } from "./on-demand-playback";
+import { soundDoc } from "./sound";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -128,6 +129,7 @@ const docs: Record<string, Doc> = {
   [videoPlayingDoc.path]: videoPlayingDoc,
   [fullscreenDoc.path]: fullscreenDoc,
   [onDemandPlaybackDoc.path]: onDemandPlaybackDoc,
+  [soundDoc.path]: soundDoc,
 };
 
 /** Look up structured doc content for a given route path. */

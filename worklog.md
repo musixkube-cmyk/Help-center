@@ -2890,3 +2890,59 @@ Stage Summary:
 - Includes 3 tables, 5 callouts (3 notes + 2 warnings), 1 bold lead-in list (3 items), 1 ordered list (3 steps), 5 H2 headings (no H3 — flat structure matching user's content).
 - All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
 - Next document per nav tree order: Sound (Media & Playback position 5).
+
+---
+Task ID: 41
+Agent: main (Z.ai Code)
+Task: Write the "Sound" doc (Help Center → Using Musicosy → Media & Playback → position 5). Content provided verbatim by the user. This is the fifth doc in the Media & Playback sub-section (after Listen on MusicOSY=1, Video playing=2, Fullscreen=3, On-demand playback=4).
+
+Work Log:
+- Read worklog tail (Task 40) for context: Media & Playback sub-section 4/10 complete (Listen on MusicOSY + Video playing + Fullscreen + On-demand playback), next doc was "Sound" (position 5).
+- Confirmed git status clean; last commit = "Add 'On-demand playback' Help Center doc (Media & Playback 4/10)".
+- Confirmed Media & Playback nav section order (nav.ts line 259): Sound is position 5 (after Listen on Musicosy, Video playing, Fullscreen, On-demand playback).
+- Verified all 10 routes return 200 before writing (the doc itself + all 9 related articles): sound, listen-on-musicosy, video-playing, fullscreen, on-demand-playback, manage-your-playback-queue, manage-your-up-next-queue, continue-listening, music-playback-troubleshooting, video-playback-troubleshooting.
+- Created src/data/docs/sound.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/sound
+  - 2 intro paragraphs (Listen environment delivers music as creator intended; guide covers sound settings for audio fidelity/volume leveling/network usage)
+  - H2 "Audio quality settings" + intro paragraph (high-res audio + adaptive streaming; customize streaming + offline in Playback Settings)
+    - H3 "Streaming quality" + intro paragraph (dynamically adjusts / manually adheres to tier) + table (3 cols × 3 rows: Data Saver / Standard / High Fidelity Hi-Fi with Best Used For + Details) + callout (note): Hi-Fi consumes significantly more data; check mobile plan
+    - H3 "Download quality (Take It With You)" + intro paragraph (choose saved file quality) + 3-step ordered list (Settings > Playback and data use → Select Download quality → Choose tier) + callout (warning): changing download quality doesn't auto re-download; must remove + Take It With You again
+  - H2 "Volume and audio normalization" + intro paragraph (libraries have different mastering loudness; normalization = consistent experience)
+    - H3 "How normalization works" + paragraph (analyzes loudness, applies gain/reduction, uniform volume without altering dynamic range/artistic intent) + 1-item bold lead-in list (To enable/disable: Settings > Playback and data use > toggle Audio normalization)
+  - H2 "Connected devices and audio routing" + intro paragraph (seamless routing, auto-detects hardware) + table (2 cols × 4 rows: Wired Headphones/DAC / Bluetooth / Casting Wi-Fi / Device Speakers with Behavior) + callout (note): switching devices mid-session = brief pause + seamless resume without losing place/queue
+  - H2 "Data Saver and network controls" + intro paragraph (strictly control network usage) + table (2 cols × 3 rows: Data Saver Mode / Wi-Fi Only Streaming / Wi-Fi Only Downloads with Effect)
+  - H2 "Background playback" + intro paragraph (continuous background audio while using other apps / screen locked) + 2-item bold lead-in list (Audio-Only Backgrounding: video → audio-only on lock/minimize; Entitlement Rules: subject to plan/creator settings/regional rights, some premium require active screen)
+  - H2 "Frequently Asked Questions" + 3 FAQ H3+paragraph pairs:
+    - H3 "Why does my audio quality drop when I'm on the train?" (Auto-Adjust Quality lowers bitrate on weak network, restores when stable)
+    - H3 "Does Audio Normalization affect the sound quality?" (No, only adjusts volume level, no compression/EQ/dynamic range change)
+    - H3 "Can I use the MusicOSY Equalizer (EQ)?" (relies on device OS / hardware EQ; creators use Production Toolkit in Studio for DSP effects)
+  - related: 9 sibling paths (Listen on Musicosy, Video playing, Fullscreen, On-demand playback, Manage your playback queue, Manage your Up Next queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+- Registered in src/data/docs/index.ts: added import + map entry for soundDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/sound → 200 (compiled in 52ms, rendered in 2.1s).
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Sound — Musicosy"
+  - H1: "Sound"
+  - 6 H2 headings: Audio quality settings | Volume and audio normalization | Connected devices and audio routing | Data Saver and network controls | Background playback | Frequently Asked Questions
+  - 6 H3 headings (doc body): Streaming quality | Download quality (Take It With You) | How normalization works | 3 FAQ questions (Why does audio quality drop on train / Does Audio Normalization affect sound quality / Can I use the MusicOSY Equalizer EQ)
+  - 3 tables: Streaming quality (3×3 with Quality Tier/Best Used For/Details), Connected devices (4×2 with Connection Type/Behavior), Data Saver (3×2 with Setting/Effect) — all render with correct headers
+  - 1 ordered list: 3 steps for download quality settings — verified numeric prefixes ("1Navigate to your Settings...2Select Download quality...3Choose your preferred tier")
+  - 2 bold lead-in lists: normalization enable/disable (1 item, lead "To enable/disable:"), background playback (2 items, leads "Audio-Only Backgrounding:" + "Entitlement Rules:") — verified font-weight 600 semibold leads
+  - 3 callouts verified via DOM query (div.border-l-2): all 3 render with correct text + correct icon/variant
+    1. note (Info icon, accent border): Hi-Fi consumes more data
+    2. warning (AlertTriangle icon, destructive border): changing download quality doesn't auto re-download
+    3. note (Info icon, accent border): switching devices mid-session seamless resume
+  - Related articles: "RELATED ARTICLES" section renders with all 9 links
+  - Back/Next nav: Back → On-demand playback (correct — position 4, the DFS predecessor); Next → Manage your playback queue (correct — position 6, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors
+  - VLM visual verification (desktop screenshot): confirmed H1 "SOUND", section headings "AUDIO QUALITY SETTINGS" + "STREAMING QUALITY", 3-column table (Quality Tier / Best Used For / Details) renders properly with clear borders and alignment, no layout problems, no overflow, content legible.
+  - Mobile (390×844): H1 + 6 H2 + 3 tables + 3 callouts all present, no horizontal overflow, footer visible, scrollH=8580 (content flows naturally).
+
+Stage Summary:
+- "Sound" doc complete — Media & Playback sub-section now 5/10 docs with real content. HALFWAY POINT of the sub-section.
+- Doc covers sound settings: audio quality tiers (3 streaming: Data Saver/Standard/Hi-Fi + download quality 3-step), volume and audio normalization (how it works + enable/disable), connected devices and audio routing (4 connection types), Data Saver and network controls (3 settings), background playback (audio-only backgrounding + entitlement rules), and 3 FAQs (quality drop on train / normalization sound quality / EQ).
+- Includes 3 tables, 3 callouts (2 notes + 1 warning), 1 ordered list (3 steps), 2 bold lead-in lists (3 items total), 6 H2 + 6 H3 headings.
+- All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
+- Next document per nav tree order: Manage your playback queue (Media & Playback position 6).
