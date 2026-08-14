@@ -2064,3 +2064,32 @@ Stage Summary:
 - Doc includes 1 quote block (4-line example), 1 callout (collaborator access note), 6-step ordered list, 6 unordered lists (9+5+6 items), and 10 related articles (all within Create & Publish).
 - All 10 related article paths verified to return 200 before writing.
 - Next document per user: Help Center → Create & Publish → Start a Studio project.
+
+---
+Task ID: 25
+Agent: main (Z.ai Code)
+Task: Update the "What is Studio?" doc with the user's revised content. User re-sent the doc with updated wording in the second intro paragraph. All other sections were identical to the existing doc (created in Task 24).
+
+Work Log:
+- Read existing src/data/docs/what-is-studio.ts (created in Task 24).
+- Diffed the user's re-sent content against the existing doc. Identified 3 wording changes, all in the second intro paragraph (line 22):
+  1. "keep drafts" → "keep drafts (Work in Progress)" — adds the formal MusicOSY term for drafts
+  2. "prepare credits and metadata" → "prepare credits and Split Sheets" — replaces generic "metadata" with the specific financial/credit concept "Split Sheets"
+  3. "move your work toward a formal release" → "move work toward a formal Release" — capitalizes "Release" as a formal MusicOSY term, drops "your"
+- All other sections (H2 headings, lists, quote, callout, related articles) were identical — no changes needed.
+- Applied single Edit to line 22 with all 3 changes.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/create-and-publish/what-is-studio → 200.
+- Agent Browser verified (desktop):
+  - Updated intro paragraph renders correctly: "Use Studio when your idea needs more than a single social post on The Stage. You can start a Session Project, add media, keep drafts (Work in Progress), prepare credits and Split Sheets, Call In a Collaborator, and move work toward a formal Release when it is ready."
+  - H1: "What is Studio?"
+  - 6 H2 headings intact: What you can do in Studio | Start with a Session Project | Your work stays private | Work with others (Sessions) | Studio and publishing | Studio Allowances and eligibility
+  - Quote block: renders (4-line example intact)
+  - Callout: renders (collaborator access note intact)
+  - Related articles section: renders
+  - No console errors.
+
+Stage Summary:
+- "What is Studio?" doc updated with revised wording: "Work in Progress" term added, "metadata" → "Split Sheets", "release" → "Release" (capitalized as formal term).
+- All other content unchanged. Create & Publish sub-section still 2/20 docs with real content.
+- Next document per user: Help Center → Create & Publish → Start a Studio project.

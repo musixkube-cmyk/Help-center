@@ -19,7 +19,7 @@ export const whatIsStudioDoc: Doc = {
     },
     {
       type: "paragraph",
-      text: "Use Studio when your idea needs more than a single social post on The Stage. You can start a Session Project, add media, keep drafts, prepare credits and metadata, Call In a Collaborator, and move your work toward a formal release when it is ready.",
+      text: "Use Studio when your idea needs more than a single social post on The Stage. You can start a Session Project, add media, keep drafts (Work in Progress), prepare credits and Split Sheets, Call In a Collaborator, and move work toward a formal Release when it is ready.",
     },
     {
       type: "paragraph",
