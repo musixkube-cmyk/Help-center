@@ -2345,3 +2345,53 @@ Stage Summary:
 - Includes 5 tables, 4 callouts (2 notes + 2 warnings), 1 ordered list (3 steps with bold lead-ins), 7 H3 headings, 4 FAQ Q&A pairs.
 - All 8 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Your Library (Collections & Library position 5).
+
+---
+Task ID: 32
+Agent: main (Z.ai Code)
+Task: Write the "Your Library" doc (Help Center → Using Musicosy → Collections & Library → position 5). Content provided verbatim by the user. This is the fifth doc in the Collections & Library sub-section (after Collections, Create collections, Shared collections, Playlists).
+
+Work Log:
+- Read worklog tail (Task 31) for context: "Playlists" doc complete (position 4), next doc was "Your Library".
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Verified "Your Library" route returns 200 (placeholder, no content yet).
+- Verified all 8 related article paths return 200 before writing: collections, create-collections, shared-collections, playlists, keep-and-organize-your-library, save-music-to-your-library, edit-or-delete-a-collection, add-remove-and-reorder-playlist-items.
+- Created src/data/docs/your-library.ts:
+  - path: /resources/help-center/using-musicosy/collections-and-library/your-library
+  - 2 intro paragraphs (Library = personal home/central hub, designed for personal retrieval/organization/repeat access)
+  - H2 "What Lives in Your Library" + intro paragraph + table (2 cols × 8 rows: Keeps/Setlists/Crates/Purchases/Downloads/Subscriptions/Tickets and Events/History with descriptions) + callout (note): Library is personal relationship layer — saving does not alter creator ownership/copyright/publication/analytics
+  - H2 "The \"Keep\" Feature" + intro paragraph (Keep = save to favorites, bookmark icon)
+    - H3 "Keep Rules at a Glance" + 3-item list with bold lead-ins (One Keep per item, No automatic access, Privacy)
+  - H2 "Offline Access (Take It With You)" + intro paragraph (downloads for offline listening)
+    - H3 "How Offline Entitlements Work" + intro paragraph (controlled entitlement, not copyright transfer) + table (2 cols × 4 rows: Active Subscription/Subscription Expires/Track Removed/Territory Restriction with offline playback status) + callout (warning): 30-day network validation required to maintain offline access
+  - H2 "Listening History and Privacy" + intro paragraph (Continue Listening/Watching, recommendations)
+    - H3 "Managing Your History" + 3-item list with bold lead-ins (Privacy First, Clearing History, Pausing History) + callout (note): clearing visible history does not erase purchases/financial records/royalty streams/platform analytics
+  - H2 "How Your Library Handles Unavailable Media" + intro paragraph (reference links) + table (2 cols × 4 rows: creator unpublishes/territory restricted/subscription ends/block creator with Library behavior)
+  - H2 "Organizing Your Library" + intro paragraph + 4-step ordered list with bold lead-ins (Filter by Content Type, Sort Options, Search Within Library, Build Collections)
+  - related: 8 sibling paths (Collections, Create collections, Shared collections, Playlists, Keep and organize your Library, Save music to your Library, Edit or delete a collection, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for yourLibraryDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/your-library → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Your Library"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / COLLECTIONS & LIBRARY / YOUR LIBRARY
+  - 6 H2 headings: What Lives in Your Library | The "Keep" Feature | Offline Access (Take It With You) | Listening History and Privacy | How Your Library Handles Unavailable Media | Organizing Your Library
+  - 3 H3 headings: Keep Rules at a Glance | How Offline Entitlements Work | Managing Your History
+  - 3 tables: Library sections (2×8), Offline entitlements (2×4), Unavailable media handling (2×4) — all render with correct headers
+  - 1 ordered list: 4-step organizing (Filter by Content Type/Sort Options/Search Within Library/Build Collections) with bold lead-ins, numbered 1-4
+  - 2 bold lead-in lists: Keep Rules (3 items), Managing Your History (3 items)
+  - 3 callouts verified via DOM query (div.border-l-2): all 3 render with correct text
+    1. note: "Your Library is a personal relationship layer. Saving an..."
+    2. warning: "MusicOSY requires periodic network validation for downl..."
+    3. note: "Clearing your visible history removes it from your Libr..."
+  - Related articles: "RELATED ARTICLES" section renders with all 8 links
+  - Back/Next nav: Back → Playlists (correct DFS predecessor, position 4); Next → Keep and organize your Library (correct, position 6)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Your Library" doc complete — Collections & Library sub-section now 5/9 docs with real content.
+- Doc covers the personal Library hub: 8 library sections, the Keep feature (3 rules), offline access "Take It With You" (4 entitlement conditions + 30-day validation), listening history/privacy (3 management options), unavailable media handling (4 events), and 4 organizing tools.
+- Includes 3 tables, 3 callouts (2 notes + 1 warning), 1 ordered list (4 steps with bold lead-ins), 2 bold lead-in lists, 6 H2 + 3 H3 headings.
+- All 8 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Keep and organize your Library (Collections & Library position 6).
