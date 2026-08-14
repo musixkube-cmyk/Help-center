@@ -2016,3 +2016,51 @@ Stage Summary:
 - All 4 related article paths verified to return 200 before writing.
 - Create & Publish sub-section: 1 doc with real content (Create on Musicosy), 19 remaining as placeholders.
 - Next document per user: Help Center → Create & Publish → What is Studio?
+
+---
+Task ID: 24
+Agent: main (Z.ai Code)
+Task: Write the "What is Studio?" doc (Help Center → Using Musicosy → Create & Publish → position 2). Content provided verbatim by the user. Next document indicated: Help Center → Create & Publish → Start a Studio project.
+
+Work Log:
+- Read worklog.md tail (Task 23) for context: "Create on Musicosy" doc completed (Create & Publish 1/20).
+- Verified route + all 10 related article paths return 200 before writing:
+  - /resources/help-center/using-musicosy/create-and-publish/what-is-studio → 200
+  - /resources/help-center/using-musicosy/create-and-publish/start-a-studio-project → 200
+  - /resources/help-center/using-musicosy/create-and-publish/save-and-manage-drafts → 200
+  - /resources/help-center/using-musicosy/create-and-publish/upload-music-video-and-artwork → 200
+  - /resources/help-center/using-musicosy/create-and-publish/add-credits-and-collaborators → 200
+  - /resources/help-center/using-musicosy/create-and-publish/studio-collaboration-and-session-roles → 200
+  - /resources/help-center/using-musicosy/create-and-publish/ai-tools → 200
+  - /resources/help-center/using-musicosy/create-and-publish/rendering → 200
+  - /resources/help-center/using-musicosy/create-and-publish/stems → 200
+  - /resources/help-center/using-musicosy/create-and-publish/mastering → 200
+  - /resources/help-center/using-musicosy/create-and-publish/choose-content-visibility → 200
+- Created src/data/docs/what-is-studio.ts:
+  - path: /resources/help-center/using-musicosy/create-and-publish/what-is-studio
+  - 3 intro paragraphs + quote block (4-line example: start idea → add demo/lyrics/art → Call In Collaborator → prepare Fresh Drop) + closing paragraph (native account connection)
+  - H2 "What you can do in Studio": intro paragraph + 9-item list (Session Projects, Add to Studio, drafts, organize, metadata/Split Sheets, collaborators, review versions, prepare for publishing, access creative tools) + closing paragraph
+  - H2 "Start with a Session Project": 2 paragraphs + 6-step ordered list + closing paragraph (Toolkits/Studio Allowances)
+  - H2 "Your work stays private": 2 paragraphs + intro paragraph + 6-item list (does NOT auto-release/publish/distribute/credit/share/start paid actions — first item has bold "Release" lead-in) + closing paragraph (closing app never silently publishes)
+  - H2 "Work with others (Sessions)": 2 paragraphs + 5-item list (collaborator access factors) + closing paragraph (Workspace roles ≠ override Block) + callout (note: access ≠ ownership/credit/royalties/distribution authority)
+  - H2 "Studio and publishing": 4 paragraphs (Studio vs publishing distinction, handoff, project ≠ release record, pre-release checklist)
+  - H2 "Studio Allowances and eligibility": 2 paragraphs (eligibility requirements, Studio Allowances with pre-consumption disclosure)
+  - related: 10 paths (all within Create & Publish: Start a Studio project, Save and manage drafts, Upload music/video/artwork, Add credits and collaborators, Studio Collaboration & Session Roles, AI Tools, Rendering, Stems, Mastering, Choose content visibility)
+- Registered in src/data/docs/index.ts: added import + map entry for whatIsStudioDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/create-and-publish/what-is-studio → 200.
+- Agent Browser verified (desktop):
+  - H1: "What is Studio?"
+  - 6 H2 headings: What you can do in Studio | Start with a Session Project | Your work stays private | Work with others (Sessions) | Studio and publishing | Studio Allowances and eligibility
+  - Quote block: 4-line example renders ("Start a song idea in Studio..." text found)
+  - Callout: "Giving someone project access does not automatically grant them ownership..." renders correctly
+  - Ordered list: 6 numbered steps (1-6) for starting a Session Project
+  - Related articles: "RELATED ARTICLES" section renders with all 10 links (Start a Studio project, Save and manage drafts, Upload music video and artwork, Add credits and collaborators, Studio Collaboration & Session Roles, AI Tools, Rendering, Stems, Mastering, Choose content visibility)
+  - Back/Next nav: Back → Create on Musicosy (correct DFS predecessor); Next → Start a Studio project (matches user's indicated next document)
+  - No console errors.
+
+Stage Summary:
+- "What is Studio?" doc complete — Create & Publish sub-section now 2/20 docs with real content.
+- Doc includes 1 quote block (4-line example), 1 callout (collaborator access note), 6-step ordered list, 6 unordered lists (9+5+6 items), and 10 related articles (all within Create & Publish).
+- All 10 related article paths verified to return 200 before writing.
+- Next document per user: Help Center → Create & Publish → Start a Studio project.
