@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  // Allow the sandbox preview panel host to reach the dev server.
+  // Without this, Next.js logs a warning on every cross-origin request
+  // from the preview iframe and may block HMR/websocket connections.
+  allowedDevOrigins: [
+    "preview-chat-a1129700-5e05-4fd4-8222-e6fa75c72a87.space-z.ai",
+  ],
   // Turbopack does NOT read tsconfig `paths` for runtime module resolution
   // (only for type-checking). So `@payload-config` (a tsconfig path alias)
   // needs an explicit Turbopack resolveAlias entry, otherwise it resolves
