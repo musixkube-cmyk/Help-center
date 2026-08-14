@@ -2135,3 +2135,23 @@ Stage Summary:
 - Doc includes 1 quote block, 1 callout, 2 ordered lists (9 steps total), 6 unordered lists, and 3 bold lead-in items (Vault, Duplicate, Pull).
 - All 6 related article paths verified to return 200 before writing.
 - Next document per user: Help Center → Create & Publish → Upload music, video, and artwork.
+
+---
+Task ID: 27
+Agent: main (Z.ai Code)
+Task: Strip rework — remove the "Publish your work" node added in Task 26 (was not in the user's original nav tree). User acknowledged they got off track by including a non-existent related article; I had added the node to make the link resolve, but user wants to stay on track with the established tree.
+
+Work Log:
+- Removed "Publish your work" from nav.ts Create & Publish sub-section (line 261). Tree restored to original 20 items in Create & Publish (was 21 after Task 26's addition).
+- Removed "/resources/help-center/using-musicosy/create-and-publish/publish-your-work" from save-and-manage-drafts.ts related array (now 5 related articles instead of 6).
+- Lint: clean. No errors.
+- Route verification:
+  - /resources/help-center/using-musicosy/create-and-publish/save-and-manage-drafts → 200 (doc still renders)
+  - /resources/help-center/using-musicosy/create-and-publish/publish-your-work → 404 (node removed, as expected)
+- Create & Publish sub-section back to 20 docs (3 with real content: Create on Musicosy, What is Studio?, Save and manage drafts).
+
+Stage Summary:
+- "Publish your work" node removed from nav tree — tree restored to user's original structure.
+- "Save and manage drafts" doc related articles updated to 5 (removed the non-existent 6th link).
+- User acknowledged the deviation and is rectifying their workflow to stay on track with the established tree.
+- Next document per user: Help Center → Create & Publish → Upload music, video, and artwork.

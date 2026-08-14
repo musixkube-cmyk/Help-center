@@ -182,6 +182,5 @@ export const saveAndManageDraftsDoc: Doc = {
     "/resources/help-center/using-musicosy/create-and-publish/upload-music-video-and-artwork",
     "/resources/help-center/using-musicosy/create-and-publish/add-credits-and-collaborators",
     "/resources/help-center/using-musicosy/create-and-publish/choose-content-visibility",
-    "/resources/help-center/using-musicosy/create-and-publish/publish-your-work",
   ],
 };
