@@ -175,7 +175,7 @@ export function SiteHeader() {
           {megaMenu.map((node) => (
             <div key={node.path} className="group static">
               <NavLink
-                href={node.path}
+                href={node.entryPath ?? node.path}
                 className="block text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-foreground transition-colors hover:text-accent"
                 activeProps={{ className: "text-accent" }}
               >
@@ -218,7 +218,7 @@ export function SiteHeader() {
           {megaMenu.map((node) => (
             <div key={node.path} className="mb-7">
               <NavLink
-                href={node.path}
+                href={node.entryPath ?? node.path}
                 onClick={() => setOpen(false)}
                 className="block text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground"
               >

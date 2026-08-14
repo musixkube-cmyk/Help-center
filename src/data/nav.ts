@@ -3,6 +3,14 @@ export type NavNode = {
   path: string;
   blurb?: string;
   children?: NavNode[];
+  /**
+   * Focused entry point for the top-nav text link (e.g. the first content
+   * sub-section). When set, the header's clickable label uses this instead of
+   * `path`, so clicking "Help Center" in the top nav lands on help docs only
+   * — not the full hub. The footer and MegaPanel "Explore" links keep using
+   * `path` (the full hub). Unset = use `path` (current behavior).
+   */
+  entryPath?: string;
 };
 
 const slug = (s: string) =>
@@ -40,6 +48,7 @@ export const megaMenu: NavNode[] = [
   {
     label: "Help Center",
     path: "/resources/help-center",
+    entryPath: "/resources/help-center/getting-started",
     blurb: "Getting started, using Musicosy, and finding resources.",
     children: [
       { label: "Getting Started", path: "/resources/help-center/getting-started" },
