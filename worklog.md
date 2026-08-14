@@ -2839,3 +2839,54 @@ Stage Summary:
 - Includes 12 tables, 10 callouts (6 notes + 4 warnings), 3 ordered lists (9 steps total + 5 nested children), 1 unordered list, 13 H2 + 20 H3 headings.
 - All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
 - Next document per nav tree order: On-demand playback (Media & Playback position 4).
+
+---
+Task ID: 40
+Agent: main (Z.ai Code)
+Task: Write the "On-demand playback" doc (Help Center → Using Musicosy → Media & Playback → position 4). Content provided verbatim by the user. This is the fourth doc in the Media & Playback sub-section (after Listen on MusicOSY=1, Video playing=2, Fullscreen=3).
+
+Work Log:
+- Read worklog tail (Task 39) for context: Media & Playback sub-section 3/10 complete (Listen on MusicOSY + Video playing + Fullscreen), next doc was "On-demand playback" (position 4).
+- Confirmed git status clean; last commit = "Add 'Fullscreen' Help Center doc (Media & Playback 3/10)".
+- Confirmed Media & Playback nav section order (nav.ts line 259): On-demand playback is position 4 (after Listen on Musicosy, Video playing, Fullscreen).
+- Verified all 10 routes return 200 before writing (the doc itself + all 9 related articles): on-demand-playback, listen-on-musicosy, video-playing, fullscreen, sound, manage-your-playback-queue, manage-your-up-next-queue, continue-listening, music-playback-troubleshooting, video-playback-troubleshooting.
+- Created src/data/docs/on-demand-playback.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/on-demand-playback
+  - 2 intro paragraphs (on-demand = choose exact media vs algorithmic radio; takes place in Listen environment) + callout (note): on-demand requires active entitlement; some content requires purchase/subscription/ad-free plan
+  - H2 "How to start on-demand playback" + intro paragraph (trigger from anywhere; player loads media + builds Up Next) + table (2 cols × 6 rows: Tap single track / Play album / Open Setlist Play All / Select podcast episode / Tap music video / Tap "Play Full" on The Stage with What Happens in Player) + callout (warning): on-demand session takes ownership of Up Next queue; playing different song from Search breaks ownership
+  - H2 "Access and entitlements" + intro paragraph (creators choose monetization; player evaluates entitlements) + table (2 cols × 5 rows: Free/Ad-Supported / Purchased/Unlocked / Subscriber Join the Circle / Rented/Borrowed / Preview Only with On-Demand Playback Rules) + callout (note): subscriber-only track without subscription → player pauses + shows gate
+  - H2 "On-demand vs. Radio and Autoplay" + intro paragraph (choosing own media vs platform choosing) + 3-item bold lead-in list (On-Demand / Radio Stations / Autoplay) + callout (note): can turn off Autoplay in Playback Settings
+  - H2 "Offline on-demand (Take It With You)" + intro paragraph (download for offline on-demand) + 3-step ordered list (navigate to eligible media → tap Take It With You icon → select quality + wait for download) + paragraph (once downloaded, play on-demand without internet) + callout (warning): 30-day network validation; subscription expiry/refund locks offline files
+  - H2 "Handling unavailable or restricted media" + intro paragraph (real-time rights/licensing/territory) + table (2 cols × 4 rows: Territory Restriction / Creator Unpublished / Subscription Expired / Age Restriction with What Happens in Player)
+  - related: 9 sibling paths (Listen on Musicosy, Video playing, Fullscreen, Sound, Manage your playback queue, Manage your Up Next queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+- Registered in src/data/docs/index.ts: added import + map entry for onDemandPlaybackDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/on-demand-playback → 200 (compiled in 30ms, rendered in 1787ms).
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "On-demand playback — Musicosy"
+  - H1: "On-demand playback"
+  - 5 H2 headings: How to start on-demand playback | Access and entitlements | On-demand vs. Radio and Autoplay | Offline on-demand (Take It With You) | Handling unavailable or restricted media
+  - 0 H3 in doc body (article has no H3 subsections — clean flat structure matching the user's content)
+  - 3 tables: How to start (6×2), Access and entitlements (5×2), Handling unavailable (4×2) — all render with correct headers
+  - 1 bold lead-in list: 3 items (On-Demand / Radio / Autoplay) — verified bold lead-ins render as <span class="font-semibold text-foreground"> with font-weight 600, accent-colored bullet dot
+  - 1 ordered list: 3 steps for offline download — verified numeric prefixes ("1Navigate...2Tap...3Select...")
+  - 5 callouts verified via DOM query (div.border-l-2): all 5 render with correct text + correct icon/variant
+    1. note (Info icon, accent border): on-demand requires active entitlement
+    2. warning (AlertTriangle icon, destructive border): on-demand session takes queue ownership
+    3. note (Info icon, accent border): subscriber-only track without subscription → gate
+    4. note (Info icon, accent border): can turn off Autoplay
+    5. warning (AlertTriangle icon, destructive border): 30-day network validation / offline lock
+  - Related articles: "RELATED ARTICLES" section renders with all 9 links
+  - Back/Next nav: Back → Fullscreen (correct — position 3, the DFS predecessor); Next → Sound (correct — position 5, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors
+  - VLM visual verification (desktop screenshot): confirmed H1 "ON-DEMAND PLAYBACK", section heading "HOW TO START ON-DEMAND PLAYBACK", callout box renders properly (light accent/orange colored with info icon about active entitlements), table renders cleanly with "Your Action" + "What Happens In the Player" headers, sidebar nav + breadcrumbs + body text + table + note all fully visible and aligned, no overflow, no layout problems.
+  - Mobile (390×844): H1 + 5 H2 + 3 tables + 5 callouts all present, no horizontal overflow, footer visible, scrollH=7890 (content flows naturally).
+
+Stage Summary:
+- "On-demand playback" doc complete — Media & Playback sub-section now 4/10 docs with real content.
+- Doc covers on-demand playback: how to start (6 trigger actions), access models (5: Free/Ad-Supported, Purchased, Subscriber, Rented, Preview Only), on-demand vs Radio vs Autoplay distinction, offline on-demand (Take It With You 3-step + 30-day validation), and handling unavailable/restricted media (4 restriction types).
+- Includes 3 tables, 5 callouts (3 notes + 2 warnings), 1 bold lead-in list (3 items), 1 ordered list (3 steps), 5 H2 headings (no H3 — flat structure matching user's content).
+- All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
+- Next document per nav tree order: Sound (Media & Playback position 5).
