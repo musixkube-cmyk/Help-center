@@ -1971,3 +1971,48 @@ Stage Summary:
 - Doc includes a 5-row comparison table (the only Content Interaction doc with a table besides Block and mute).
 - All 6 related article paths verified to return 200 before writing.
 - Next document per user: Help Center → Using Musicosy → Collections & Library → Collections (first doc of the next sub-section).
+
+---
+Task ID: 23
+Agent: main (Z.ai Code)
+Task: Write the "Create on Musicosy" doc (Help Center → Using Musicosy → Create & Publish → position 1). Content provided verbatim by the user. This is the first doc in the Create & Publish sub-section. Next document indicated: Help Center → Create & Publish → What is Studio?
+
+Work Log:
+- Read worklog.md tail (Task 22) for context: Content Interaction section completed (12/12); last doc was "Take your post off The Stage".
+- Verified route + all 4 related article paths return 200 before writing:
+  - /resources/help-center/using-musicosy/create-and-publish/create-on-musicosy → 200
+  - /resources/help-center/using-musicosy/create-and-publish/what-is-studio → 200
+  - /resources/help-center/using-musicosy/create-and-publish/start-a-studio-project → 200
+  - /resources/help-center/using-musicosy/create-and-publish/save-and-manage-drafts → 200
+  - /resources/help-center/using-musicosy/create-and-publish/choose-content-visibility → 200
+- Created src/data/docs/create-on-musicosy.ts:
+  - path: /resources/help-center/using-musicosy/create-and-publish/create-on-musicosy
+  - 2 intro paragraphs + 1 callout (note: creating/uploading does not auto-publish/distribute/monetize)
+  - H2 "Start creating": intro paragraph + 6-step ordered list + closing paragraph (tools vary by Context/Toolkits)
+  - H2 "Choose your starting point": intro paragraph + 5-item list with bold lead-ins (Post on The Stage, Studio, Upload Flow, Release/Catalog Flow, Drafts) + closing paragraph (social post ≠ canonical catalog record)
+  - H2 "Create a post for The Stage": intro paragraph + 5-step ordered list + closing paragraph (use cases for posts)
+  - H2 "Start a Studio project": intro paragraph + 6-step ordered list + closing paragraph (Studio = work in progress)
+  - H2 "Save and manage drafts": paragraph + intro paragraph + 5-item list (draft use cases) + closing paragraph (saving draft ≠ publishing)
+  - H2 "Before you publish": intro paragraph + 6-item checklist (rights/permissions) + closing paragraph (creating ≠ overriding restrictions)
+  - H2 "Choose content visibility": intro paragraph + 4-item list with bold lead-ins (Draft, Published, Unpublished, Archived/Vault)
+  - H2 "Create responsibly": paragraph + intro paragraph + 7-item list (prohibited uses incl. AI voice cloning, participatory action misuse)
+  - related: 4 paths (What is Studio?, Start a Studio project, Save and manage drafts, Choose content visibility)
+- Registered in src/data/docs/index.ts: added import + map entry for createOnMusicosyDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/create-and-publish/create-on-musicosy → 200.
+- Agent Browser verified (desktop):
+  - H1: "Create on Musicosy"
+  - 8 H2 headings: Start creating | Choose your starting point | Create a post for The Stage | Start a Studio project | Save and manage drafts | Before you publish | Choose content visibility | Create responsibly
+  - Callout: "Creating or uploading something does not automatically make it public..." renders correctly
+  - Ordered lists: 17 numbered steps total (6 + 5 + 6 across 3 ordered lists) — verified badge sequence 1-6, 1-5, 1-6
+  - Bold lead-ins: 9 total (5 in "Choose your starting point": Post on The Stage, Studio, Upload Flow, Release/Catalog Flow, Drafts + 4 in "Choose content visibility": Draft, Published, Unpublished, Archived)
+  - Related articles: "RELATED ARTICLES" section renders with all 4 links
+  - Back/Next nav: Back → Create & Publish (parent section, since this is the first doc); Next → What is Studio? (href: /resources/help-center/using-musicosy/create-and-publish/what-is-studio) — matches user's indicated next document
+  - No console errors.
+
+Stage Summary:
+- "Create on Musicosy" doc complete — first doc in the Create & Publish sub-section (1/20).
+- Doc includes 3 ordered lists (17 total steps), 5 unordered lists, 1 callout, and 9 bold lead-in items.
+- All 4 related article paths verified to return 200 before writing.
+- Create & Publish sub-section: 1 doc with real content (Create on Musicosy), 19 remaining as placeholders.
+- Next document per user: Help Center → Create & Publish → What is Studio?

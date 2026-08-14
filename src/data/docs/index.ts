@@ -52,6 +52,7 @@ import { saveContentDoc } from "./save-content";
 import { blockAndMuteDoc } from "./block-and-mute";
 import { editOrDeleteYourCommentDoc } from "./edit-or-delete-your-comment";
 import { takeYourPostOffTheStageDoc } from "./take-your-post-off-the-stage";
+import { createOnMusicosyDoc } from "./create-on-musicosy";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -96,6 +97,7 @@ const docs: Record<string, Doc> = {
   [blockAndMuteDoc.path]: blockAndMuteDoc,
   [editOrDeleteYourCommentDoc.path]: editOrDeleteYourCommentDoc,
   [takeYourPostOffTheStageDoc.path]: takeYourPostOffTheStageDoc,
+  [createOnMusicosyDoc.path]: createOnMusicosyDoc,
 };
 
 /** Look up structured doc content for a given route path. */
