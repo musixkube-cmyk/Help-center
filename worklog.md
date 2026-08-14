@@ -2999,3 +2999,62 @@ Stage Summary:
 - Includes 3 tables, 4 callouts (3 notes + 1 warning), 4 ordered lists (15 steps total), 1 unordered list (3 items), 6 H2 + 3 H3 headings.
 - All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
 - Next document per nav tree order: Manage your Up Next queue (Media & Playback position 7).
+
+---
+Task ID: 43
+Agent: main (Z.ai Code)
+Task: Write the "Manage your Up Next queue" doc (Help Center → Using Musicosy → Media & Playback → position 7). Content provided verbatim by the user. This is the seventh doc in the Media & Playback sub-section (after Listen on MusicOSY=1, Video playing=2, Fullscreen=3, On-demand playback=4, Sound=5, Manage your playback queue=6).
+
+Work Log:
+- Read worklog tail (Task 42) for context: Media & Playback sub-section 6/10 complete, next doc was "Manage your Up Next queue" (position 7).
+- Confirmed git status clean; last commit = "Add 'Manage your playback queue' Help Center doc (Media & Playback 6/10)".
+- Verified all related routes return 200 before writing (manage-your-up-next-queue, manage-your-playback-queue, sound, continue-listening, music-playback-troubleshooting, video-playback-troubleshooting).
+- Reviewed doc-content.tsx renderer to understand: (a) nested list children render as indented <ul> with muted bullets (children only render `text`, not `lead` — so embedded "Play Next:" / "Add to Up Next:" lead-ins directly in text); (b) callout `title` field renders as a small uppercase bold label above the text — perfect for the "Autoplay Disclosure:" bold lead-in paragraph.
+- Created src/data/docs/manage-your-up-next-queue.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/manage-your-up-next-queue
+  - 2 intro paragraphs (Up Next = temporary ordered sequence in Listen; Setlist = permanent; dynamic/session-specific; manage = curate on fly, inject discoveries, control flow without altering saved collections)
+  - H2 "Understanding queue ownership" + intro paragraph + table (3 cols × 4 rows: Play Setlist or Album / Play single track from Search / Play Creator Radio Station / Select Play Full from The Stage with Queue Owner + What Happens Next) + callout (note, from "Important:"): break Album ownership by searching different song
+  - H2 "Viewing the Up Next interface" + intro paragraph + table (2 cols × 3 rows: Playing Now / Up Next / Recently Played with Description) + callout (note): tap Recently Played item to restart or add back to Up Next
+  - H2 "Adding media to your queue" + intro paragraph (browse The Stage / search / explore Library → inject into session) + ordered list (2 steps: tap Action Menu → choose injection method, with 2 nested children: "Play Next: Inserts..." + "Add to Up Next: Places...") + callout (note, from "Rule:"): queue must not add paid/restricted/explicit/blocked/muted/age-gated/territory-ineligible media without eligibility validation
+  - H2 "Reordering, removing, and clearing" + intro paragraph
+    - H3 "Reordering and removing items" + ordered list (4 steps: open queue panel → press hold drag handle → drag up/down → tap Remove icon)
+    - H3 "Clearing the queue" + ordered list (3 steps: open queue panel → tap Clear Queue/Clear Up Next → confirm) + callout (warning): clearing queue only affects current session; doesn't delete from Setlists/Keeps; queue changes never modify canonical Setlist unless Setlist editor
+  - H2 "Saving your queue as a Setlist" + intro paragraph + ordered list (5 steps: open queue panel → tap Save as Setlist → enter title + description → choose visibility → tap Create) + closing paragraph (current Up Next order saved to Library as new Setlist; edit/share/replay)
+  - H2 "How Up Next handles unavailable media" + intro paragraph (real-time rights/licensing/territory; player handles gracefully) + table (2 cols × 4 rows: Territory Restriction / Subscription Expiry / Content Unpublished / Network Loss with What Happens in the Queue) + callout (note): unavailable queue item must be skipped or marked unavailable; never plays just because it was queued
+  - H2 "Autoplay and continuous discovery" + intro paragraph (Up Next reaches end → Autoplay transitions to algorithmic radio) + unordered list (3 items: analyzes genres/moods/creators | generates infinite queue | Love/Keep/skip adjusts algorithm) + callout (note, title="Autoplay Disclosure"): transitions from member-owned to recommended are visibly identified; can stop/disable/replace + callout (note): disable Autoplay in Playback Settings
+  - related: 9 sibling paths (Listen on Musicosy, Video playing, Fullscreen, On-demand playback, Sound, Manage your playback queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+- Registered in src/data/docs/index.ts: added import + map entry for manageYourUpNextQueueDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/manage-your-up-next-queue → 200.
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Manage your Up Next queue — Musicosy"
+  - H1: "Manage your Up Next queue"
+  - 7 H2 headings: Understanding queue ownership | Viewing the Up Next interface | Adding media to your queue | Reordering, removing, and clearing | Saving your queue as a Setlist | How Up Next handles unavailable media | Autoplay and continuous discovery
+  - 2 H3 headings: Reordering and removing items | Clearing the queue
+  - 3 tables: Understanding queue ownership (4×3 with Your Action/Queue Owner/What Happens Next), Viewing the Up Next interface (3×2 with Queue Section/Description), How Up Next handles unavailable media (4×2 with Restriction Type/What Happens in the Queue) — all render with correct headers
+  - 4 ordered lists: Adding media (2 steps with 2 nested children), Reordering and removing (4 steps), Clearing the queue (3 steps), Saving your queue as a Setlist (5 steps) = 14 steps + 2 nested children — verified numeric prefixes render ("1Tap the Action Menu...", "1Open the queue panel from the player...", "1Open the queue panel.", "1Open your queue panel...")
+  - Nested children verified: under "Adding media" step 2 "Choose your injection method:", 2 nested sub-items render: "Play Next: Inserts the selected track immediately after the currently playing song, bumping the rest of the queue down." and "Add to Up Next: Places the selected track at the very end of your current queue."
+  - 1 unordered list: Autoplay (3 items, no numeric prefix)
+  - 7 callouts verified via DOM query (div.border-l-2): all 7 render with correct text + correct icon/variant
+    1. note: If you are listening to an Album and manually search for different song, you break ownership
+    2. note: You can tap any item in your Recently Played list to restart or add back to Up Next
+    3. note (from "Rule:"): queue must not add paid/restricted/explicit/blocked/muted/age-gated/territory-ineligible media without eligibility validation
+    4. warning: Clearing your queue or removing items only affects current session; doesn't delete from Setlists/Keeps; queue changes never modify canonical Setlist unless Setlist editor
+    5. note: unavailable queue item must be skipped or marked unavailable; never plays just because it was queued
+    6. note with title="Autoplay Disclosure": transitions from member-owned source to recommended continuation are visibly identified; can stop/disable/replace (title renders as small uppercase bold label "AUTOPLAY DISCLOSURE" above text — verified via DOM)
+    7. note: disable Autoplay in Playback Settings
+  - Related articles: "RELATED ARTICLES" section renders with all 9 links (Listen on Musicosy, Video playing, Fullscreen, On-demand playback, Sound, Manage your playback queue, Continue listening, Music playback troubleshooting, Video playback troubleshooting)
+  - Back/Next nav: Back → Manage your playback queue (/resources/help-center/using-musicosy/media-and-playback/manage-your-playback-queue — correct, position 6, the DFS predecessor); Next → Continue listening (/resources/help-center/using-musicosy/media-and-playback/continue-listening — correct, position 8, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR/Fast Refresh dev logs)
+  - VLM visual verification (desktop screenshot): confirmed H1 "MANAGE YOUR UP NEXT QUEUE", section heading "UNDERSTANDING QUEUE OWNERSHIP", table renders cleanly with header row "Your Action" / "Queue Owner" / "What Happens Next" (well-aligned with clear borders), sidebar navigation present with active state for current page, breadcrumb trail intact, no text overflow / no broken images / no misaligned elements. Verdict: "The page is fully rendered and structurally sound. All requested elements (headings, table, sidebar) are present and displayed correctly without visible layout errors."
+  - Mobile (390×844): H1 + 7 H2 + 2 H3 + 3 tables + 7 callouts all present, no horizontal overflow, footer visible, scrollH=9025 (content flows naturally).
+
+Stage Summary:
+- "Manage your Up Next queue" doc complete — Media & Playback sub-section now 7/10 docs with real content.
+- Doc covers the Up Next queue specifically: queue ownership (4 owner types: Setlist/Album, Single Track, Creator Radio Station, Play Full from The Stage), the Up Next interface (3 sections: Playing Now / Up Next / Recently Played), adding media (Action Menu → Play Next (insert after current) vs Add to Up Next (end of queue), with eligibility validation rule), reordering/removing/clearing (drag handle + Remove icon + Clear Queue, with canonical Setlist protection warning), saving queue as Setlist (5-step conversion), handling unavailable media (4 restriction types: Territory / Subscription Expiry / Content Unpublished / Network Loss), and Autoplay and continuous discovery (algorithmic radio + feedback adjustment + Autoplay Disclosure with visible transition indicator + disable option).
+- Includes 3 tables, 7 callouts (6 notes + 1 warning, one note titled "Autoplay Disclosure"), 4 ordered lists (14 steps + 2 nested children), 1 unordered list (3 items), 7 H2 + 2 H3 headings.
+- First use of callout `title` field in Media & Playback sub-section — used for the "Autoplay Disclosure" bold lead-in paragraph, rendering as a small uppercase bold label above the callout text.
+- All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
+- Next document per nav tree order: Continue listening (Media & Playback position 8).
