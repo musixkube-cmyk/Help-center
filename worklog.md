@@ -2288,3 +2288,60 @@ Stage Summary:
 - Includes 3 tables, 3 callouts (1 warning + 2 notes), 2 ordered lists (8 steps), 4 bold lead-in lists, 6 H2 + 2 H3 headings.
 - All 8 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Playlists (Collections & Library position 4).
+
+---
+Task ID: 31
+Agent: main (Z.ai Code)
+Task: Write the "Playlists" doc (Help Center → Using Musicosy → Collections & Library → position 4). Content provided verbatim by the user. This is the fourth doc in the Collections & Library sub-section (after Collections, Create collections, Shared collections).
+
+Work Log:
+- Read worklog tail (Task 30) for context: "Shared collections" doc complete (position 3), next doc was "Playlists".
+- Confirmed git status clean, pulled from GitHub (already up to date).
+- Verified "Playlists" route returns 200 (placeholder, no content yet).
+- Verified all 8 related article paths return 200 before writing: collections, create-collections, shared-collections, your-library, keep-and-organize-your-library, save-music-to-your-library, edit-or-delete-a-collection, add-remove-and-reorder-playlist-items.
+- Created src/data/docs/playlists.ts:
+  - path: /resources/help-center/using-musicosy/collections-and-library/playlists
+  - 2 intro paragraphs (Setlists = MusicOSY playlists, strictly for Listen environment + Up Next queue ownership)
+  - H2 "The Anatomy of a Setlist" + paragraph (reference list / pointer to canonical catalog object)
+    - H3 "Eligible Media Types" + intro paragraph + table (2 cols × 5 rows: Songs and Tracks/Music Videos/Podcast Episodes/Live Replays/Albums or Releases with eligibility) + callout (note): cannot add social posts/merch/flyers/samples to Setlist → use Crate
+  - H2 "Setlist Visibility and Ownership" + intro paragraph + table (4 cols × 5 rows: Private/Unlisted/Public/Collaborative/Workspace-owned) + callout (warning): check Context Switcher before creating — Workspace active = team asset
+  - H2 "Playback Mechanics and the Up Next Queue" + intro paragraph
+    - H3 "How Queue Ownership Works" + 3-step ordered list with bold lead-ins (Starting Playback/Making Changes/Session End and Autoplay) + callout (note): unavailable tracks auto-skipped, Setlist never broken/deleted
+  - H2 "Building a Collaborative Setlist" + intro paragraph
+    - H3 "Managing Collaborator Permissions" + intro paragraph + table (2 cols × 3 rows: Add items/Remove items/Reorder items)
+    - H3 "Entitlement Rules for Collaborators" + intro paragraph + 2-item list (subscriber-only block, territory restriction behavior)
+  - H2 "System-Generated and Editorial Setlists" + intro paragraph + table (3 cols × 3 rows: System-Generated/Editorial/Algorithmic Radio with Description + Editing Capabilities) + callout (warning): cannot delete/change visibility of System-Generated or Editorial Setlists
+  - H2 "Setlists vs. Crates vs. Keeps" + intro paragraph + table (4 cols × 4 rows: Primary Purpose/Eligible Items/Playback Behavior/Sharing for Setlist/Crate/Keep)
+  - H2 "Frequently Asked Questions" + 4 FAQ H3+paragraph pairs:
+    - H3 "Can I add a subscriber-only track to a Public Setlist?" (yes, but locked for non-subscribers)
+    - H3 "Is there a limit to how many items I can put in a Setlist?" (thousands, Workspace plans expand)
+    - H3 "What happens to my Setlists if I downgrade my plan or cancel a subscription?" (Setlists kept, premium items unplayable)
+    - H3 "Can I merge two Setlists together?" (no auto-merge; manual Add to Setlist)
+  - related: 8 sibling paths (Collections, Create collections, Shared collections, Your Library, Keep and organize your Library, Save music to your Library, Edit or delete a collection, Add/remove/reorder playlist items)
+- Registered in src/data/docs/index.ts: added import + map entry for playlistsDoc.
+- Lint: clean. No errors.
+- Route verification: /resources/help-center/using-musicosy/collections-and-library/playlists → 200.
+- Agent Browser verified (desktop + mobile):
+  - H1: "Playlists"
+  - Breadcrumb: HOME / HELP CENTER / USING MUSICOSY / COLLECTIONS & LIBRARY / PLAYLISTS
+  - 8 H2 headings: The Anatomy of a Setlist | Setlist Visibility and Ownership | Playback Mechanics and the Up Next Queue | Building a Collaborative Setlist | System-Generated and Editorial Setlists | Setlists vs. Crates vs. Keeps | Frequently Asked Questions
+  - 7 H3 headings: Eligible Media Types | How Queue Ownership Works | Managing Collaborator Permissions | Entitlement Rules for Collaborators | + 4 FAQ questions
+  - 5 tables: Eligible Media Types (2×5), Visibility and Ownership (4×5), Collaborator Permissions (2×3), System-Generated/Editorial (3×3), Setlists vs Crates vs Keeps (4×4) — all render with correct headers
+  - 1 ordered list: 3-step queue ownership (Starting Playback/Making Changes/Session End and Autoplay) with bold lead-ins, numbered 1-3
+  - 4 callouts verified via DOM query (div.border-l-2): all 4 render with correct text
+    1. note: "You cannot add social posts, merchandise products..."
+    2. warning: "Always check your Context Switcher..."
+    3. note: "If a track in your Setlist becomes unavailable..."
+    4. warning: "You cannot delete or change the visibility of a System-Generated..."
+  - 2 unordered lists: entitlement rules (2 items), 
+  - Related articles: "RELATED ARTICLES" section renders with all 8 links
+  - Back/Next nav: Back → Shared collections (correct DFS predecessor, position 3); Next → Your Library (correct, position 5)
+  - Mobile (390×844): layout holds, no overflow
+  - No console errors, no page errors.
+
+Stage Summary:
+- "Playlists" doc complete — Collections & Library sub-section now 4/9 docs with real content.
+- Doc explains Setlists = MusicOSY playlists, covers anatomy (reference list), eligible media, visibility/ownership, Up Next queue mechanics, Collaborative Setlists (permissions + entitlement), System-Generated/Editorial/Algorithmic Radio, three-way comparison (Setlist vs Crate vs Keep), and 4 FAQs.
+- Includes 5 tables, 4 callouts (2 notes + 2 warnings), 1 ordered list (3 steps with bold lead-ins), 7 H3 headings, 4 FAQ Q&A pairs.
+- All 8 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Your Library (Collections & Library position 5).

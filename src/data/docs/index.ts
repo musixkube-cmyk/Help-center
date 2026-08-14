@@ -58,6 +58,7 @@ import { saveAndManageDraftsDoc } from "./save-and-manage-drafts";
 import { collectionsDoc } from "./collections";
 import { createCollectionsDoc } from "./create-collections";
 import { sharedCollectionsDoc } from "./shared-collections";
+import { playlistsDoc } from "./playlists";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -108,6 +109,7 @@ const docs: Record<string, Doc> = {
   [collectionsDoc.path]: collectionsDoc,
   [createCollectionsDoc.path]: createCollectionsDoc,
   [sharedCollectionsDoc.path]: sharedCollectionsDoc,
+  [playlistsDoc.path]: playlistsDoc,
 };
 
 /** Look up structured doc content for a given route path. */
