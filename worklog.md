@@ -1756,3 +1756,66 @@ Key architectural facts for the next agent:
 
 Stage Summary:
 - Mapped the entire navigation/header/layout architecture of /home/z/my-project. Header is GLOBAL (4 mega items, same on every page, NOT context-aware). Sidebar IS context-aware via findRootSection + rootSections. Footer is the "6col-flat-utility" pattern (6 flat columns + 16-link utility bar + 8-link bottom rail). Two existing nested-layout sub-headers (developers, advertising) provide the only pattern for adding per-section header context. Full Legal & Policies tree documented above (Trust & Policies = 4 sub-cats + 55 leaves; Legal Center = 4 sub-cats + 25 leaves; combined = 8 sub-cats + 80 leaves). No files modified. Worklog appended.
+
+---
+Task ID: 18
+Agent: main (Z.ai Code)
+Task: Add the "Legal, Policy & Compliance" sub-group (24 legal/policy nodes) to the Legal Center nav tree. User provided two near-duplicate source lists from Fondation.docx (§"Legal and compliance" line 2900 = 23 items; §15 Capability Map line 3444 = 21 items) with minor wording variants. Also: user requested a nav restructure (section-specific top nav) — that part is an architecture decision and was deferred for user confirmation (see Part 2 plan in conversation, not yet executed).
+
+Work Log:
+- Ran checkpoint.sh: local matches GitHub (5c49165). No sandbox reset.
+- Launched Explore agent (Task ID explore-nav-arch) to map nav/header/layout architecture. Key findings:
+  - Header (src/components/site/site-header.tsx) is GLOBAL and NOT context-aware — renders same 4 megaMenu entries on every page.
+  - Home (/) shows 6 marketing cards, not the full tree.
+  - Help Center landing exists at /resources/help-center (shows full sidebar).
+  - Sidebar IS context-aware via findRootSection(path).
+  - Legal Center (/legal-and-policies) had 4 sub-groups: Rules & Policies Home, Terms of Use, Copyright & IP, Law Enforcement. NO "Legal, Policy & Compliance" group existed.
+- Merged the two source lists into a canonical 24-item list. Wording decisions (documented):
+  - Tax collection + Tax reporting: kept as 2 separate items (list 1's split, not list 2's merged "Tax collection/reporting").
+  - Data deletion + Account deletion: included BOTH as distinct concepts (data lifecycle vs account termination). User flagged as "not identical wording"; treated as genuinely different policies.
+  - Archive/purge workflow: used list 1's wording (more descriptive than list 2's "Archive and purge").
+  - Territory restrictions: included (present in list 1, missing in list 2 — union).
+- Edited src/data/nav.ts: added new sub-group "Legal, Policy & Compliance" (path /legal-and-policies/legal-policy-and-compliance) as the 5th sub-group under Legal Center, after "Law Enforcement". Used build() helper with 24 string items. Added blurb.
+- Lint: clean. No errors.
+- Verified all 24/24 leaf routes return 200 (including both account-deletion and data-deletion, both tax-collection and tax-reporting, archive-purge-workflow, territory-restrictions).
+- Agent Browser verified (desktop 1440×900 + mobile iPhone 14 / 390×844):
+  - Legal Center landing (/legal-and-policies): H1 "Legal Center"; new "Legal, Policy & Compliance" group card renders with correct href.
+  - Group landing (/legal-and-policies/legal-policy-and-compliance): H1 "Legal, Policy & Compliance"; 24 child cards render in grid (verified all 24 labels: Terms of use, Privacy policy, Community guidelines, Copyright policy, Creator agreement, Distribution agreement, Advertising agreement, Subscription terms, Merchant terms, Payout terms, Age verification, Identity verification, Business verification, Tax collection, Tax reporting, Consent management, Data export, Data deletion, Account deletion, Archive/purge workflow, Legal hold, Territory restrictions, Sanctions restrictions, Audit retention).
+  - Sidebar shows all 5 Legal Center sub-groups (Rules & Policies Home, Terms of Use, Copyright & IP, Law Enforcement, Legal, Policy & Compliance) — new group correctly integrated.
+  - Leaf placeholder (/legal-and-policies/legal-policy-and-compliance/sanctions-restrictions): H1 renders, breadcrumb correct, sidebar shows 25 new-group links (24 children + group), Back/Next DFS correct (Territory restrictions ← Sanctions restrictions → Audit retention).
+  - No console errors.
+  - Mobile: no horizontal overflow (bodyHorizontalScroll 0); footer at natural document end (footerBottom 4266 = docHeight 4266), no overlap.
+- Committed (329cdbe) and pushed to GitHub main.
+
+Stage Summary:
+- Legal Center now has 5 sub-groups (was 4): Rules & Policies Home, Terms of Use, Copyright & IP, Law Enforcement, Legal, Policy & Compliance.
+- 24 new legal/policy placeholder nodes added under /legal-and-policies/legal-policy-and-compliance/*. All return 200.
+- Canonical merged list documented with wording decisions for the 4 variant items.
+- Note: some items overlap thematically with existing nodes (e.g., "Terms of use" here vs the "Terms of Use" sub-group; "Privacy policy" vs Trust & Policies → Privacy Center). These are distinct nodes with distinct paths — acceptable in a help center where the same topic is referenced from multiple organizational angles.
+- Part 2 (nav restructure for section-specific top nav) NOT executed — architecture decision deferred to user. Plan presented in conversation.
+
+---
+Task ID: explore-nav-arch
+Agent: Explore (subagent)
+Task: Map the navigation/header/layout architecture of the Musicosy help center to inform a nav-restructure plan.
+
+Work Log:
+- Read worklog.md tail (Tasks 10, 16-17) for nav-tree context.
+- Read src/data/nav.ts fully (832 lines): megaMenu (4 entries, abbreviated), helpCenterSections (6 root sections, full tree), build() helper, footerNav (6 cols), adsHelpCenter (18 sections).
+- Read src/components/site/site-header.tsx (246 lines): global SiteHeader, renders ALL megaMenu entries on every page via megaMenu.map (lines 174-187). NOT context-aware. MegaPanel is CSS-hover dropdown, 5-col grid. Mobile menu is flat 2-level.
+- Read src/app/layout.tsx (65 lines): root layout wraps SiteHeader + children + SiteFooter globally.
+- Read src/app/page.tsx (124 lines): home renders 6 HELP_CARDS + 6 QUICK_LINKS, NOT the full tree.
+- Read src/app/[...path]/page.tsx (243 lines): catch-all. Center layout (when findRootSection matches) = sticky sidebar with [rootSection] only + main content. Standalone layout = hero + buttons.
+- Read src/components/site/help-center-sidebar.tsx (113 lines): recursive SidebarItem, context-aware via sections prop.
+- Read src/components/site/site-footer.tsx (95 lines): 6-col flat footerNav + utility bar + bottom rail.
+- Found /resources/help-center/page.tsx (111 lines) overrides catch-all — dedicated Help Center landing showing full sidebar.
+- Found existing per-section sub-header pattern: /developers/layout.tsx and /advertising/layout.tsx add a dark sub-header BELOW the global SiteHeader. No header-level context switching exists today.
+
+Stage Summary:
+- Header is global, NOT context-aware (same 4 mega items everywhere).
+- Sidebar IS context-aware (shows only matching root section).
+- Home shows 6 cards, not the full tree.
+- Help Center landing exists at /resources/help-center.
+- Two nav data sources (megaMenu abbreviated + helpCenterSections full) must be manually synced.
+- Existing nested-layout sub-header pattern (/developers, /advertising) is the cleanest model for per-section top nav if user wants it.
+- Legal Center full tree documented: 4 sub-groups + 25 leaves (pre-Task-18). Trust & Policies: 4 sub-cats + 55 leaves. Combined 80 policy leaves across 2 centers.
