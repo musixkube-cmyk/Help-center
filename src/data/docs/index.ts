@@ -73,6 +73,7 @@ import { manageYourPlaybackQueueDoc } from "./manage-your-playback-queue";
 import { manageYourUpNextQueueDoc } from "./manage-your-up-next-queue";
 import { continueListeningDoc } from "./continue-listening";
 import { sendMessageDoc } from "./send-a-message";
+import { manageMessageRequestsDoc } from "./manage-message-requests";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -138,6 +139,7 @@ const docs: Record<string, Doc> = {
   [manageYourUpNextQueueDoc.path]: manageYourUpNextQueueDoc,
   [continueListeningDoc.path]: continueListeningDoc,
   [sendMessageDoc.path]: sendMessageDoc,
+  [manageMessageRequestsDoc.path]: manageMessageRequestsDoc,
 };
 
 /** Look up structured doc content for a given route path. */

@@ -3182,3 +3182,68 @@ Stage Summary:
 - First Backstage & Community doc written in this session. Related articles include cross-section (Block and mute in Content Interaction) and cross-category (Report a post/account/LIVE/comment/DM in Support Center) links — following the pattern established in prior Content Interaction docs.
 - All 5 related article paths verified to return 200 before writing (mapped from user's conceptual labels to actual nav node paths).
 - Next document per nav tree order: The remaining Media & Playback docs (Music playback troubleshooting position 9, Video playback troubleshooting position 10), OR continue with Backstage & Community docs. Awaiting user's next content.
+
+---
+Task ID: 46
+Agent: main (Z.ai Code)
+Task: Write the "Manage message requests" doc (Help Center → Using Musicosy → Backstage & Community → position 3). Content provided verbatim by the user. This is the third doc in the Backstage & Community sub-section (after What is Backstage?=1, Send a message=2).
+
+Work Log:
+- Read worklog tail (Task 45) for context: Backstage & Community sub-section 2/8 complete (Send a message was last), next doc was "Manage message requests" (position 3).
+- Confirmed git status clean; last commit = "Add 'Send a message' Help Center doc (Backstage & Community 2/8)".
+- Investigated the user's 7 related article labels and mapped them to actual nav node routes:
+  * "Send a message" → /resources/help-center/using-musicosy/backstage-and-community/send-a-message (sibling)
+  * "What is Backstage?" → /resources/help-center/using-musicosy/backstage-and-community/what-is-backstage (sibling)
+  * "Block and mute" → /resources/help-center/using-musicosy/content-interaction/block-and-mute (cross-section)
+  * "Manage your privacy and discoverability settings" → /support/account-and-access/account-privacy-and-visibility-settings (cross-category, Support Center)
+  * "Report a profile or message" → /support/reports-and-appeals/report-a-profile (cross-category, Support Center)
+  * "Start a group conversation" → /resources/help-center/using-musicosy/backstage-and-community/start-a-group-conversation (sibling)
+  * "Share content in Backstage" → /resources/help-center/using-musicosy/backstage-and-community/share-content-in-backstage (sibling)
+- Verified all 7 mapped related article routes return 200 before writing.
+- Created src/data/docs/manage-message-requests.ts:
+  - path: /resources/help-center/using-musicosy/backstage-and-community/manage-message-requests
+  - 2 intro paragraphs (DM in Backstage; messages from non-followed members routed to Message Requests; privacy shield; review without exposing activity/presence/data)
+  - H2 "The Privacy Shield: How Message Requests Work" + intro paragraph (platform intercepts message + places in Message Requests) + paragraph (strict boundaries enforced) + table (2 cols × 4 rows: What happens in a Message Request / What is strictly prevented) + callout (note, from "Important:"): opening request to read does not accept; sender won't know unless you tap Accept
+  - H2 "Managing Your Message Requests" + intro paragraph (access via Backstage > Requests tab; full control)
+    - H3 "1. Accept" + bold-lead-in list (3 items: What it does: / The result: / Note:)
+    - H3 "2. Delete (Decline)" + bold-lead-in list (2 items: What it does: / The result:)
+    - H3 "3. Block" + bold-lead-in list (2 items: What it does: / The result:)
+    - H3 "4. Flag (Report)" + bold-lead-in list (2 items: What it does: / The result:)
+  - H2 "Attachment and Link Safety" + intro paragraph (common spam/phishing vector; restricts media until accepted) + bold-lead-in list (3 items: Restricted Attachments: / Link Safety: / Catalog and Commerce Sharing:)
+  - H2 "Configuring Your Message Intake Settings" + intro paragraph (control who bypasses Message Requests) + intro paragraph (To adjust:) + ordered list (3 steps: Settings > Privacy and Safety > Backstage → Message Intake / Allow Messages From → choose boundary) + table (3 cols × 5 rows: Everyone / Followers Only / Mutual Follows / Subscribers Only / No One with Primary Inbox + Message Requests columns) + callout (note): Workspace contexts have separate messaging rules; team messages route to Workspace inbox
+  - H2 "Handling Abuse and Repeat Offenders" + intro paragraph (Trust & Safety monitors; repeat contact/multiple accounts) + ordered list (3 items with bold leads: Always Block and Flag: / Rate Limiting: / Hidden Requests:)
+  - H2 "Frequently Asked Questions" + 4 FAQ H3+paragraph pairs:
+    - H3 "If I accept a message request, does the sender see my personal Library?" (No; messaging is strictly communication; no access to Keeps/Setlists/history/drafts)
+    - H3 "Can I turn off Message Requests entirely?" (Yes; set Message Intake to No One; won't block transactional/security/Trust & Safety signals)
+    - H3 "Why did a message request disappear on its own?" (sender deleted account / sender blocked you / Trust & Safety removed sender for Community Guidelines violation)
+    - H3 "Can I recover a deleted message request?" (No; permanently removed to protect privacy)
+  - related: 7 mapped paths (send-a-message, what-is-backstage, block-and-mute cross-section, account-privacy-and-visibility-settings cross-category, report-a-profile cross-category, start-a-group-conversation, share-content-in-backstage)
+- Registered in src/data/docs/index.ts: added import + map entry for manageMessageRequestsDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/backstage-and-community/manage-message-requests → 200.
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Manage message requests — Musicosy"
+  - H1: "Manage message requests"
+  - 6 H2 headings: The Privacy Shield: How Message Requests Work | Managing Your Message Requests | Attachment and Link Safety | Configuring Your Message Intake Settings | Handling Abuse and Repeat Offenders | Frequently Asked Questions
+  - 8 H3 headings: 1. Accept | 2. Delete (Decline) | 3. Block | 4. Flag (Report) | If I accept a message request, does the sender see my personal Library? | Can I turn off Message Requests entirely? | Why did a message request disappear on its own? | Can I recover a deleted message request?
+  - 2 tables: Privacy Shield (4×2 with What happens in a Message Request/What is strictly prevented), Intake Settings (5×3 with Intake Setting/Who goes to Primary Inbox/Who goes to Message Requests) — all render with correct headers
+  - 2 callouts verified via DOM query (div.border-l-2): all 2 render with correct text + note variant
+    1. note: opening request to read does not accept; sender won't know unless you tap Accept
+    2. note: Workspace contexts have separate messaging rules; team messages route to Workspace inbox
+  - 5 bold-lead-in unordered lists: Accept (3 leads: What it does:/The result:/Note:), Delete (2: What it does:/The result:), Block (2: What it does:/The result:), Flag (2: What it does:/The result:), Attachment Safety (3: Restricted Attachments:/Link Safety:/Catalog and Commerce Sharing:) — verified bold lead-ins render as <span class="font-semibold text-foreground">
+  - 2 ordered lists: Configuring intake settings (3 steps: Navigate to Settings.../Locate Message Intake.../Choose boundary), Handling Abuse (3 items with bold leads: Always Block and Flag:/Rate Limiting:/Hidden Requests:) — verified numeric prefixes render ("1Navigate to Settings...", "1Always Block and Flag:")
+  - Related articles: "RELATED ARTICLES" section renders with all 7 links (Send a message, What is Backstage?, Block and mute, Account privacy and visibility settings, Report a profile, Start a group conversation, Share content in Backstage)
+  - Back/Next nav: Back → Send a message (/resources/help-center/using-musicosy/backstage-and-community/send-a-message — correct, position 2, the DFS predecessor); Next → Start a group conversation (/resources/help-center/using-musicosy/backstage-and-community/start-a-group-conversation — correct, position 4, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR/Fast Refresh dev logs)
+  - VLM visual verification (desktop screenshot): confirmed H1 "MANAGE MESSAGE REQUESTS", section heading "THE PRIVACY SHIELD: HOW MESSAGE REQUESTS WORK", table renders cleanly with header row "What happens in a Message Request" / "What is strictly prevented" (well-aligned with clear borders), sidebar present with current page "Manage message requests" correctly highlighted in orange under "Backstage & Community", breadcrumb intact, no overflow/broken elements. Verdict: "The page is rendering correctly with proper hierarchy, functional navigation highlighting, and clean data presentation."
+  - Mobile (390×844): H1 + 6 H2 + 8 H3 + 2 tables + 2 callouts all present, no horizontal overflow, footer visible, scrollH=9478 (content flows naturally).
+
+Stage Summary:
+- "Manage message requests" doc complete — Backstage & Community sub-section now 3/8 docs with real content (What is Backstage?=1, Send a message=2, Manage message requests=3).
+- Doc covers the Message Requests privacy shield: how requests work (comparison table: what happens vs. what's prevented), 4 management actions (Accept: moves to Primary + notifies + unlocks attachments / Delete: permanently removes, sender not notified / Block: mutual safety boundary, sender can't message/follow/view/interact / Flag: sends to Trust & Safety for Community Guidelines review), attachment and link safety (restricted/blurred attachments, scanned links, safe preview cards), configuring message intake settings (3-step + 5-setting table: Everyone/Followers Only/Mutual Follows/Subscribers Only/No One), handling abuse (Block+Flag, rate limiting, Hidden Requests), and 4 FAQs (Library access / turn off / disappearance / recovery).
+- Includes 2 tables, 2 callouts (both notes), 2 ordered lists (6 items total, 3 with bold leads), 5 bold-lead-in unordered lists (12 items total), 6 H2 + 8 H3 headings (4 action subsections + 4 FAQs).
+- Related articles include 2 cross-section/cross-category links (block-and-mute in Content Interaction + account-privacy-and-visibility-settings and report-a-profile in Support Center) following the pattern from Task 45.
+- All 7 related article paths verified to return 200 before writing.
+- Next document per nav tree order: Start a group conversation (Backstage & Community position 4).
