@@ -3311,3 +3311,35 @@ Stage Summary:
 - Related articles include 2 cross-section/cross-category links (block-and-mute in Content Interaction + account-privacy-and-visibility-settings in Support Center + create-or-join-a-workspace in Creator Studio & Workspaces) following the pattern from Tasks 45-46.
 - All 6 related article paths verified to return 200 before writing.
 - Next document per nav tree order: Group Conversations & Live Chat (Backstage & Community position 5).
+
+---
+Task ID: supabase-cli-setup
+Agent: Z.ai Code (main)
+Task: Install Supabase CLI, create `.env.local` from user-provided credentials, harden `.gitignore`, and verify connection to remote Supabase project. Prep work for the Payload CMS migration (admin route will be /cms, not /admin).
+
+Work Log:
+- Verified existing `.gitignore` already covered `.env*` files, but found a latent bug: a duplicate `.env*` line on line 49 silently re-excluded `.env.example` despite the `!.env.example` exception (git applies later patterns first). Fixed by removing the duplicate and consolidating the env rules.
+- Installed Supabase CLI globally via `bun add -g supabase` — version 2.114.0 at `/usr/local/bin/supabase`.
+- Added a dedicated Supabase section to `.gitignore`: local CLI artifacts (`/supabase/.branches/`, `/supabase/.temp/`, `/supabase/.env*`), pg_dump exports (`*.sql.gz`, `*.dump`), the CLI token cache (`.supabase/`), edge function deno lockfiles, and migration fixtures.
+- Added a Payload CMS section to `.gitignore` for the forthcoming migration: local SQLite files (`/payload.db`, `*.payload.db`), media uploads (`/public/uploads/payload/`), and parity-check report outputs (`/parity-report.json`, `/migration-reports/`).
+- Created `.env.example` as a committable template (no real secrets) — includes the full variable schema for legacy Prisma/SQLite, Supabase, Payload, and the migration cutover toggle (`DATA_SOURCE="ts"`).
+- Created local git branch `payload-cms-migration` with NO upstream tracking — cannot be accidentally pushed to GitHub. Verified via `git rev-parse --abbrev-ref @{upstream}` returning "no upstream configured".
+- Read credentials from `/home/z/my-project/upload/MusicosyCREDS.md` (file is gitignored via the existing `upload/` rule).
+- Wrote `.env.local` with all real credentials: project ref `kcvjdxerjttjhrzygtrp`, Supabase URL, anon key, CLI access token, publishable key, and three Postgres connection strings (direct + transaction pooler + session pooler).
+- **CRITICAL ISSUE FOUND**: The user's creds document pasted the anon JWT in BOTH the `NEXT_PUBLIC_SUPABASE_ANON` and `NEXT_PUBLIC_SUPABASE_SERVICE_ROLE` fields. Decoded the JWT payload: `{"role":"anon"}` in both. The real service_role key was NOT provided. Wrote a `REPLACE_WITH_REAL_SERVICE_ROLE_KEY` placeholder in `.env.local` with a TODO comment. This is blocking — the migration script cannot write data without the service_role key (it bypasses RLS).
+- Verified secret hygiene: `git check-ignore -v .env.local` confirms ignored; `git check-ignore -v upload/MusicosyCREDS.md` confirms ignored; scanned all tracked files for any of the secret patterns (`Bavin1863`, `ghp_dDdgt1nW`, `sbp_d6b0269c`, `kcvjdxerjttjhrzygtrp`) — no leaks found.
+- Ran `supabase init` to create the local `supabase/` project directory (contains `config.toml` and a CLI-managed `.gitignore`).
+- Ran `supabase link --project-ref kcvjdxerjttjhrzygtrp` — succeeded.
+- Verified remote access via `supabase projects list` using the access token — confirmed the linked project is `musixkube-cmyk's Project` in East US (Ohio), created 2026-07-30.
+- Installed `pg` package (postgres client for Node/Bun) via `bun add pg`.
+- Ran end-to-end DB connection test via `bun -e` script using the transaction pooler URL — CONNECTED. Confirmed PostgreSQL 17.6, database `postgres`, user `postgres`, responding to queries.
+
+Stage Summary:
+- **Supabase CLI v2.114.0** installed globally and linked to remote project `kcvjdxerjttjhrzygtrp`.
+- **`.env.local`** written with all real credentials (gitignored, verified).
+- **`.env.example`** created as committable template (no secrets).
+- **Local branch `payload-cms-migration`** created with no upstream — will not push to GitHub.
+- **Postgres connection verified** — PostgreSQL 17.6 reachable via both direct and pooler URLs.
+- **BLOCKER**: `SUPABASE_SERVICE_ROLE_KEY` is missing — user pasted anon key in both slots. Must request the real service_role key before the migration script can write to the DB.
+- **READY FOR NEXT STEP**: Install Payload CMS with admin route at `/cms`, configure `@payloadcms/db-postgres` against the Supabase pooler URL, and define the 6-block `Doc` collection + the four pillar collections (help-docs, support-docs, trust-docs, legal-docs) + nav-nodes collection. The renderer (`DocContent`) and catch-all route (`[...path]/page.tsx`) will not change — only the `getDoc()` data source swaps.
+- **GitHub PAT provided in creds doc** but NOT configured in git per user instruction ("refrain from pushing to GitHub until we are set"). Will remain dormant on the local branch.
