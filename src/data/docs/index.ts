@@ -65,6 +65,7 @@ import { saveMusicToYourLibraryDoc } from "./save-music-to-your-library";
 import { editOrDeleteACollectionDoc } from "./edit-or-delete-a-collection";
 import { addRemoveAndReorderPlaylistItemsDoc } from "./add-remove-and-reorder-playlist-items";
 import { listenOnMusicosyDoc } from "./listen-on-musicosy";
+import { videoPlayingDoc } from "./video-playing";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -122,6 +123,7 @@ const docs: Record<string, Doc> = {
   [editOrDeleteACollectionDoc.path]: editOrDeleteACollectionDoc,
   [addRemoveAndReorderPlaylistItemsDoc.path]: addRemoveAndReorderPlaylistItemsDoc,
   [listenOnMusicosyDoc.path]: listenOnMusicosyDoc,
+  [videoPlayingDoc.path]: videoPlayingDoc,
 };
 
 /** Look up structured doc content for a given route path. */
