@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Barlow } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
