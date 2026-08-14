@@ -3058,3 +3058,57 @@ Stage Summary:
 - First use of callout `title` field in Media & Playback sub-section — used for the "Autoplay Disclosure" bold lead-in paragraph, rendering as a small uppercase bold label above the callout text.
 - All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
 - Next document per nav tree order: Continue listening (Media & Playback position 8).
+
+---
+Task ID: 44
+Agent: main (Z.ai Code)
+Task: Write the "Continue listening" doc (Help Center → Using Musicosy → Media & Playback → position 8). Content provided verbatim by the user. This is the eighth doc in the Media & Playback sub-section (after Listen on MusicOSY=1, Video playing=2, Fullscreen=3, On-demand playback=4, Sound=5, Manage your playback queue=6, Manage your Up Next queue=7).
+
+Work Log:
+- Read worklog tail (Task 43) for context: Media & Playback sub-section 7/10 complete, next doc was "Continue listening" (position 8).
+- Confirmed git status clean; last commit = "Add 'Manage your Up Next queue' Help Center doc (Media & Playback 7/10)".
+- Verified all related routes return 200 before writing (continue-listening, manage-your-up-next-queue, music-playback-troubleshooting, video-playback-troubleshooting).
+- Created src/data/docs/continue-listening.ts:
+  - path: /resources/help-center/using-musicosy/media-and-playback/continue-listening
+  - 2 intro paragraphs (Continue listening auto-saves progress so you pick up exactly where left off; resume state synced to account → start on phone, finish on desktop)
+  - H2 "How MusicOSY saves your progress" + intro paragraph (Listen environment continuously tracks playback position; stored privately in Library history; powers Continue listening rails) + table (2 cols × 5 rows: Podcasts and Episodes / Albums and Releases / Setlists / Long-form Videos & Replays / Individual Songs with How Progress is Saved) + callout (note): progress updated in real-time; offline → local cache → syncs on reconnect
+  - H2 "Where to find Continue listening" + intro paragraph (access saved sessions from key areas in app shell) + ordered list (4 items with bold leads: The Home Feed: / Your Library: / The Listen Player: / Search: with descriptions)
+  - H2 "Cross-device handoff" + intro paragraph (resume state tied to account, not device) + unordered list (2 items with bold leads: Seamless Transitions: / Offline to Online:)
+  - H2 "Privacy and History controls" + intro paragraph (strictly separates private consumption data from public social metrics and creator analytics)
+    - H3 "What remains private" + unordered list (2 items with bold leads: Creators cannot see your timeline: / Followers cannot see your activity:)
+    - H3 "Managing your History" + intro paragraph (full control over data) + ordered list (3 steps: Library > History → Settings/Clear History → remove individual or clear entire) + callout (warning): clearing history permanently deletes saved timestamps; no more Resume offer; may reset personalized recommendations
+    - H3 "Pausing History" + paragraph (temporarily Pause Listening History in Privacy/Playback settings; media consumed while paused won't generate resume state)
+  - H2 "Handling unavailable or restricted media" + intro paragraph (real-time rights/licensing/catalog availability; handle gracefully) + table (2 cols × 4 rows: Territory Restriction / Creator Unpublishes / Subscription Expiry / Content Takedown with What Happens to Your Resume State)
+  - H2 "Frequently Asked Questions" + 3 FAQ H3+paragraph pairs:
+    - H3 "Does MusicOSY save my progress for short songs?" (3-minute songs → remembers last played track + queue, not micro-timestamp; timestamp resume primarily for long-form: podcasts, live replays, DJ mixes, audiobooks)
+    - H3 "Why did my podcast episode start over instead of resuming?" (cleared Library history / switched account / podcaster uploaded new version replacing canonical audio → treated as new media object, starts from beginning)
+    - H3 "Can I turn off the Continue listening rail on my Home screen?" (yes — Edit Home / Customize button → toggle visibility)
+  - related: 9 sibling paths (Listen on Musicosy, Video playing, Fullscreen, On-demand playback, Sound, Manage your playback queue, Manage your Up Next queue, Music playback troubleshooting, Video playback troubleshooting)
+- Registered in src/data/docs/index.ts: added import + map entry for continueListeningDoc.
+- Lint: clean (bun run lint, 0 problems). No errors.
+- Route verification: /resources/help-center/using-musicosy/media-and-playback/continue-listening → 200.
+- Agent Browser verified (desktop 1280×800 + mobile 390×844):
+  - Page title: "Continue listening — Musicosy"
+  - H1: "Continue listening"
+  - 6 H2 headings: How MusicOSY saves your progress | Where to find Continue listening | Cross-device handoff | Privacy and History controls | Handling unavailable or restricted media | Frequently Asked Questions
+  - 6 H3 headings: What remains private | Managing your History | Pausing History | Does MusicOSY save my progress for short songs? | Why did my podcast episode start over instead of resuming? | Can I turn off the Continue listening rail on my Home screen?
+  - 2 tables: How MusicOSY saves your progress (5×2 with Media Type/How Progress is Saved), Handling unavailable or restricted media (4×2 with Event/What Happens to Your Resume State) — all render with correct headers
+  - 2 callouts verified via DOM query (div.border-l-2): all 2 render with correct text + correct icon/variant
+    1. note: progress updated in real-time; offline → local cache → syncs on reconnect
+    2. warning: clearing history permanently deletes saved timestamps; no more Resume offer; may reset personalized recommendations
+  - Ordered lists: "Where to find Continue listening" (4 items with bold leads: The Home Feed: / Your Library: / The Listen Player: / Search:) + "Managing your History" (3 steps) — verified numeric prefixes render ("1The Home Feed:...", "1Navigate to your Library > History.")
+  - Unordered lists: "Cross-device handoff" (2 items with bold leads: Seamless Transitions: / Offline to Online:) + "What remains private" (2 items with bold leads: Creators cannot see your timeline: / Followers cannot see your activity:) — verified bold lead-ins render as <span class="font-semibold text-foreground"> with font-weight 600
+  - Related articles: "RELATED ARTICLES" section renders with all 9 links (Listen on Musicosy, Video playing, Fullscreen, On-demand playback, Sound, Manage your playback queue, Manage your Up Next queue, Music playback troubleshooting, Video playback troubleshooting)
+  - Back/Next nav: Back → Manage your Up Next queue (/resources/help-center/using-musicosy/media-and-playback/manage-your-up-next-queue — correct, position 7, the DFS predecessor); Next → Music playback troubleshooting (/resources/help-center/using-musicosy/media-and-playback/music-playback-troubleshooting — correct, position 9, the successor)
+  - No horizontal scroll: desktop scrollW=1280=clientW=1280; mobile scrollW=390=clientW=390
+  - Footer visible (min-h-screen flex flex-col shell intact)
+  - No page errors, no console errors (only React DevTools info + HMR/Fast Refresh dev logs)
+  - VLM visual verification (desktop screenshot): confirmed H1 "CONTINUE LISTENING", section heading "HOW MUSICOSY SAVES YOUR PROGRESS", table renders cleanly with header row "Media Type" / "How Progress is Saved" (well-aligned data rows), sidebar navigation present showing hierarchy (Help Center > Using Musicosy > Media & Playback) with current page "Continue Listening" highlighted, breadcrumb trail intact, no content overflow / text readable. Verdict: "The page is rendering correctly with all key structural elements (headings, navigation, tables) present and properly aligned."
+  - Mobile (390×844): H1 + 6 H2 + 6 H3 + 2 tables + 2 callouts all present, no horizontal overflow, footer visible, scrollH=8548 (content flows naturally).
+
+Stage Summary:
+- "Continue listening" doc complete — Media & Playback sub-section now 8/10 docs with real content.
+- Doc covers the Continue listening feature: how progress is saved (5 media types: Podcasts/Episodes (timestamp), Albums/Releases (last track + position), Setlists (last song in sequence), Long-form Videos & Replays (timestamp for Continue watching), Individual Songs (last played track for Recently Played)), where to find Continue listening (4 areas: Home Feed rail, Library History tab, Listen Player Resume/Start Over prompt, Search progress bar + Resume button), cross-device handoff (account-tied resume state + offline-to-online sync), privacy and History controls (creators see only aggregate analytics, followers see nothing, manage history with 3-step clear, Pause Listening History), handling unavailable/restricted media (4 events: Territory Restriction / Creator Unpublishes / Subscription Expiry / Content Takedown), and 3 FAQs (short songs progress / episode start over reasons / turn off Home rail).
+- Includes 2 tables, 2 callouts (1 note + 1 warning), 2 ordered lists (4 bold-lead-in items + 3 steps = 7 total), 2 unordered lists with bold leads (4 items total), 6 H2 + 6 H3 headings (3 privacy subsections + 3 FAQs).
+- All 9 related article paths verified to return 200 before writing (all from Media & Playback sub-section).
+- Next document per nav tree order: Music playback troubleshooting (Media & Playback position 9).

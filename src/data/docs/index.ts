@@ -71,6 +71,7 @@ import { onDemandPlaybackDoc } from "./on-demand-playback";
 import { soundDoc } from "./sound";
 import { manageYourPlaybackQueueDoc } from "./manage-your-playback-queue";
 import { manageYourUpNextQueueDoc } from "./manage-your-up-next-queue";
+import { continueListeningDoc } from "./continue-listening";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -134,6 +135,7 @@ const docs: Record<string, Doc> = {
   [soundDoc.path]: soundDoc,
   [manageYourPlaybackQueueDoc.path]: manageYourPlaybackQueueDoc,
   [manageYourUpNextQueueDoc.path]: manageYourUpNextQueueDoc,
+  [continueListeningDoc.path]: continueListeningDoc,
 };
 
 /** Look up structured doc content for a given route path. */
