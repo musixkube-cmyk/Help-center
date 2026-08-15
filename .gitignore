@@ -51,6 +51,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# payload sqlite database
+*.db
+*.db-journal
+payload.db
+payload.db-journal
+
 
 # typescript
 *.tsbuildinfo
