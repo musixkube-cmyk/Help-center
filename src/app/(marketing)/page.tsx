@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { SiteFooter } from "@/components/site/site-footer";
+import { footerUtilityBar, footerBottomRail } from "@/data/nav";
+import { NavLink } from "@/components/site/nav-link";
 
 const sections = [
   {
@@ -223,25 +224,78 @@ export default function Home() {
         </section>
       ))}
 
-      {/* Bottom rail — exact same footer as the Help Center:
-          6-column nav grid + Musicosy logo + utility bar + bottom rail
-          (© 2026 Musicosy Corp. + legal links + English). Wrapped in a
-          mt-auto div so the footer pins to the bottom of the viewport on
-          short pages and pushes down naturally on long pages.
+      {/* Footer — logo down. Musicosy logo + utility bar (16 links) +
+          bottom rail (© 2026 Musicosy Corp. + 8 legal links + English).
+          Mirrors the Help Center footer FROM THE LOGO DOWN — i.e. no
+          6-column nav grid, just the logo row, the utility bar, and the
+          copyright/legal bottom rail.
 
-          The shared SiteFooter paints the logo + link hovers with
-          var(--accent). In the (public) Help Center design system
-          --accent IS the Musicosy orange; in the (marketing) system the
-          orange lives in --primary and --accent is a dark muted brown.
-          Locally re-map --accent to the marketing orange so the footer
-          looks identical to the Help Center (orange logo, orange hovers)
-          without mutating the shared component or the marketing tokens. */}
-      <div
-        className="mt-auto"
+          `--accent` is scoped to `--primary` (the Musicosy orange in the
+          marketing token set) so the masked logo + link hovers render
+          orange, matching the Help Center. */}
+      <footer
+        className="mt-auto border-t border-ink-foreground/10 bg-ink text-ink-foreground"
         style={{ "--accent": "var(--primary)" } as React.CSSProperties}
       >
-        <SiteFooter />
-      </div>
+        {/* Logo row — right-aligned, Musicosy orange via masked adnote-logo.png */}
+        <div className="w-full px-6 lg:px-10 pt-8 pb-6">
+          <div className="flex justify-end">
+            <div
+              role="img"
+              aria-label="Musicosy"
+              className="h-9 w-[150px]"
+              style={{
+                backgroundColor: "var(--accent)",
+                WebkitMaskImage: "url('/adnote-logo.png')",
+                maskImage: "url('/adnote-logo.png')",
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+                WebkitMaskPosition: "right center",
+                maskPosition: "right center",
+                WebkitMaskSize: "contain",
+                maskSize: "contain",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Utility bar — 16 quick-access links below the logo */}
+        <div className="border-t border-ink-foreground/10 px-6 lg:px-10 py-4">
+          <nav
+            aria-label="Footer utility"
+            className="flex flex-wrap items-center gap-x-5 gap-y-2"
+          >
+            {footerUtilityBar.map((item) => (
+              <NavLink
+                key={item.label + item.path}
+                href={item.path}
+                className="text-xs font-medium uppercase tracking-wider text-ink-foreground/60 transition-colors hover:text-accent"
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+
+        {/* Bottom rail — © 2026 Musicosy Corp. + 8 legal links + English */}
+        <div className="border-t border-ink-foreground/10 px-6 lg:px-10 py-5">
+          <div className="flex flex-col gap-3 text-xs text-ink-foreground/50 sm:flex-row sm:items-center sm:justify-between">
+            <span>© 2026 Musicosy Corp.</span>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+              {footerBottomRail.map((item) => (
+                <NavLink
+                  key={item.label + item.path}
+                  href={item.path}
+                  className="transition-colors hover:text-ink-foreground"
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+              <span className="cursor-pointer transition-colors hover:text-ink-foreground">English</span>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
