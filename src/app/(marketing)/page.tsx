@@ -224,17 +224,17 @@ export default function Home() {
         </section>
       ))}
 
-      {/* Footer — logo down. Musicosy logo + utility bar (16 links) +
-          bottom rail (© 2026 Musicosy Corp. + 8 legal links + English).
-          Mirrors the Help Center footer FROM THE LOGO DOWN — i.e. no
-          6-column nav grid, just the logo row, the utility bar, and the
-          copyright/legal bottom rail.
+      {/* Footer — logo down. Transparent (no bg) so the full-bleed
+          background video shows through, exactly like the original
+          landing-home repo. Content mirrors the Help Center footer FROM
+          THE LOGO DOWN: Musicosy logo + utility bar (16 links) + bottom
+          rail (© 2026 Musicosy Corp. + 8 legal links + English).
 
           `--accent` is scoped to `--primary` (the Musicosy orange in the
           marketing token set) so the masked logo + link hovers render
           orange, matching the Help Center. */}
       <footer
-        className="mt-auto border-t border-ink-foreground/10 bg-ink text-ink-foreground"
+        className="mt-auto border-t border-ink-foreground/10 text-ink-foreground"
         style={{ "--accent": "var(--primary)" } as React.CSSProperties}
       >
         {/* Logo row — right-aligned, Musicosy orange via masked adnote-logo.png */}

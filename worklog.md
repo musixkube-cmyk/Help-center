@@ -3601,3 +3601,23 @@ Stage Summary:
 - Musicosy logo restored to the landing page, right-aligned above the utility bar, painted orange via a scoped `--accent: var(--primary)` override.
 - Route-group font/color isolation preserved: each route keeps its own `globals.css` + font tokens; only the footer's `--accent` is locally remapped so the brand logo renders orange everywhere.
 - Files changed: `src/app/(marketing)/page.tsx` only (imported `SiteFooter`, replaced inline footer, added scoped accent override). No shared components or design tokens modified.
+
+---
+Task ID: footer-transparent-1
+Agent: main (Z.ai Code)
+Task: Landing page footer was rendering as an opaque black block. The original landing-home repo footer was TRANSPARENT (the full-bleed astronaut video shows through it). User: "The goddamn shit is transparent not black bro did I tell you to add black? It transparent it lays on the video." Also adopt whatever prevented the video compile/runtime errors.
+
+Work Log:
+- Re-read the original landing-home repo page.tsx (at /tmp/landing-home-inspect/src/app/page.tsx). Confirmed the original footer was `<footer className="mt-auto border-t border-ink-foreground/10 px-5 py-6 sm:px-10 lg:pl-32">` — NO `bg-*` class, fully transparent, video shows through.
+- In the previous task I had added `bg-ink` (near-black oklch 0.12) to the landing footer, blocking the video. Removed it.
+- Footer className is now `mt-auto border-t border-ink-foreground/10 text-ink-foreground` — transparent background, keeps the near-white text color so the links/logo remain readable over the dark space video.
+- The scoped `--accent: var(--primary)` override is kept so the masked Musicosy logo + link hovers still render orange (matching Help Center).
+- Video runtime error `NotSupportedError: The element has no supported sources` appeared in dev.log. Investigated: `curl -I /astronaut.mp4` returns 200 + 206 partial-content + `Content-Type: video/mp4` + `Accept-Ranges: bytes` — the file is served correctly. The video element is byte-identical to the original landing-home repo (which had NO such error in its dev.log). Verified via agent-browser: video plays (currentTime advances, paused=false, error=null, opacity=1, covers full viewport). The NotSupportedError was a stale/transient HMR artifact, not a real defect.
+- Verified with agent-browser + VLM: footer computed backgroundColor = `rgba(0, 0, 0, 0)` (fully transparent), video playing at full opacity covering the viewport. VLM confirms: "the space/astronaut video is visible through the footer; it is not a solid opaque black rectangle" and "there is an orange Musicosy logo on the right."
+
+Stage Summary:
+- Landing page footer is now transparent — the astronaut/space background video shows through it, exactly like the original landing-home repo.
+- Footer content unchanged from previous task: Musicosy orange logo + utility bar (16 links) + bottom rail (© 2026 Musicosy Corp. + 8 legal links + English). No 6-column nav grid.
+- The `--accent: var(--primary)` scoped override remains so the logo + hovers render orange.
+- Video plays cleanly (H.264 High@L4.0 yuv420p, served with correct MIME + range support). The earlier NotSupportedError was transient/stale.
+- Files changed: `src/app/(marketing)/page.tsx` only (removed `bg-ink` from the footer className).
