@@ -184,7 +184,9 @@ export const footerUtilityBar: NavNode[] = [
   { label: "Get App", path: "/download" },
   { label: "Help", path: "/resources/help-center" },
   { label: "Careers", path: "/careers" },
-  { label: "Ads & Business", path: "/for-business" },
+  // Footer “Ads & Business” routes to the Ad Center gate login (ads/signin),
+  // not the for-business landing — ad help lives in the Ads Help Center.
+  { label: "Ads & Business", path: "/ads/signin" },
   { label: "Podcast", path: "/podcast" },
   { label: "Stream", path: "/for-fans" },
   { label: "Creators", path: "/for-creators" },
@@ -486,17 +488,15 @@ export const helpCenterSections: NavNode[] = [
     ],
   },
 
-  // ── 6. Business & Advertising ────────────────────────────────────────────
-  {
-    label: "Business & Advertising",
-    path: "/for-business",
-    blurb: "Adnote, business tools, and the Ads Help Center.",
-    children: [
-      { label: "Musicosy for Business", path: "/for-business" },
-      { label: "Advertise / Adnote", path: "/advertise" },
-      { label: "Ads Help Center", path: "/advertising" },
-    ],
-  },
+  // ── Business & Advertising section removed from the main Help Center ────
+  // Ad help articles now live in the Ads Help Center at /advertising (the
+  // `adsHelpCenter` tree), which is surfaced as its own root section so the
+  // full 18-section Adnote tree renders with a persistent sidebar inside
+  // the Ads Center. The main Help Center cross-links to it from the
+  // /resources/help-center homepage “Advertising” card.
+  //
+  // (Business & Advertising footer navigation lives in `footerNav` group 5
+  //  “Business” and the platformRoutes entry for /for-business — both intact.)
 ];
 
 /**
@@ -800,6 +800,10 @@ export function findTrail(path: string, nodes: NavNode[] = allNav, trail: NavNod
 export const rootSections: NavNode[] = [
   // Help-center sections (they carry the full detailed trees).
   ...helpCenterSections,
+  // Ads Help Center — its own root section so /advertising and every
+  // /advertising/... page renders with the full 18-section Adnote sidebar.
+  // This is the “help center inside the Ads Center”.
+  adsHelpCenter,
   // Resources — standalone center for Guides, Glossary, FAQ, Accessibility, Blog.
   // (Not in the mega menu anymore, but still a center with a sidebar.)
   {

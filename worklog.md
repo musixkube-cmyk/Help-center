@@ -3621,3 +3621,35 @@ Stage Summary:
 - The `--accent: var(--primary)` scoped override remains so the logo + hovers render orange.
 - Video plays cleanly (H.264 High@L4.0 yuv420p, served with correct MIME + range support). The earlier NotSupportedError was transient/stale.
 - Files changed: `src/app/(marketing)/page.tsx` only (removed `bg-ink` from the footer className).
+
+---
+Task ID: ads-routing-1
+Agent: main (Z.ai Code)
+Task: (1) Footer "Ads & Business" link should route to the Ad Center gate login (ads/signin). (2) Ad-related help articles currently surfaced in the main Help Center should be moved INTO the Ads Help Center (the help center inside the Ads Center at /advertising).
+
+Work Log:
+- Read `src/data/nav.ts` end-to-end to understand the data model: `footerUtilityBar` (footer quick-access), `helpCenterSections` (main Help Center sidebar + homepage cards, 6 sections incl. "Business & Advertising"), `adsHelpCenter` (standalone 18-section Adnote tree at /advertising), `rootSections` (decides which paths render with a persistent sidebar), `allNav`/`findNode` (route resolver for the catch-all [...path]/page.tsx).
+- Read `src/app/(public)/[...path]/page.tsx` to understand the two layouts: center layout (with sidebar, when `findRootSection(path)` returns a node) vs standalone layout (no sidebar). Confirmed `rootSections` did NOT previously include `adsHelpCenter`, so /advertising was resolving its root section to the main Help Center's "Business & Advertising" group (3 links) via treeContains — showing the WRONG sidebar.
+- Verified current state via agent-browser: /advertising sidebar showed "BUSINESS & ADVERTISING" with only 3 links (Musicosy for Business / Advertise / Adnote / Ads Help Center) instead of the full 18-section Adnote tree.
+
+Change 1 — Footer "Ads & Business" → Ad Center gate login:
+- `footerUtilityBar` entry changed from `path: "/for-business"` to `path: "/ads/signin"`. Verified via agent-browser: footer link href now `/ads/signin`.
+
+Change 2 — Move ad help articles into the Ads Help Center (inside the Ads Center):
+- Removed the "Business & Advertising" section (formerly section 6 of `helpCenterSections`) from the main Help Center. This removes ad help from the main Help Center sidebar AND stops /advertising from resolving to the wrong (3-link) root section.
+- Added `adsHelpCenter` to `rootSections` so /advertising and every /advertising/... page now renders with the proper Ads Help Center sidebar — the full 18-section Adnote tree (Getting Started, Advertising on Musicosy, Musicosy Accounts, Managing Your Ad Center, Ad Objectives, Campaign Creation, Ad Group Management, Ad Placements & Formats, Creative Management, Ad Management, Audience & Lead Management, Measurement & Analytics, Tools & Resources, Ad Auction & Optimization, Billing & Payment, Account Management, Team & Members, Policies & Security). This makes /advertising the "help center inside the Ads Center".
+- Confirmed route resolution is intact after removal: /for-business resolves via `platformRoutes` + `megaMenu`; /advertise via `megaMenu`; /advertising + all 18 sections via `adsHelpCenter`. No 404s.
+- The main Help Center homepage (/resources/help-center) keeps its "Advertising" pointer card that bridges to /advertising ("Running ads on Musicosy? The Ads Help Center has its own dedicated hub with 18 sections..."). This is a cross-link, not a help article, so it stays as the bridge from the consumer Help Center to the Ads Help Center.
+
+Verification:
+- agent-browser: /advertising sidebar root label = "ADS HELP CENTER", 18 sections listed. ✓
+- agent-browser: /advertising/getting-started renders with the same Ads Help Center sidebar + "Getting Started" heading. ✓
+- agent-browser: main Help Center sidebar no longer contains "Business & Advertising". ✓
+- agent-browser: footer "Ads & Business" href = /ads/signin. ✓
+- All routes 200, no console/runtime errors.
+
+Stage Summary:
+- Footer "Ads & Business" now routes to the Ad Center gate login (/ads/signin).
+- Ad help articles moved out of the main Help Center and into the Ads Help Center at /advertising, which now renders as its own root section with the full 18-section Adnote sidebar. /advertising is now properly "the help center inside the Ads Center".
+- Main Help Center keeps an "Advertising" bridge card pointing to /advertising.
+- Files changed: `src/data/nav.ts` only (3 edits: footerUtilityBar path, removed helpCenterSections section 6, added adsHelpCenter to rootSections).
