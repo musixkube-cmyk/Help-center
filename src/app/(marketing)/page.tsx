@@ -234,7 +234,7 @@ export default function Home() {
           marketing token set) so the masked logo + link hovers render
           orange, matching the Help Center. */}
       <footer
-        className="mt-auto border-t border-ink-foreground/10 text-ink-foreground"
+        className="mt-auto text-ink-foreground"
         style={{ "--accent": "var(--primary)" } as React.CSSProperties}
       >
         {/* Logo row — right-aligned, Musicosy orange via masked adnote-logo.png */}
