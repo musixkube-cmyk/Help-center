@@ -73,6 +73,7 @@
         "react-hook-form": "^7.60.0",
         "react-markdown": "^10.1.0",
         "react-resizable-panels": "^3.0.3",
+        "react-server-dom-turbopack": "^19.2.8",
         "react-server-dom-webpack": "^19.2.8",
         "react-syntax-highlighter": "^15.6.1",
         "recharts": "^2.15.4",
@@ -2134,6 +2135,8 @@
     "react-resizable-panels": ["react-resizable-panels@3.0.6", "", { "peerDependencies": { "react": "^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc", "react-dom": "^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc" } }, "sha512-b3qKHQ3MLqOgSS+FRYKapNkJZf5EQzuf6+RLiq1/IlTHw99YrZ2NJZLk4hQIzTnnIkRg2LUqyVinu6YWWpUYew=="],
 
     "react-select": ["react-select@5.9.0", "", { "dependencies": { "@babel/runtime": "^7.12.0", "@emotion/cache": "^11.4.0", "@emotion/react": "^11.8.1", "@floating-ui/dom": "^1.0.1", "@types/react-transition-group": "^4.4.0", "memoize-one": "^6.0.0", "prop-types": "^15.6.0", "react-transition-group": "^4.3.0", "use-isomorphic-layout-effect": "^1.2.0" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-nwRKGanVHGjdccsnzhFte/PULziueZxGD8LL2WojON78Mvnq7LdAMEtu2frrwld1fr3geixg3iiMBIc/LLAZpw=="],
+
+    "react-server-dom-turbopack": ["react-server-dom-turbopack@19.2.8", "", { "dependencies": { "acorn-loose": "^8.3.0", "neo-async": "^2.6.1" }, "peerDependencies": { "react": "^19.2.8", "react-dom": "^19.2.8" } }, "sha512-ff4bxfO2iz4z6GLZ8plk9EIaidqCYKAApMO6gEcTgB3waNV+sHcDjfxaoDdyWaphpKZ7eLO/NPRi1DDuJC2PJw=="],
 
     "react-server-dom-webpack": ["react-server-dom-webpack@19.2.8", "", { "dependencies": { "acorn-loose": "^8.3.0", "neo-async": "^2.6.1", "webpack-sources": "^3.2.0" }, "peerDependencies": { "react": "^19.2.8", "react-dom": "^19.2.8", "webpack": "^5.59.0" } }, "sha512-rFO1VJZ+cH9ZH6hGy9+qmIsmZHZpCMKJZXhWHqT71UnSfg+w+W+gwrwp58MVzMqdFquG8GF1c6C8q0OGphkEdg=="],
 
