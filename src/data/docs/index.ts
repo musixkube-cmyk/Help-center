@@ -65,6 +65,16 @@ import { saveMusicToYourLibraryDoc } from "./save-music-to-your-library";
 import { editOrDeleteACollectionDoc } from "./edit-or-delete-a-collection";
 import { addRemoveAndReorderPlaylistItemsDoc } from "./add-remove-and-reorder-playlist-items";
 import { listenOnMusicosyDoc } from "./listen-on-musicosy";
+import { videoPlayingDoc } from "./video-playing";
+import { fullscreenDoc } from "./fullscreen";
+import { onDemandPlaybackDoc } from "./on-demand-playback";
+import { soundDoc } from "./sound";
+import { manageYourPlaybackQueueDoc } from "./manage-your-playback-queue";
+import { manageYourUpNextQueueDoc } from "./manage-your-up-next-queue";
+import { continueListeningDoc } from "./continue-listening";
+import { sendMessageDoc } from "./send-a-message";
+import { manageMessageRequestsDoc } from "./manage-message-requests";
+import { startAGroupConversationDoc } from "./start-a-group-conversation";
 
 export type { Doc, DocBlock, DocListItem } from "./types";
 
@@ -122,6 +132,16 @@ const docs: Record<string, Doc> = {
   [editOrDeleteACollectionDoc.path]: editOrDeleteACollectionDoc,
   [addRemoveAndReorderPlaylistItemsDoc.path]: addRemoveAndReorderPlaylistItemsDoc,
   [listenOnMusicosyDoc.path]: listenOnMusicosyDoc,
+  [videoPlayingDoc.path]: videoPlayingDoc,
+  [fullscreenDoc.path]: fullscreenDoc,
+  [onDemandPlaybackDoc.path]: onDemandPlaybackDoc,
+  [soundDoc.path]: soundDoc,
+  [manageYourPlaybackQueueDoc.path]: manageYourPlaybackQueueDoc,
+  [manageYourUpNextQueueDoc.path]: manageYourUpNextQueueDoc,
+  [continueListeningDoc.path]: continueListeningDoc,
+  [sendMessageDoc.path]: sendMessageDoc,
+  [manageMessageRequestsDoc.path]: manageMessageRequestsDoc,
+  [startAGroupConversationDoc.path]: startAGroupConversationDoc,
 };
 
 /** Look up structured doc content for a given route path. */

@@ -37,6 +37,9 @@ id_rsa
 id_ed25519
 .env
 .env.*
+.env.local
+.env.*.local
+# Allow the template (no secrets) to be committed
 !.env.example
 
 # debug
@@ -44,9 +47,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
 
 # vercel
 .vercel
@@ -76,3 +76,37 @@ server.log
 .gitconfig.local
 tool-results/
 upload/
+
+# ── Supabase ──────────────────────────────────────────────────────────────
+# Local Supabase CLI project artifacts
+/supabase/.branches/
+/supabase/.temp/
+/supabase/.env
+/supabase/.env.*
+/supabase/.gitignore
+!/supabase/.env.example
+# Local Postgres mirror / pg_dump exports
+/supabase/.pg_dump/
+*.sql.gz
+*.dump
+*.psql
+# Supabase access token cache (created by `supabase login`)
+.supabase/
+# Edge function deno lockfiles (regenerated on deploy)
+/supabase/functions/*/deno.lock
+# CLI-generated report artifacts
+/supabase/.reports/
+# Migration fixtures used only for local dev seeding (may contain real-looking data)
+/supabase/seed/local-only/
+
+# ── Payload CMS (forthcoming) ──────────────────────────────────────────────
+# Local SQLite files used by Payload during development / migration parity tests
+/payload.db
+/payload-*.db
+*.payload.db
+# Payload media/uploads (regenerated; never commit user uploads)
+/public/uploads/payload/
+# Migration script output (parity-check reports, diff logs)
+/migration-output/
+/migration-reports/
+/parity-report.json

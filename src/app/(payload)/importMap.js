@@ -1,1 +1,1 @@
-export { importMap } from './admin/importMap.js'
+export const importMap = {}

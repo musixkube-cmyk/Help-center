@@ -20,8 +20,13 @@
     "@hookform/resolvers": "^5.1.1",
     "@mdxeditor/editor": "^3.39.1",
     "@payloadcms/db-postgres": "^3.88.0",
+    "@payloadcms/db-sqlite": "^3.88.0",
     "@payloadcms/next": "^3.88.0",
+<<<<<<< HEAD
+=======
+    "@payloadcms/richtext-lexical": "^3.88.0",
     "@payloadcms/ui": "^3.88.0",
+>>>>>>> origin/jules-16513300667624907369-fa118e55
     "@prisma/client": "^6.11.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -64,14 +69,19 @@
     "howler": "^2.2.4",
     "input-otp": "^1.4.2",
     "lenis": "^1.3.26",
+    "lexical": "0.41.0",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.525.0",
-    "next": "^16.1.1",
+    "next": "^16.2.6",
     "next-auth": "^4.24.11",
     "next-intl": "^4.3.4",
     "next-seo": "^7.3.0",
     "next-themes": "^0.4.6",
     "payload": "^3.88.0",
+<<<<<<< HEAD
+    "pg": "^8.23.0",
+=======
+>>>>>>> origin/jules-16513300667624907369-fa118e55
     "prisma": "^6.11.1",
     "react": "^19.0.0",
     "react-day-picker": "^9.8.0",
@@ -92,7 +102,10 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@swc-node/register": "^1.12.1",
+    "@swc/core": "^1.15.47",
     "@tailwindcss/postcss": "^4",
+    "@types/howler": "^2.2.13",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "bun-types": "^1.3.4",
@@ -100,7 +113,6 @@
     "eslint-config-next": "^16.1.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.5",
-    "typescript": "^5",
-    "@types/howler": "^2.2.13"
+    "typescript": "^5"
   }
 }

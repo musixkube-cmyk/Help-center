@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Barlow } from "next/font/google";
 import "../globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { SiteHeader } from "@/components/site/site-header";
-import { SiteFooter } from "@/components/site/site-footer";
 
 const bebasNeue = Bebas_Neue({
   variable: "--font-display",
@@ -23,11 +21,6 @@ export const metadata: Metadata = {
   title: "Musicosy Help Center",
   description: "Musicosy Help Center — support, safety, rules, developer and business resources.",
   authors: [{ name: "Musicosy" }],
-  // Icons are provided via the Next.js file convention:
-  //   src/app/icon.png       → <link rel="icon" href="/icon?<hash>"> (cache-busted)
-  //   src/app/apple-icon.png → <link rel="apple-touch-icon" href="/apple-icon?<hash>">
-  // public/favicon.ico is kept as the fallback for browsers that request
-  // /favicon.ico directly (the file convention supersedes the metadata below).
   openGraph: {
     title: "Musicosy Help Center",
     description: "Support, safety, rules, developer and business resources — all in one place.",
@@ -43,6 +36,14 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+/**
+ * ROOT LAYOUT — kept intentionally minimal.
+ *
+ * The site header/footer live in `(public)/layout.tsx` so that other route
+ * groups (notably `(payload)` for the CMS admin at /cms) can render without
+ * the public chrome. Adding a new chrome-less route group? Just create a
+ * sibling `(group-name)/` folder with no SiteHeader/SiteFooter import.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -53,11 +54,7 @@ export default function RootLayout({
       <body
         className={`${bebasNeue.variable} ${barlow.variable} antialiased`}
       >
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <div className="flex-1">{children}</div>
-          <SiteFooter />
-        </div>
+        {children}
         <Toaster />
       </body>
     </html>
