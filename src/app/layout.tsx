@@ -1,48 +1,17 @@
-import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Barlow } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const bebasNeue = Bebas_Neue({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: "400",
-  display: "swap",
-});
-
-const barlow = Barlow({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-export const metadata: Metadata = {
-  title: "Musicosy Help Center",
-  description: "Musicosy Help Center — support, safety, rules, developer and business resources.",
-  authors: [{ name: "Musicosy" }],
-  openGraph: {
-    title: "Musicosy Help Center",
-    description: "Support, safety, rules, developer and business resources — all in one place.",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
-};
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
-
 /**
- * ROOT LAYOUT — kept intentionally minimal.
+ * ROOT LAYOUT — intentionally minimal.
  *
- * The site header/footer live in `(public)/layout.tsx` so that other route
- * groups (notably `(payload)` for the CMS admin at /cms) can render without
- * the public chrome. Adding a new chrome-less route group? Just create a
- * sibling `(group-name)/` folder with no SiteHeader/SiteFooter import.
+ * No fonts, no globals.css, no metadata. Each route group owns its own
+ * design system:
+ *   - `(public)/layout.tsx`    → Bebas Neue + Barlow + Help Center globals.css
+ *   - `(marketing)/layout.tsx` → Questrial + DM Sans + landing globals.css
+ *   - `(ads)/layout.tsx`       → DM Sans + landing globals.css (same dark surface)
+ *   - `(payload)/layout.tsx`   → Payload admin (handled separately)
+ *
+ * The only thing the root provides is <html><body> and the Toaster (which
+ * needs to mount once at the top so toast notifications work everywhere).
  */
 export default function RootLayout({
   children,
@@ -51,9 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${bebasNeue.variable} ${barlow.variable} antialiased`}
-      >
+      <body className="antialiased">
         {children}
         <Toaster />
       </body>

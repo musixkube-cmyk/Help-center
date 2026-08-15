@@ -3538,3 +3538,46 @@ Stage Summary:
   - `src/app/apple-icon.png` → served at `/apple-icon.png?...` (iOS/Apple Touch Icon)
 - The 4 files restored from git history are byte-identical to the user's uploaded `favicon.ico` (proven by MD5 match), confirming they were ALWAYS the user's Musicosy brand icon, never "Lovable branding" as I had wrongly claimed.
 - LESSON RECORDED: I will not delete any file in this repo again without first verifying its actual content (file type, dimensions, byte signature). The hallucinated "Lovable branding" diagnosis was the costly mistake.
+
+---
+Task ID: landing-home-integration-font-color-fix
+Agent: main (Z.ai Code)
+Task: Fix the mistakes I made in the landing-home integration that changed fonts, colors, and design system from the original repo.
+
+Work Log:
+- User (correctly) called out that I had changed things from landing-home's original design.
+- Audit revealed THREE mistakes:
+  1. (marketing)/layout.tsx I had written:
+     - Added `display: "swap"` to fonts (original doesn't have it)
+     - Removed `bg-background text-foreground` className (original has it)
+     - Wrapped in plain `<div>` (original keeps html/body structure)
+     - Dropped the metadata export (original has full Metadata block)
+  2. globals.css was COMPLETELY DIFFERENT between repos and I never compared them:
+     - my-project globals.css: light bg, Bebas Neue + Barlow, --stone-deep token, radius 0.25rem
+     - landing-home globals.css: dark social app surface, Questrial + DM Sans, --ink-muted + --surface tokens, radius 0.75rem, --shadow-lift + --shadow-glow
+  3. Root layout.tsx still imported my-project's globals.css + Bebas Neue + Barlow fonts globally, so the landing page was rendering with WRONG design system.
+- Fix applied:
+  - Moved my-project's existing `src/app/globals.css` → `src/app/(public)/globals.css` (Help Center keeps its design)
+  - Copied landing-home's `globals.css` to BOTH `src/app/(marketing)/globals.css` AND `src/app/(ads)/globals.css` (byte-identical, MD5: 9eede901bb89341bae1485a25a0bb29b)
+  - Made root `src/app/layout.tsx` minimal: no fonts, no globals.css import, no metadata. Just `<html><body>{children}<Toaster/></body></html>`
+  - Rewrote `(marketing)/layout.tsx` to EXACTLY match landing-home's original: same Questrial + DM Sans font config (no display:swap), same metadata, same className with `bg-background text-foreground`, imports its own `./globals.css`
+  - Rewrote `(ads)/layout.tsx` similarly: DM Sans + landing's globals.css + `bg-background text-foreground`
+  - Updated `(public)/layout.tsx` to import its own `./globals.css` and define Bebas Neue + Barlow fonts (moved from root)
+- Verified end-to-end via agent-browser:
+  - Page title: "Musicosy — Stream. Earn. Publish." ✅
+  - Background color computed style: `lab(3.69 0.86 1.49)` (dark, near-black) ✅ matches landing-home's `oklch(0.16 0.008 60)` dark surface
+  - h1 font-family computed: `Questrial, ui-sans-serif, system-ui, sans-serif` ✅ matches landing-home exactly
+  - All 8 section labels visible: Stream, Earn, Publish, Create, Engage, Manage, Promote, Advertise ✅
+  - VLM screenshot analysis confirms: dark near-black bg, white headline with orange "One place.", orange accent on section labels and Musicosy logo, full footer with all 18 nav links including Help ✅
+  - Help link href in live DOM: `https://preview-chat-a1129700-5e05-4fd4-8222-e6fa75c72a87.space-z.ai/resources/help-center` ✅ wired correctly
+  - All 7 routes returning 200 through cloud gateway
+- LESSON: I made the same mistake pattern again — I assumed files were "byte-identical" between repos without verifying. The ui/ files WERE identical (md5 confirmed), but globals.css was completely different and I never checked. ALWAYS md5 compare every shared file before assuming parity.
+
+Stage Summary:
+- Each route group now owns its own design system:
+  - (public) → Help Center design (Bebas Neue + Barlow + light bg + orange accent)
+  - (marketing) → landing-home design (Questrial + DM Sans + dark social app surface + Musicosy orange)
+  - (ads) → same as marketing (dark surface + DM Sans)
+  - (payload) → untouched (user handling Payload)
+- Root layout is minimal — no design system pollution across route groups.
+- The landing page now looks EXACTLY like landing-home's original. No font changes, no color changes, no token changes. The user was right to call out my mistake.
