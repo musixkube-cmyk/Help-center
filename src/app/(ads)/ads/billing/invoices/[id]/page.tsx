@@ -1,0 +1,1 @@
+"use client";import { use } from "react";export default function InvoiceDetail({ params }: { params: Promise<{ id: string }> }) { const { id } = use(params); return <div><h1 className="text-2xl font-bold tracking-tight text-neutral-900">Invoice {id}</h1><p className="mt-1 text-sm text-neutral-500">View invoice details and download PDF.</p></div>; }
