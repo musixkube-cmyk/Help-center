@@ -52,7 +52,7 @@ export default function MarketingLayout({
 }>) {
   return (
     <div
-      className={`${questrial.variable} ${dmSans.variable} antialiased bg-background text-foreground`}
+      className={`${questrial.variable} ${dmSans.variable} antialiased text-foreground`}
     >
       {children}
     </div>
