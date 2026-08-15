@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { SiteFooter } from "@/components/site/site-footer";
 
 const sections = [
   {
@@ -222,41 +223,25 @@ export default function Home() {
         </section>
       ))}
 
-      {/* Bottom rail */}
-      <footer className="mt-auto border-t border-ink-foreground/10 px-5 py-6 sm:px-10 lg:pl-32">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <nav aria-label="Bottom rail" className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-ink-muted">
-              <a href="/about" className="transition-colors hover:text-ink-foreground">About</a>
-              <a href="/get-app" className="transition-colors hover:text-ink-foreground">Get App</a>
-              <a href="/resources/help-center" className="transition-colors hover:text-ink-foreground">Help</a>
-              <a href="/terms" className="transition-colors hover:text-ink-foreground">Terms</a>
-              <a href="/privacy" className="transition-colors hover:text-ink-foreground">Privacy</a>
-              <a href="/cookies" className="transition-colors hover:text-ink-foreground">Cookies</a>
-              <a href="/dmca" className="transition-colors hover:text-ink-foreground">DMCA</a>
-              <a href="/careers" className="transition-colors hover:text-ink-foreground">Careers</a>
-              <a href="/advertise" className="transition-colors hover:text-ink-foreground">Advertise</a>
-              <a href="/ads-business" className="transition-colors hover:text-ink-foreground">Ads & Business</a>
-              <a href="/labels" className="transition-colors hover:text-ink-foreground">Labels</a>
-              <a href="/creators" className="transition-colors hover:text-ink-foreground">Creators</a>
-              <a href="/distributors" className="transition-colors hover:text-ink-foreground">Distributors</a>
-              <a href="/sync" className="transition-colors hover:text-ink-foreground">Sync</a>
-              <a href="/developers" className="transition-colors hover:text-ink-foreground">Developers</a>
-              <a href="/news" className="transition-colors hover:text-ink-foreground">News</a>
-              <a href="/us-tida" className="transition-colors hover:text-ink-foreground">US TIDA</a>
-              <a href="/accessibility" className="transition-colors hover:text-ink-foreground">Accessibility</a>
-            </nav>
-          </div>
-          <div className="flex shrink-0 flex-col items-end pr-4">
-            <img
-              src="/musicosy-orange-logo.webp"
-              alt="Musicosy"
-              className="h-36 w-auto object-contain"
-            />
-            <p className="mt-1 text-xs text-ink-muted">&copy; {new Date().getFullYear()} Musicosy</p>
-          </div>
-        </div>
-      </footer>
+      {/* Bottom rail — exact same footer as the Help Center:
+          6-column nav grid + Musicosy logo + utility bar + bottom rail
+          (© 2026 Musicosy Corp. + legal links + English). Wrapped in a
+          mt-auto div so the footer pins to the bottom of the viewport on
+          short pages and pushes down naturally on long pages.
+
+          The shared SiteFooter paints the logo + link hovers with
+          var(--accent). In the (public) Help Center design system
+          --accent IS the Musicosy orange; in the (marketing) system the
+          orange lives in --primary and --accent is a dark muted brown.
+          Locally re-map --accent to the marketing orange so the footer
+          looks identical to the Help Center (orange logo, orange hovers)
+          without mutating the shared component or the marketing tokens. */}
+      <div
+        className="mt-auto"
+        style={{ "--accent": "var(--primary)" } as React.CSSProperties}
+      >
+        <SiteFooter />
+      </div>
     </div>
   );
 }

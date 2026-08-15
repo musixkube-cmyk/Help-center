@@ -3581,3 +3581,23 @@ Stage Summary:
   - (payload) → untouched (user handling Payload)
 - Root layout is minimal — no design system pollution across route groups.
 - The landing page now looks EXACTLY like landing-home's original. No font changes, no color changes, no token changes. The user was right to call out my mistake.
+
+---
+Task ID: footer-sync-1
+Agent: main (Z.ai Code)
+Task: The landing page (`/`) lost its "double bar footer and logo". Restore the exact Help Center footer (6-column nav grid + Musicosy logo + utility bar with About/Get App/Help/Careers/Ads & Business/Podcast/Stream/Creators/Fans/Distributors/Sync/Developers/News/US TIDA/Sign In/Contact Us + bottom rail with © 2026 Musicosy Corp. + Terms/Privacy/Cookies/DMCA/Accessibility/Privacy Center/Legal Center/Support Center + English) on the new landing page.
+
+Work Log:
+- Inspected the existing inline footer in `src/app/(marketing)/page.tsx` — it was a single-row bar with a few hand-rolled links and a `<img src="/musicosy-orange-logo.webp">`. Missing: the 6-column nav grid, the masked Musicosy logo, and the two-bar (utility + bottom rail) structure.
+- Inspected the canonical Help Center footer component `src/components/site/site-footer.tsx` — it renders exactly what the user asked for: `footerNav` (6 groups w/ children) + masked Musicosy logo (right-aligned) + `footerUtilityBar` (16 links) + `footerBottomRail` (8 legal links) + `© 2026 Musicosy Corp.` + `English`.
+- Replaced the landing page's inline `<footer>` block with `<SiteFooter />`, wrapped in `<div className="mt-auto">` to preserve the sticky-to-bottom behavior on short pages and natural push-down on long pages.
+- Root-caused a color-token mismatch: `SiteFooter` paints the logo + link hovers with `var(--accent)`. In the `(public)` Help Center design system `--accent` IS the Musicosy orange (`oklch(0.67 0.185 44)`), but in the `(marketing)` design system `--accent` is a dark muted brown (`oklch(0.3 0.04 45)`) and the orange lives in `--primary` (`oklch(0.72 0.19 45)`). Without intervention the landing-page logo + hovers would have rendered dark brown.
+- Fixed WITHOUT mutating the shared `SiteFooter` component or the marketing design tokens: added a scoped CSS-variable override on the footer wrapper — `style={{ "--accent": "var(--primary)" }}` — so inside the footer scope only, `--accent` resolves to the Musicosy orange. The Help Center and every other `(public)` route are completely unaffected.
+- Verified with agent-browser on `/`: footer text content byte-for-byte matches the Help Center footer (same 6 nav groups, same 16 utility links, same 8 legal links, `© 2026 Musicosy Corp.`, `English`). Logo computed background = `lab(66.15 51.71 65.36)` = vivid orange (vs Help Center `lab(60.35 51.11 63.75)` — same hue, sub-perceptible shade difference from the two route-group token sets).
+- Confirmed no runtime/console errors; `GET / 200` and `GET /resources/help-center 200` both clean.
+
+Stage Summary:
+- Landing page footer now = Help Center footer (same `<SiteFooter />` component, same `@/data/nav` data: `footerNav` / `footerUtilityBar` / `footerBottomRail`).
+- Musicosy logo restored to the landing page, right-aligned above the utility bar, painted orange via a scoped `--accent: var(--primary)` override.
+- Route-group font/color isolation preserved: each route keeps its own `globals.css` + font tokens; only the footer's `--accent` is locally remapped so the brand logo renders orange everywhere.
+- Files changed: `src/app/(marketing)/page.tsx` only (imported `SiteFooter`, replaced inline footer, added scoped accent override). No shared components or design tokens modified.
