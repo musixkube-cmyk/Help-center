@@ -184,9 +184,10 @@ export const footerUtilityBar: NavNode[] = [
   { label: "Get App", path: "/download" },
   { label: "Help", path: "/resources/help-center" },
   { label: "Careers", path: "/careers" },
-  // Footer “Ads & Business” routes to the Ad Center gate login (ads/signin),
-  // not the for-business landing — ad help lives in the Ads Help Center.
-  { label: "Ads & Business", path: "/ads/signin" },
+  // Footer "Ads & Business" routes to /advertise — the real Ad Center gate
+  // (combined sign-in + sign-up with Google/Apple OAuth) imported from the
+  // landing-home repo. Not /ads/signin.
+  { label: "Ads & Business", path: "/advertise" },
   { label: "Podcast", path: "/podcast" },
   { label: "Stream", path: "/for-fans" },
   { label: "Creators", path: "/for-creators" },
